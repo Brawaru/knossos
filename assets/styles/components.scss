@@ -512,6 +512,25 @@ tr.button-transparent {
   --text-color: var(--color-brand-inverted);
 }
 
+.stateful-button {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+
+  & > span {
+    grid-column-start: 1;
+    grid-row-start: 1;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-items: center;
+
+    &.active {
+      visibility: visible;
+    }
+  }
+}
+
 .button-group {
   display: flex;
   grid-gap: var(--spacing-card-sm);

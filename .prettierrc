@@ -1,5 +1,16 @@
 {
   "semi": false,
   "singleQuote": true,
-  "endOfLine": "auto"
+  "endOfLine": "auto",
+  "plugins": ["prettier-plugin-jsdoc"],
+  "overrides": [
+    {
+      "files": ["i18n/nuxt/**.html"],
+      "options": {
+        "proseWrap": "never",
+        "htmlWhitespaceSensitivity": "strict",
+        "printWidth": 1111691111
+      }
+    }
+  ]
 }

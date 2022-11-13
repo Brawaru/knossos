@@ -10,9 +10,15 @@
     "serve": "nuxt serve",
     "lint:js": "eslint --ext .js,.vue --ignore-path .eslintignore .",
     "lint": "npm run lint:js",
-    "fix": "eslint --fix --ext .js,.vue --ignore-path .eslintignore ."
+    "fix": "eslint --fix --ext .js,.vue --ignore-path .eslintignore .",
+    "i18n:refresh": "node ./bin/i18n-config-gen.mjs",
+    "i18n:types": "node ./bin/i18n-type-gen.mjs",
+    "i18n:watch": "node ./bin/i18n-type-gen.mjs -w"
   },
   "dependencies": {
+    "@formatjs/intl": "^2.5.1",
+    "@formatjs/intl-localematcher": "^0.2.31",
+    "@formatjs/intl-numberformat": "^8.2.0",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/dayjs": "^1.2.0",
     "@nuxtjs/markdownit": "^2.0.0",
@@ -31,17 +37,33 @@
     "xss": "^1.0.8"
   },
   "devDependencies": {
+    "@formatjs/icu-messageformat-parser": "^2.1.10",
+    "@ltd/j-toml": "^1.35.2",
+    "@nuxt/types": "^2.15.8",
     "@nuxtjs/color-mode": "^2.1.1",
     "@nuxtjs/eslint-config": "^6.0.0",
     "@nuxtjs/eslint-module": "^3.0.2",
     "@nuxtjs/svg": "^0.1.12",
+    "@types/flat": "^5.0.2",
+    "@types/glob": "^8.0.0",
+    "@types/loader-utils": "^2.0.3",
+    "@types/lodash": "^4.14.188",
+    "@types/prettier": "^2.7.1",
+    "@types/yargs": "^17.0.13",
     "babel-eslint": "^10.1.0",
     "eslint": "^7.22.0",
     "eslint-config-prettier": "^8.1.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.3.1",
+    "flat": "^5.0.2",
+    "fuse.js": "^6.6.2",
+    "glob": "^8.0.3",
+    "loader-utils": "^2.0.4",
+    "lodash": "^4.17.21",
     "prettier": "^2.2.1",
-    "sass-loader": "^10.1.1"
+    "prettier-plugin-jsdoc": "^0.4.2",
+    "sass-loader": "^10.1.1",
+    "yargs": "^17.6.2"
   },
   "optionalDependencies": {
     "fsevents": "^2.3.2"

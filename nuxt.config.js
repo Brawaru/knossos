@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs'
 import { sortRoutes } from '@nuxt/utils'
 import axios from 'axios'
+import i18nConfig from './i18n/config.json'
+import path from 'path'
 
 const STAGING_API_URL = 'https://staging-api.modrinth.com/v2/'
 const STAGING_ARIADNE_URL = 'https://staging-ariadne.modrinth.com/v1/'
@@ -185,7 +187,9 @@ export default {
     '~/plugins/vue-notification.js',
     '~/plugins/xss.js',
     '~/plugins/vue-syntax.js',
+    '~/plugins/i18n-helpers.js',
     '~/plugins/shorthands.js',
+    '~/plugins/vue-fragment.js',
   ],
   /*
    ** Auto import components
@@ -205,8 +209,9 @@ export default {
    ** Nuxt.js modules
    */
   modules: [
-    // Doc: https://axios.nuxtjs.org/usage
+    '~/modules/i18n',
     '@nuxtjs/dayjs',
+    // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/robots',
     '@nuxtjs/style-resources',
@@ -259,6 +264,37 @@ export default {
           },
         ],
       ],
+    },
+    /** @param {import('webpack').Configuration} config */
+    extend(config) {
+      const translationsLoader = path.resolve(
+        __dirname,
+        'loaders/translationsLoader.js'
+      )
+
+      const messageLoader = path.resolve(__dirname, 'loaders/messageLoader.js')
+
+      config.module.rules.push({
+        test: /\.toml$/,
+        include: path.resolve(__dirname, 'i18n'),
+        loader: translationsLoader,
+        type: 'javascript/auto',
+      })
+
+      config.module.rules.push({
+        test: /\.md$/,
+        include: path.resolve(__dirname, 'i18n'),
+        loader: messageLoader,
+      })
+
+      config.module.rules.push({
+        test: /\.html$/,
+        include: path.resolve(__dirname, 'i18n'),
+        loader: messageLoader,
+      })
+
+      config.resolve.alias['@formatjs/icu-messageformat-parser'] =
+        '@formatjs/icu-messageformat-parser/no-parser'
     },
   },
   markdownit: {
@@ -405,6 +441,8 @@ export default {
       },
     },
   },
+  /** @type {import('modules/i18n').Options} */
+  i18n: Object.assign(i18nConfig, { baseURL: getDomain() }),
 }
 
 function getApiUrl() {

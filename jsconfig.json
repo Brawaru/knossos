@@ -6,7 +6,15 @@
       "@/*": ["./*"],
       "~~/*": ["./*"],
       "@@/*": ["./*"]
-    }
+    },
+    "resolveJsonModule": true,
+    "target": "es2022",
+    "module": "node16",
+    "moduleResolution": "node",
+    "strict": true
+  },
+  "vueCompilerOptions": {
+    "target": 2.7
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
 }
