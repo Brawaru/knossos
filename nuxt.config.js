@@ -190,6 +190,7 @@ export default {
     '~/plugins/i18n-helpers.js',
     '~/plugins/shorthands.js',
     '~/plugins/vue-fragment.js',
+    '~/plugins/markdown.js',
   ],
   /*
    ** Auto import components
@@ -215,7 +216,6 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/robots',
     '@nuxtjs/style-resources',
-    '@nuxtjs/markdownit',
     'cookie-universal-nuxt',
   ],
   ads: {
@@ -296,12 +296,6 @@ export default {
       config.resolve.alias['@formatjs/icu-messageformat-parser'] =
         '@formatjs/icu-messageformat-parser/no-parser'
     },
-  },
-  markdownit: {
-    preset: 'default',
-    html: true,
-    linkify: true,
-    breaks: false,
   },
   loading: {
     color: '#1bd96a',
