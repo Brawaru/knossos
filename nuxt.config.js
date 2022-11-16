@@ -189,6 +189,7 @@ export default {
     '~/plugins/vue-syntax.js',
     '~/plugins/i18n-helpers.js',
     '~/plugins/shorthands.js',
+    '~/plugins/typed-shorthands.js',
     '~/plugins/vue-fragment.js',
     '~/plugins/markdown.js',
   ],
