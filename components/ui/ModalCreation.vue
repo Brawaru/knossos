@@ -1,42 +1,60 @@
 <template>
-  <Modal ref="modal" header="Create a project">
+  <Modal ref="modal" :header="$t('component.modal-creation.title')">
     <div class="modal-creation universal-labels">
       <div class="markdown-body">
         <p>
-          New projects are created as drafts and can be found under your profile
-          page.
+          {{ $t('component.modal-creation.description') }}
         </p>
       </div>
       <label for="project-type">
-        <span class="label__title"
-          >Project type<span class="required">*</span></span
-        >
+        <span class="label__title">
+          <IntlFormatted
+            message-id="component.modal-creation.fields.project-type.title"
+          >
+            <template #required="{ children }">
+              <span class="required"><Fragment :of="children" /></span>
+            </template>
+          </IntlFormatted>
+        </span>
       </label>
       <Chips
         id="project-type"
         v-model="projectType"
-        :items="$tag.projectTypes.map((x) => x.display)"
+        :items="this.$tag.projectTypes"
+        :format-label="({ id }) => $translateProjectType(id)"
       />
       <label for="name">
-        <span class="label__title">Name<span class="required">*</span></span>
+        <span class="label__title">
+          <IntlFormatted
+            message-id="component.modal-creation.fields.name.title"
+          >
+            <template #required="{ children }">
+              <span class="required"><Fragment :of="children" /></span>
+            </template>
+          </IntlFormatted>
+        </span>
       </label>
       <input
         id="name"
         v-model="name"
         type="text"
         maxlength="64"
-        placeholder="Enter project name..."
+        :placeholder="$t('component.modal-creation.fields.name.placeholder')"
         autocomplete="off"
         @input="updatedName()"
       />
       <label for="slug">
-        <span class="label__title">URL<span class="required">*</span></span>
+        <span class="label__title">
+          <IntlFormatted message-id="component.modal-creation.fields.url.title">
+            <template #required="{ children }">
+              <span class="required"><Fragment :of="children" /></span>
+            </template>
+          </IntlFormatted>
+        </span>
       </label>
       <div class="text-input-wrapper">
         <div class="text-input-wrapper__before">
-          https://modrinth.com/{{
-            getProjectType() ? getProjectType().id : '???'
-          }}/
+          https://modrinth.com/{{ projectType ? projectType.id : '???' }}/
         </div>
         <input
           id="slug"
@@ -48,11 +66,18 @@
         />
       </div>
       <label for="additional-information">
-        <span class="label__title">Summary<span class="required">*</span></span>
-        <span class="label__description"
-          >This appears in search and on the sidebar of your project's
-          page.</span
-        >
+        <span class="label__title">
+          <IntlFormatted
+            message-id="component.modal-creation.fields.summary.title"
+          >
+            <template #required="{ children }">
+              <span class="required"><Fragment :of="children" /></span>
+            </template>
+          </IntlFormatted>
+        </span>
+        <span class="label__description">
+          {{ $t('component.modal-creation.fields.summary.description') }}
+        </span>
       </label>
       <div class="textarea-wrapper">
         <textarea
@@ -64,11 +89,11 @@
       <div class="push-right input-group">
         <button class="iconified-button" @click="cancel">
           <CrossIcon />
-          Cancel
+          {{ $t('generic.action.cancel') }}
         </button>
         <button class="iconified-button brand-button" @click="createProject">
           <CheckIcon />
-          Continue
+          {{ $t('generic.action.continue') }}
         </button>
       </div>
     </div>
@@ -101,7 +126,7 @@ export default {
   },
   data() {
     return {
-      projectType: this.$tag.projectTypes[0].display,
+      projectType: this.$tag.projectTypes[0],
       name: '',
       slug: '',
       description: '',
@@ -138,7 +163,7 @@ export default {
     async createProject() {
       this.$nuxt.$loading.start()
 
-      const projectType = this.getProjectType()
+      const projectType = this.projectType
 
       const formData = new FormData()
 
@@ -149,27 +174,47 @@ export default {
           project_type: projectType.actual,
           slug: this.slug,
           description: this.description,
-          body: `# Placeholder description
-This is your new ${projectType.display}, ${
-            this.name
-          }. A checklist below is provided to help prepare for release.
+          body: (() => {
+            let body = ''
 
-### Before submitting for review
-- Upload at least one version
-- [Edit project description](https://modrinth.com/${this.getProjectType().id}/${
-            this.slug
-          }/edit)
-- Update metadata
-  - Select license
-  - Set up environments
-  - Choose categories
-  - Add source, wiki, Discord and donation links (optional)
-- Add images to gallery (optional)
-- Invite project team members (optional)
+            if (
+              this.$i18n.intlLocale.language !== 'en' ||
+              this.$i18n.locale.includes('-x-')
+            ) {
+              body += this.$t(
+                'component.modal-creation.auto-description.warning',
+                {
+                  projectType: this.projectType.id,
+                }
+              )
+              body += '\n\n'
+            }
 
-> Submissions are normally reviewed within 24 hours, but may take up to 48 hours
+            const unfilteredLines = this.$fmt
+              .customMessage(
+                this.$i18n.data['starter.md'],
+                {
+                  projectType: this.projectType.id,
+                  projectName: this.name,
+                  editLink: `https://modrinth.com/${this.projectType.id}/${this.slug}/edit`,
+                  skip: '<!-- MR:SKIP-LINE -->',
+                },
+                {
+                  ignoreTag: true,
+                }
+              )
+              .split('\n')
 
-Questions? [Join the Modrinth Discord for support!](https://discord.gg/EUHuJHt)`,
+            for (const line of unfilteredLines) {
+              if (line.includes('<!-- MR:SKIP-LINE -->')) {
+                continue
+              }
+
+              body += line + '\n'
+            }
+
+            return body
+          })(),
           initial_versions: [],
           team_members: [
             {
@@ -204,7 +249,7 @@ Questions? [Join the Modrinth Discord for support!](https://discord.gg/EUHuJHt)`
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })
@@ -212,7 +257,7 @@ Questions? [Join the Modrinth Discord for support!](https://discord.gg/EUHuJHt)`
       this.$nuxt.$loading.finish()
     },
     show() {
-      this.projectType = this.$tag.projectTypes[0].display
+      this.projectType = this.$tag.projectTypes[0]
       this.name = ''
       this.slug = ''
       this.description = ''

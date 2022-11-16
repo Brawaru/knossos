@@ -1,8 +1,8 @@
 <template>
   <div class="chips">
     <button
-      v-for="item in items"
-      :key="item"
+      v-for="(item, index) of items"
+      :key="index"
       class="iconified-button"
       :class="{ selected: selected === item }"
       @click="toggleItem(item)"
@@ -24,7 +24,6 @@ export default {
   props: {
     value: {
       required: true,
-      type: String,
     },
     items: {
       required: true,
@@ -35,7 +34,9 @@ export default {
       type: Boolean,
     },
     formatLabel: {
-      default: (x) => x,
+      default() {
+        return (x) => String(x)
+      },
       type: Function,
     },
   },

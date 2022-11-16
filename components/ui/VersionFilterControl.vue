@@ -7,7 +7,7 @@
       v-if="getValidLoaders().length > 1"
       v-model="selectedLoaders"
       :options="getValidLoaders()"
-      :custom-label="(value) => value.charAt(0).toUpperCase() + value.slice(1)"
+      :custom-label="(value) => $translateLoader(value)"
       :multiple="true"
       :searchable="false"
       :show-no-results="false"
@@ -16,7 +16,7 @@
       :show-labels="false"
       :allow-empty="true"
       :disabled="getValidLoaders().length === 1"
-      placeholder="Filter loader..."
+      :placeholder="$t('component.version-filter.field.versions.placeholder')"
       @input="updateVersionFilters()"
     ></Multiselect>
     <Multiselect
@@ -36,7 +36,7 @@
       :show-labels="false"
       :hide-selected="true"
       :selectable="() => selectedGameVersions.length <= 6"
-      placeholder="Filter versions..."
+      :placeholder="$t('component.version-filter.field.versions.placeholder')"
       @input="updateVersionFilters()"
     ></Multiselect>
     <Checkbox
@@ -45,12 +45,13 @@
         getValidVersions().some((v) => v.version_type !== 'release')
       "
       v-model="showSnapshots"
-      label="Include snapshots"
-      description="Include snapshots"
+      :label="$t('component.version-filter.field.versions.show-snapshots')"
+      :description="
+        $t('component.version-filter.field.versions.show-snapshots')
+      "
       :border="false"
     />
     <button
-      title="Clear filters"
       :disabled="
         selectedLoaders.length === 0 && selectedGameVersions.length === 0
       "
@@ -62,7 +63,7 @@
       "
     >
       <ClearIcon />
-      Clear filters
+      {{ $t('component.version-filter.action.clear') }}
     </button>
   </div>
 </template>

@@ -4,9 +4,11 @@
       <div class="markdown-body" v-html="$xss($md.render(description))"></div>
       <label v-if="hasToType" for="confirmation" class="confirmation-label">
         <span>
-          <strong>To verify, type</strong>
-          <em class="confirmation-text">{{ confirmationText }}</em>
-          <strong>below:</strong>
+          <IntlFormatted message-id="component.modal-confirm.verify-text">
+            <template #~confirmationText>
+              <strong>{{ confirmationText }}</strong>
+            </template>
+          </IntlFormatted>
         </span>
       </label>
       <div class="confirmation-input">
@@ -15,14 +17,14 @@
           id="confirmation"
           v-model="confirmation_typed"
           type="text"
-          placeholder="Type here..."
+          :placeholder="$t('component.modal-confirm.verify-text-placeholder')"
           @input="type"
         />
       </div>
       <div class="button-group">
         <button class="iconified-button" @click="cancel">
           <CrossIcon />
-          Cancel
+          {{ $t('generic.action.cancel') }}
         </button>
         <button
           class="iconified-button danger-button"
@@ -60,17 +62,23 @@ export default {
     },
     title: {
       type: String,
-      default: 'No title defined',
+      default() {
+        return this.$t('component.modal-confirm.default-title')
+      },
       required: true,
     },
     description: {
       type: String,
-      default: 'No description defined',
+      default() {
+        return this.$t('component.modal-confirm.default-description')
+      },
       required: true,
     },
     proceedLabel: {
       type: String,
-      default: 'Proceed',
+      default() {
+        return this.$t('component.modal-confirm.default-action')
+      },
     },
   },
   data() {

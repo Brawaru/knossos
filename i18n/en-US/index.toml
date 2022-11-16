@@ -1,1 +1,213 @@
 # Source strings go here
+
+[ads]
+exaroton = """\
+Host your Minecraft server on <strong>exaroton</strong> - only pay while the \
+server is running - billed per second."""
+
+[category]
+128x = "128x"
+16x = "16x"
+256x = "256x"
+32x = "32x"
+512x-or-higher = "512x or higher"
+64x = "64x"
+8x-or-lower = "8x or lower"
+adventure = "Adventure"
+audio = "Audio"
+blocks = "Blocks"
+challenging = "Challenging"
+combat = "Combat"
+core-shaders = "Core Shaders"
+cursed = "Cursed"
+decoration = "Decoration"
+economy = "Economy"
+entities = "Entities"
+environment = "Environment"
+equipment = "Equipment"
+fonts = "Fonts"
+food = "Food"
+game-mechanics = "Game Mechanics"
+gui = "GUI"
+items = "Items"
+kitchen-sink = "Kitchen Sink"
+library = "Library"
+lightweight = "Lightweight"
+locale = "Locale"
+magic = "Magic"
+management = "Management"
+minigame = "Minigame"
+mobs = "Mobs"
+modded = "Modded"
+models = "Models"
+multiplayer = "Multiplayer"
+optimization = "Optimization"
+quests = "Quests"
+realistic = "Realistic"
+simplistic = "Simplistic"
+social = "Social"
+storage = "Storage"
+technology = "Technology"
+themed = "Themed"
+transportation = "Transportation"
+tweaks = "Tweaks"
+utility = "Utility"
+vanilla-like = "Vanilla-like"
+worldgen = "World Generation"
+
+[component.advertisement]
+provider = "Ad by {provider}"
+
+[component.copy-code]
+title = "Copy code to clipboard"
+
+[component.file-input]
+default-prompt = "Select file"
+
+[component.modal-confirm]
+verify-text = "To verify, type {confirmationText} below:"
+verify-text-placeholder = "Type here..."
+default-title = "Do something?"
+default-description = "Please confirm that you want to do something."
+default-action = "Proceed"
+
+[component.modal-creation]
+title = "Create a project"
+description = "New projects are created as drafts and can be found under your profile page."
+auto-description.warning = """\
+**⚠ Warning**: This description is provided automatically by Modrinth in your \
+language, however, since Modrinth is an international site, unless your \
+{projectType, select, mod {mod} plugin {plugin} resourcepack {resource pack} \
+modpack {modpack} other {project}} is targetted at the very specific language \
+community, **please provide your description in English language**. For other \
+languages you can [use `'<details>'` tag](https://developer.mozilla.org/en-US/\
+docs/Web/HTML/Element/details)."""
+
+[component.modal-creation.fields]
+project-type.title = "Project type<required>*</required>"
+name.title = "Name<required>*</required>"
+name.placeholder = "Enter project name..."
+url.title = "URL<required>*</required>"
+summary.title = "Summary<required>*</required>"
+summary.description = "This appears in search and on the sidebar of your project's page."
+
+[component.modal-report]
+title = "Report {itemType, select, user {user} other {project}}"
+description = """\
+Modding should be safe for everyone, so we take abuse and malicious intent \
+seriously at Modrinth. We want to hear about harmful content on the site that \
+violates our <tos-link>ToS</tos-link> and <rules-link>Rules</rules-link>. Rest \
+assured, we’ll keep your identifying information private."""
+action = "Report"
+
+[component.modal-report.fields]
+reason.title = "Reason"
+reason.placeholder = "Choose report type"
+info.title = "Additional information"
+info.description = """\
+Include links and images if possible. Markdown formatting is supported."""
+
+[component.modal-transfer]
+title = """\
+Transfer to {wallet, select, venmo {Venmo} paypal {PayPal} other {wallet}}"""
+description = """\
+You are initiating a transfer of your revenue from Modrinth's Creator \
+Monetization Program. How much of your {balance} balance would you like to \
+transfer?"""
+
+[component.modal-transfer.action]
+transfer = "Transfer"
+settings = "Monetization settings"
+
+[component.modal-transfer.fields]
+amount.placeholder = "Amount to transfer"
+venmo-fee-consent.label = """\
+I acknowledge that {fee} will be deducted from the amount I receive to cover \
+{wallet, select, venmo {Venmo} other {{wallet}}} processing fees."""
+regular-fee-consent.label = """\
+I acknowledge that an estimated {fee} will be deducted from the amount I \
+receive to cover {wallet, select, paypal {PayPal} other {{wallet}}} processing \
+fees and that any excess will be returned to my Modrinth balance."""
+account-confirm.label = """\
+I confirm that I an initiating a transfer to the following \
+{wallet, select, venmo {Venmo} paypal {PayPal} other {{wallet}}} account: \
+{account}"""
+
+[component.modal-transfer.error]
+min-amount-required = "The amount must be at least {amount}"
+max-amount-exceeded = "The amount must be no more than {amount}"
+illegal-input = "{amount} is not a valid amount"
+
+[component.pagination]
+previous = "Previous"
+next = "Next"
+
+[component.project-card]
+author = "by {author}"
+notice.has-mod-message = """
+Project has a message from the moderators. View the project to see more."""
+
+[component.version-filter.field]
+loader.placeholder = "Filter loader..."
+versions.placeholder = "Filter versions..."
+versions.show-snapshots = "Include snapshots"
+
+[component.version-filter.action]
+clear = "Clear filters"
+
+[generic.action]
+cancel = "Cancel"
+continue = "Continue"
+
+[generic.error]
+title = "An error occurred"
+
+[generic.label]
+beta = "BETA"
+
+[loader]
+bukkit = "Bukkit"
+bungeecord = "BungeeCord"
+fabric = "Fabric"
+forge = "Forge"
+liteloader = "LiteLoader"
+minecraft = "Minecraft"
+modloader = "Risugami's ModLoader"
+paper = "Paper"
+purpur = "Purpur"
+quilt = "Quilt"
+rift = "Rift"
+spigot = "Spigot"
+sponge = "Sponge"
+velocity = "Velocity"
+waterfall = "Waterfall"
+
+[markdown-editor.tab]
+source = "Source"
+preview = "Preview"
+
+[project.stats]
+downloads = "{downloads, plural, one {{counter} download} other {{counter} downloads}}"
+followers = "{followers, plural, one {{counter} follower} other {{counter} followers}}"
+created = "{projectType, select, other {Created {ago}}}"
+updated = "{projectType, select, other {Updated {ago}}}"
+
+[project-type]
+mod-and-plugin = { singular = "Mod and Plugin", plural = "Mods and Plugins" }
+mod = { singular = "Mod", plural = "Mods" }
+modpack = { singular = "Modpack", plural = "Modpacks" }
+plugin = { singular = "Plugin", plural = "Plugins" }
+resourcepack = { singular = "Resource Pack", plural = "Resource Packs" }
+
+[project-type-display]
+mod-and-plugin = "{side, select, client {Client} server {Server} other {Universal}} mod and plugin"
+mod = "{side, select, client {Client} server {Server} other {Universal}} mod"
+plugin = "{side, select, client {Client} server {Server} other {Universal}} plugin"
+modpack = "{side, select, client {Client} server {Server} other {Universal}} modpack"
+
+[report-type]
+spam = "Spam"
+copyright = "Copyright infringement"
+inappropriate = "Inappropriate content"
+malicious = "Malicious behaviour"
+name-squatting = "Name squatting"

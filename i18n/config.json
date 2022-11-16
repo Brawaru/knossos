@@ -6,7 +6,9 @@
       "code": "en-US",
       "file": "~/i18n/en-US/index.toml",
       "additionalImports": [],
-      "importedData": {},
+      "importedData": {
+        "starter.md": "~/i18n/en-US/starter.md"
+      },
       "data": {
         "displayName": "American English"
       }

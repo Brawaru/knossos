@@ -3,13 +3,25 @@
     <span
       v-for="category in categoriesFiltered"
       :key="category.name"
-      v-html="category.icon + $formatCategory(category.name)"
-    />
+      class="category"
+    >
+      <span v-if="category.icon" class="icon" v-html="category.icon" />
+      {{ $translateCategory(category.name) }}
+    </span>
+    <span v-for="loader in loadersFiltered" :key="loader.name" class="category">
+      <span v-if="loader.icon" class="icon" v-html="loader.icon" />
+      {{ $translateLoader(loader.name) }}
+    </span>
   </div>
 </template>
 
 <script>
-export default {
+// @ts-check
+import { defineComponent } from 'vue'
+
+// FIXME: remove ts directives once store is typed
+
+export default defineComponent({
   name: 'Categories',
   props: {
     categories: {
@@ -25,35 +37,41 @@ export default {
   },
   computed: {
     categoriesFiltered() {
-      return this.$tag.categories
-        .concat(this.$tag.loaders)
-        .filter(
-          (x) =>
-            this.categories.includes(x.name) &&
-            (!x.project_type || x.project_type === this.type) &&
-            x.name !== 'minecraft'
-        )
+      // @ts-expect-error
+      return this.$tag.categories.filter(
+        // @ts-expect-error
+        (category) =>
+          this.categories.includes(category.name) &&
+          (category.project_type == null || category.project_type === this.type)
+      )
+    },
+    loadersFiltered() {
+      return this.$tag.loaders.filter(
+        // @ts-expect-error
+        (loader) =>
+          this.categories.includes(loader.name) && loader.name !== 'minecraft'
+      )
     },
   },
-}
+})
 </script>
 
 <style lang="scss" scoped>
 .categories {
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
+  column-gap: 0.5rem;
 
-  span ::v-deep {
+  .category {
     display: flex;
-    align-items: center;
-    flex-direction: row;
+    column-gap: 0.125rem;
     color: var(--color-icon);
-    margin-right: var(--spacing-card-md);
+    align-items: center;
 
-    svg {
+    .icon,
+    .icon::v-deep svg {
       width: 1rem;
-      margin-right: 0.2rem;
+      height: 1rem;
     }
   }
 }

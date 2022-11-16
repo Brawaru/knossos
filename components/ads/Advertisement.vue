@@ -15,18 +15,17 @@
               />
               <DarkIcon v-else class="brand-icon" />
               <span>
-                <span> Host your Minecraft server on </span>
-                <strong>exaroton</strong>
-                <span>
-                  - only pay while the server is running - billed per second.
-                </span>
+                <IntlFormatted message-id="ads.exaroton" :tags="['strong']" />
               </span>
             </a>
           </div>
         </div>
         <div class="ea-callout">
           <a rel="nofollow noopener" target="_blank" href="https://adrinth.com">
-            Ads via Adrinth
+            <IntlFormatted
+              message-id="component.advertisement.provider"
+              :values="{ provider: 'Adrinth' }"
+            />
           </a>
         </div>
       </div>

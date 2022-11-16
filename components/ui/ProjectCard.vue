@@ -16,62 +16,37 @@
                 <IssuesIcon
                   v-if="hasModMessage"
                   v-tooltip="
-                    'Project has a message from the moderators. View the project to see more.'
+                    $t('component.project-card.notice.has-mod-message')
                   "
-                  aria-label="Project has a message from the moderators. View the project to see more."
+                  :aria-label="
+                    $t('component.project-card.notice.has-mod-message')
+                  "
                 />
                 {{ name }}
               </nuxt-link>
             </h2>
             <p v-if="author" class="author">
-              by
-              <nuxt-link class="title-link" :to="'/user/' + author"
-                >{{ author }}
-              </nuxt-link>
+              <IntlFormatted message-id="component.project-card.author">
+                <template #~author>
+                  <nuxt-link class="title-link" :to="'/user/' + author">
+                    {{ author }}
+                  </nuxt-link>
+                </template>
+              </IntlFormatted>
             </p>
           </div>
           <div
-            v-if="
-              type !== 'resourcepack' &&
-              !(projectTypeDisplay === 'plugin' && search)
-            "
+            v-if="sideTip != null && search && !moderation"
             class="side-type"
           >
-            <div
-              v-if="clientSide === 'optional' && serverSide === 'optional'"
-              class="side-descriptor"
-            >
+            <div class="side-descriptor">
               <InfoIcon aria-hidden="true" />
-              Universal {{ projectTypeDisplay }}
-            </div>
-            <div
-              v-else-if="
-                (clientSide === 'optional' || clientSide === 'required') &&
-                (serverSide === 'optional' || serverSide === 'unsupported')
-              "
-              class="side-descriptor"
-            >
-              <InfoIcon aria-hidden="true" />
-              Client {{ projectTypeDisplay }}
-            </div>
-            <div
-              v-else-if="
-                (serverSide === 'optional' || serverSide === 'required') &&
-                (clientSide === 'optional' || clientSide === 'unsupported')
-              "
-              class="side-descriptor"
-            >
-              <InfoIcon aria-hidden="true" />
-              Server {{ projectTypeDisplay }}
-            </div>
-            <div v-else-if="moderation" class="side-descriptor">
-              <InfoIcon aria-hidden="true" />
-              A {{ projectTypeDisplay }}
+              {{ sideTip }}
             </div>
           </div>
           <div v-else-if="moderation" class="side-descriptor">
             <InfoIcon aria-hidden="true" />
-            A {{ projectTypeDisplay }}
+            {{ $t(`project-type.${coercedProjectType}.singular`) }}
           </div>
           <p class="description">
             {{ description }}
@@ -84,21 +59,37 @@
           <div class="dates">
             <div
               v-tooltip="
-                $dayjs(createdAt).format('MMMM D, YYYY [at] h:mm:ss A')
+                $fmt.date(createdAt, {
+                  dateStyle: 'long',
+                  timeStyle: 'medium',
+                })
               "
               class="date"
             >
               <CalendarIcon aria-hidden="true" />
-              Created {{ $dayjs(createdAt).fromNow() }}
+              {{
+                $t('project.stats.created', {
+                  ago: $fmt.timeDifference(createdAt),
+                  projectType: safeProjectType,
+                })
+              }}
             </div>
             <div
               v-tooltip="
-                $dayjs(updatedAt).format('MMMM D, YYYY [at] h:mm:ss A')
+                $fmt.date(updatedAt, {
+                  dateStyle: 'long',
+                  timeStyle: 'medium',
+                })
               "
               class="date"
             >
               <EditIcon aria-hidden="true" />
-              Updated {{ $dayjs(updatedAt).fromNow() }}
+              {{
+                $t('project.stats.updated', {
+                  ago: $fmt.timeDifference(updatedAt),
+                  projectType: safeProjectType,
+                })
+              }}
             </div>
           </div>
         </div>
@@ -108,29 +99,47 @@
       <div v-if="downloads" class="stat">
         <DownloadIcon aria-hidden="true" />
         <p>
-          <strong>{{ $formatNumber(downloads) }}</strong> download<span
-            v-if="downloads !== '1'"
-            >s</span
+          <IntlFormatted
+            message-id="project.stats.downloads"
+            :values="{ downloads: $fmt.compactNumber(downloads) }"
           >
+            <template #~counter="{ values: { downloads } }">
+              <strong>{{ String(downloads) }}</strong>
+            </template>
+          </IntlFormatted>
         </p>
       </div>
       <div v-if="follows" class="stat">
         <HeartIcon aria-hidden="true" />
         <p>
-          <strong>{{ $formatNumber(follows) }}</strong> follower<span
-            v-if="follows !== '1'"
-            >s</span
+          <IntlFormatted
+            message-id="project.stats.followers"
+            :values="{ followers: $fmt.compactNumber(follows) }"
           >
+            <template #~counter="{ values: { followers } }">
+              <strong>{{ String(followers) }}</strong>
+            </template>
+          </IntlFormatted>
         </p>
       </div>
       <div class="mobile-dates">
         <div class="date">
           <CalendarIcon aria-hidden="true" />
-          Created {{ $dayjs(createdAt).fromNow() }}
+          {{
+            $t('project.stats.created', {
+              ago: $fmt.timeDifference(createdAt),
+              projectType: safeProjectType,
+            })
+          }}
         </div>
         <div class="date">
           <EditIcon aria-hidden="true" />
-          Updated {{ $dayjs(updatedAt).fromNow() }}
+          {{
+            $t('project.stats.updated', {
+              ago: $fmt.timeDifference(updatedAt),
+              projectType: safeProjectType,
+            })
+          }}
         </div>
       </div>
       <div v-if="status" class="status">
@@ -248,8 +257,34 @@ export default {
     },
   },
   computed: {
-    projectTypeDisplay() {
-      return this.$getProjectTypeForDisplay(this.type, this.categories)
+    loaders() {
+      const loaders = []
+
+      for (const { name: loader } of this.$tag.loaders) {
+        if (this.categories.includes(loader) && !loaders.includes(loader)) {
+          loaders.push(loader)
+        }
+      }
+
+      return loaders
+    },
+    coercedProjectType() {
+      return /** @type {import('vue/types/vue').Vue} */ (
+        this
+      ).$coerceProjectType(this.type, this.loaders)
+    },
+    safeProjectType() {
+      return this.coercedProjectType.replace(/-/g, '_')
+    },
+    projectSide() {
+      return /** @type {import('vue/types/vue').Vue} */ (
+        this
+      ).$computeProjectSide(this.clientSide, this.serverSide)
+    },
+    sideTip() {
+      return /** @type {import('vue/types/vue').Vue} */ (
+        this
+      ).$computeProjectTypeDisplay(this.projectSide, this.coercedProjectType)
     },
   },
 }

@@ -1,12 +1,20 @@
 <template>
-  <Modal ref="modal" :header="'Transfer to ' + $formatWallet(wallet)">
+  <Modal ref="modal" :header="$t('component.modal-transfer.title')">
     <div class="modal-transfer">
-      <span
-        >You are initiating a transfer of your revenue from Modrinth's Creator
-        Monetization Program. How much of your
-        <strong>{{ $formatMoney(balance) }}</strong> balance would you like to
-        transfer?</span
-      >
+      <span>
+        <IntlFormatted message-id="component.modal-transfer.description">
+          <template #~balance>
+            <strong>
+              {{
+                $fmt.number(balance, {
+                  style: 'currency',
+                  currency: 'USD',
+                })
+              }}
+            </strong>
+          </template>
+        </IntlFormatted>
+      </span>
       <div class="confirmation-input">
         <input
           id="confirmation"
@@ -14,7 +22,9 @@
           type="text"
           pattern="^\d*(\.\d{0,2})?$"
           autocomplete="off"
-          placeholder="Amount to transfer..."
+          :placeholder="
+            $t('component.modal-transfer.fields.amount.placeholder')
+          "
         />
       </div>
       <div class="confirm-text">
@@ -26,17 +36,25 @@
           "
           v-model="consentedFee"
         >
-          <template v-if="wallet === 'venmo'"
-            >I acknowledge that $0.25 will be deducted from the amount I receive
-            to cover {{ $formatWallet(wallet) }} processing fees.</template
-          >
-          <template v-else
-            >I acknowledge that an estimated
-            {{ $formatMoney(calcProcessingFees()) }} will be deducted from the
-            amount I receive to cover {{ $formatWallet(wallet) }} processing
-            fees and that any excess will be returned to my Modrinth
-            balance.</template
-          >
+          <template v-if="wallet === 'venmo'">
+            {{
+              $t('component.modal-transfer.fields.venmo-fee-consent.label', {
+                fee: $fmt.number(0.25, { style: 'currency', currency: 'USD' }),
+                wallet,
+              })
+            }}
+          </template>
+          <template v-else>
+            {{
+              $t('component.modal-transfer.fields.regular-fee-consent.label', {
+                fee: $fmt.number(calcProcessingFees(), {
+                  style: 'currency',
+                  currency: 'USD',
+                }),
+                wallet,
+              })
+            }}
+          </template>
         </Checkbox>
         <Checkbox
           v-if="
@@ -46,29 +64,47 @@
           "
           v-model="consentedAccount"
         >
-          I confirm that I an initiating a transfer to the following
-          {{ $formatWallet(wallet) }} account: {{ account }}
+          {{
+            $t('component.modal-transfer.fields.account-confirm.label', {
+              wallet,
+              account,
+            })
+          }}
         </Checkbox>
         <span
           v-else-if="validInput && parseInput() < minWithdraw"
           class="invalid"
         >
-          The amount must be at least {{ $formatMoney(minWithdraw) }}</span
-        >
+          {{
+            $t('component.modal-transfer.error.min-amount-required', {
+              amount: $fmt.number(minWithdraw, {
+                style: 'currency',
+                currency: 'USD',
+              }),
+            })
+          }}
+        </span>
         <span v-else-if="validInput && parseInput() > balance" class="invalid">
-          The amount must be no more than {{ $formatMoney(balance) }}</span
-        >
+          {{
+            $t('component.modal-transfer.error.max-amount-exceeded', {
+              amount: $fmt.number(balance, {
+                style: 'currency',
+                currency: 'USD',
+              }),
+            })
+          }}
+        </span>
         <span v-else-if="amount.length > 0" class="invalid">
-          {{ amount }} is not a valid amount</span
-        >
+          {{ $t('component.modal-transfer.error.illegal-input', { amount }) }}
+        </span>
       </div>
       <div class="button-group">
         <NuxtLink class="iconified-button" to="/settings/monetization">
-          <SettingsIcon /> Monetization settings
+          <SettingsIcon /> {{ $t('component.modal-transfer.action.settings') }}
         </NuxtLink>
         <button class="iconified-button" @click="cancel">
           <CrossIcon />
-          Cancel
+          {{ $t('generic.action.cancel') }}
         </button>
         <button
           class="iconified-button brand-button"
@@ -76,7 +112,7 @@
           @click="proceed"
         >
           <TransferIcon />
-          Transfer
+          {{ $t('component.modal-transfer.action.transfer') }}
         </button>
       </div>
     </div>
@@ -155,7 +191,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })

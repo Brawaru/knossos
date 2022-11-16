@@ -29,7 +29,9 @@ export default {
   props: {
     prompt: {
       type: String,
-      default: 'Select file',
+      default() {
+        return this.$t('component.file-input.default-prompt')
+      },
     },
     multiple: {
       type: Boolean,
@@ -39,9 +41,7 @@ export default {
       type: String,
       default: null,
     },
-    /**
-     * The max file size in bytes
-     */
+    /** The max file size in bytes */
     maxSize: {
       type: Number,
       default: null,

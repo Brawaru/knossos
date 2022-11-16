@@ -3,7 +3,9 @@
     <div class="nav-content">
       <slot />
       <span>{{ label }}</span>
-      <span v-if="beta" class="beta-badge">BETA</span>
+      <span v-if="beta" class="beta-badge">
+        {{ $t('generic.label.beta') }}
+      </span>
     </div>
   </NuxtLink>
 </template>
