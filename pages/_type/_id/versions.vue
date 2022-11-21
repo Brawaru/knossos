@@ -14,9 +14,15 @@
     <div v-if="versions.length > 0" class="universal-card all-versions">
       <div class="header">
         <div></div>
-        <div>Version</div>
-        <div>Supports</div>
-        <div>Stats</div>
+        <div>
+          {{ $t('project.versions.column.version') }}
+        </div>
+        <div>
+          {{ $t('project.versions.column.supports') }}
+        </div>
+        <div>
+          {{ $t('project.versions.column.stats') }}
+        </div>
       </div>
       <div
         v-for="version in filteredVersions"

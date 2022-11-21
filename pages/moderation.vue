@@ -44,7 +44,7 @@
             "
           >
             <CrossIcon />
-            Cancel
+            {{ $t('generic.action.cancel') }}
           </button>
           <button class="iconified-button brand-button" @click="saveProject">
             <CheckIcon />

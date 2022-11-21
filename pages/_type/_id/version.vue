@@ -3,13 +3,13 @@
     <div v-if="showKnownErrors" class="known-errors card">
       <ul>
         <li v-if="version.version_number === ''">
-          Your version must have a version number.
+          {{ $t('project.version.validation-error.no-version-number') }}
         </li>
         <li v-if="version.game_versions.length === 0">
-          Your version must have the supported Minecraft versions selected.
+          {{ $t('project.version.validation-error.no-game-versions') }}
         </li>
         <li v-if="newFiles.length === 0 && version.files.length === 0">
-          Your version must have a file uploaded.
+          {{ $t('project.version.validation-error.no-files') }}
         </li>
         <li
           v-if="
@@ -17,17 +17,17 @@
             project.project_type !== 'resourcepack'
           "
         >
-          Your version must have the supported mod loaders selected.
+          {{ $t('project.version.validation-error.no-loaders') }}
         </li>
       </ul>
     </div>
     <div class="content card">
       <ModalConfirm
         ref="modal_confirm"
-        title="Are you sure you want to delete this version?"
-        description="This will remove this version forever (like really forever)."
+        :title="$t('project.version.deletion-modal.title')"
+        :description="$t('project.version.deletion-modal.description')"
         :has-to-type="false"
-        proceed-label="Delete"
+        :proceed-label="$t('project.version.deletion-modal.action')"
         @proceed="deleteVersion()"
       />
       <ModalReport
@@ -50,7 +50,7 @@
           }`"
         >
           <BackIcon aria-hidden="true" />
-          Back to list
+          {{ $t('project.version.action.back-to-list') }}
         </nuxt-link>
       </div>
       <div>
@@ -59,14 +59,14 @@
 
           <div v-if="version.featured" class="featured">
             <StarIcon aria-hidden="true" />
-            Featured
+            {{ $t('project.version.status.featured') }}
           </div>
           <div
             v-else-if="featuredVersions.find((x) => x.id === version.id)"
             class="featured"
           >
             <StarIcon aria-hidden="true" />
-            Auto-featured
+            {{ $t('project.version.status.auto-featured') }}
           </div>
         </div>
         <div
@@ -84,7 +84,9 @@
           <hr class="card-divider" />
         </div>
         <div v-if="mode === 'edit'" class="header-buttons button-group columns">
-          <h3 class="column-grow-1">Edit version</h3>
+          <h3 class="column-grow-1">
+            {{ $t('project.version.edit.title') }}
+          </h3>
           <nuxt-link
             v-if="$auth.user"
             :to="`/${project.project_type}/${
@@ -93,21 +95,23 @@
             class="iconified-button"
           >
             <CrossIcon aria-hidden="true" />
-            Cancel
+            {{ $t('generic.action.cancel') }}
           </nuxt-link>
           <button
             class="iconified-button brand-button"
             @click="saveEditedVersion"
           >
             <SaveIcon aria-hidden="true" />
-            Save
+            {{ $t('generic.action.save') }}
           </button>
         </div>
         <div
           v-else-if="mode === 'create'"
           class="header-buttons button-group columns"
         >
-          <h3 class="column-grow-1">Create version</h3>
+          <h3 class="column-grow-1">
+            {{ $t('project.version.create.title') }}
+          </h3>
           <nuxt-link
             v-if="$auth.user"
             :to="`/${project.project_type}/${
@@ -116,25 +120,32 @@
             class="iconified-button"
           >
             <CrossIcon aria-hidden="true" />
-            Cancel
+            {{ $t('generic.action.cancel') }}
           </nuxt-link>
           <button class="iconified-button brand-button" @click="createVersion">
             <CheckIcon aria-hidden="true" />
-            Create
+            {{ $t('project.version.create.action.create') }}
           </button>
         </div>
         <div v-else class="button-group">
           <a
             v-if="primaryFile"
             v-tooltip="
-              primaryFile.filename + ' (' + $formatBytes(primaryFile.size) + ')'
+              $t('project.version.file.action.download.tooltip', {
+                fileName: primaryFile.filename,
+                fileSize: $formatFileSize(primaryFile.size),
+              })
             "
             :href="primaryFile.url"
             class="bold-button iconified-button brand-button"
-            :title="`Download ${primaryFile.filename}`"
+            :title="
+              $t('project.version.downloads.title', {
+                fileName: primaryFile.filename,
+              })
+            "
           >
             <DownloadIcon aria-hidden="true" />
-            Download
+            {{ $t('generic.action.download') }}
           </a>
           <button
             v-if="$auth.user"
@@ -142,11 +153,11 @@
             @click="$refs.modal_version_report.show()"
           >
             <ReportIcon aria-hidden="true" />
-            Report
+            {{ $t('generic.action.report') }}
           </button>
           <a v-else class="action iconified-button" :href="authUrl">
             <ReportIcon aria-hidden="true" />
-            Report
+            {{ $t('generic.action.report') }}
           </a>
           <nuxt-link
             v-if="currentMember"
@@ -157,7 +168,7 @@
             @click.prevent="mode = 'edit'"
           >
             <EditIcon aria-hidden="true" />
-            Edit
+            {{ $t('generic.action.edit') }}
           </nuxt-link>
           <button
             v-if="currentMember"
@@ -165,15 +176,18 @@
             @click="$refs.modal_confirm.show()"
           >
             <TrashIcon aria-hidden="true" />
-            Delete
+            {{ $t('generic.action.delete') }}
           </button>
         </div>
         <section v-if="mode === 'edit' || mode === 'create'">
-          <h3>Changelog</h3>
+          <h3>
+            {{ $t('project.version.changelog.title') }}
+          </h3>
           <Chips
             v-model="changelogViewMode"
             class="separator"
             :items="['source', 'preview']"
+            :format-label="(x) => $t(`markdown-editor.tab.${x}`)"
           />
           <div
             v-if="changelogViewMode === 'source'"
@@ -188,28 +202,34 @@
             v-html="
               version.changelog
                 ? $xss($md.render(version.changelog))
-                : 'No changelog specified.'
+                : $t('project.version.changelog.empty')
             "
           ></div>
         </section>
         <section v-else>
-          <h3>Changelog</h3>
+          <h3>
+            {{ $t('project.version.changelog.title') }}
+          </h3>
           <div
             v-highlightjs
             class="markdown-body"
             v-html="
               version.changelog
                 ? $xss($md.render(version.changelog))
-                : 'No changelog specified.'
+                : $t('project.version.changelog.empty')
             "
           ></div>
           <hr class="card-divider" />
         </section>
         <section>
-          <h3>Metadata</h3>
+          <h3>
+            {{ $t('project.version.metadata.title') }}
+          </h3>
           <div :class="'data-wrapper ' + mode">
             <div class="data">
-              <p class="title">Release channel</p>
+              <p class="title">
+                {{ $t('project.version.metadata.release-channel.title') }}
+              </p>
               <Multiselect
                 v-if="mode === 'edit' || mode === 'create'"
                 v-model="version.version_type"
@@ -217,7 +237,7 @@
                 placeholder="Select one"
                 :options="['release', 'beta', 'alpha']"
                 :custom-label="
-                  (value) => value.charAt(0).toUpperCase() + value.slice(1)
+                  (value) => $t(`project-release-channel.${value}`)
                 "
                 :searchable="false"
                 :close-on-select="true"
@@ -227,7 +247,7 @@
               <VersionBadge
                 v-else-if="version.version_type === 'release'"
                 class="value"
-                type="release"
+                :type="$t('project-release-channel.release')"
                 color="green"
               />
               <VersionBadge
@@ -245,11 +265,12 @@
             </div>
             <div v-if="project.project_type !== 'resourcepack'" class="data">
               <p class="title">
-                Loaders<span
+                {{ $t('project.version.loaders.title') }}
+                <span
                   v-if="mode === 'edit' || mode === 'create'"
                   class="required"
-                  >*</span
-                >
+                  v-text="'*'"
+                />
               </p>
               <multiselect
                 v-if="mode === 'edit' || mode === 'create'"
@@ -273,23 +294,28 @@
                 :show-labels="false"
                 :limit="6"
                 :hide-selected="true"
-                placeholder="Choose loaders..."
+                :placeholder="
+                  $t('project.version.edit.field.loaders.placeholder')
+                "
               />
               <p v-else class="value">
                 {{ version.loaders.map((x) => $formatCategory(x)).join(', ') }}
               </p>
             </div>
             <div v-if="mode === 'version'" class="data">
-              <p class="title">Downloads</p>
+              <p class="title">
+                {{ $t('project.version.downloads.title') }}
+                <span
+                  v-if="mode === 'edit' || mode === 'create'"
+                  class="required"
+                  v-text="'*'"
+                />
+              </p>
               <p class="value">{{ $formatNumber(version.downloads) }}</p>
             </div>
             <div class="data">
               <p class="title">
-                Version number<span
-                  v-if="mode === 'edit' || mode === 'create'"
-                  class="required"
-                  >*</span
-                >
+                {{ $t('project.version.version-number.title') }}
               </p>
               <input
                 v-if="mode === 'edit' || mode === 'create'"
@@ -302,11 +328,12 @@
             </div>
             <div class="data">
               <p class="title">
-                Minecraft versions<span
+                {{ $t('project.version.game-versions.title') }}
+                <span
                   v-if="mode === 'edit' || mode === 'create'"
                   class="required"
-                  >*</span
-                >
+                  v-text="'*'"
+                />
               </p>
               <div v-if="mode === 'edit' || mode === 'create'">
                 <multiselect
@@ -327,12 +354,22 @@
                   :show-labels="false"
                   :limit="6"
                   :hide-selected="true"
-                  placeholder="Choose versions..."
+                  :placeholder="
+                    $t('project.version.edit.field.game-versions.placeholder')
+                  "
                 />
                 <Checkbox
                   v-model="showSnapshots"
-                  label="Include snapshots"
-                  description="Include snapshots"
+                  :label="
+                    $t(
+                      'project.version.edit.field.game-versions.show-snapshots'
+                    )
+                  "
+                  :description="
+                    $t(
+                      'project.version.edit.field.game-versions.show-snapshots'
+                    )
+                  "
                   style="margin-top: 0.5rem"
                   :border="false"
                 />
@@ -342,30 +379,45 @@
               </p>
             </div>
             <div v-if="mode === 'version'" class="data">
-              <p class="title">Published</p>
+              <p class="title">
+                {{ $t('project.version.published.title') }}
+              </p>
               <p class="value">
-                {{ $dayjs(version.date_published).format('MMM D, YYYY') }}
-                <span
-                  v-if="members.find((x) => x.user.id === version.author_id)"
+                <IntlFormatted
+                  :message-id="
+                    members.find((x) => x.user.id === version.author_id) != null
+                      ? 'project.version.published.value.default'
+                      : 'project.version.published.value.authorless'
+                  "
+                  :values="{
+                    publishedAt: new Date(version.date_published),
+                  }"
                 >
-                  by
-                  <nuxt-link
-                    class="text-link"
-                    :to="
-                      '/user/' +
-                      members.find((x) => x.user.id === version.author_id).user
-                        .username
-                    "
-                    >{{
-                      members.find((x) => x.user.id === version.author_id).user
-                        .username
-                    }}</nuxt-link
+                  <template
+                    v-if="members.find((x) => x.user.id === version.author_id)"
+                    #~author
                   >
-                </span>
+                    <nuxt-link
+                      class="text-link"
+                      :to="
+                        '/user/' +
+                        members.find((x) => x.user.id === version.author_id)
+                          .user.username
+                      "
+                    >
+                      {{
+                        members.find((x) => x.user.id === version.author_id)
+                          .user.username
+                      }}
+                    </nuxt-link>
+                  </template>
+                </IntlFormatted>
               </p>
             </div>
             <div v-if="mode === 'version'" class="data">
-              <p class="title">Version ID</p>
+              <p class="title">
+                {{ $t('project.version.version-id.title') }}
+              </p>
               <p class="value"><CopyCode :text="version.id" /></p>
             </div>
           </div>
@@ -379,7 +431,9 @@
               project.project_type.toLowerCase() !== 'modpack')
           "
         >
-          <h3>Dependencies</h3>
+          <h3>
+            {{ $t('project.version.dependencies.title') }}
+          </h3>
           <div class="dependencies">
             <div
               v-for="(dependency, index) in version.dependencies.filter(
@@ -417,15 +471,23 @@
                     {{
                       dependency.project
                         ? dependency.project.title
-                        : 'Unknown Project'
+                        : $t('project.version.dependency.unknown-project')
                     }}
                   </h4>
                   <p v-if="dependency.version" class="version-number">
-                    Version {{ dependency.version.version_number }} is
-                    {{ dependency.dependency_type }}
+                    {{
+                      $t('project.version.dependency.version-bound', {
+                        version: dependency.version.version_number,
+                        type: dependency.dependency_type,
+                      })
+                    }}
                   </p>
                   <p v-else>
-                    {{ dependency.dependency_type }}
+                    {{
+                      $t('project.version.dependency.project-bound', {
+                        type: dependency.dependency_type,
+                      })
+                    }}
                   </p>
                 </nuxt-link>
                 <div class="bottom">
@@ -434,7 +496,8 @@
                     class="iconified-button"
                     @click="version.dependencies.splice(index, 1)"
                   >
-                    <TrashIcon /> Remove
+                    <TrashIcon />
+                    {{ $t('project.version.edit.dependency.action.remove') }}
                   </button>
                 </div>
               </div>
@@ -444,30 +507,39 @@
             v-if="mode === 'edit' || mode === 'create'"
             class="edit-dependency"
           >
-            <h4>Add dependency</h4>
+            <h4>
+              {{ $t('project.version.edit.add-dependency.title') }}
+            </h4>
             <Chips
               v-model="dependencyAddMode"
               class="separator"
               :items="['project', 'version']"
+              :format-label="
+                (x) => $t(`project.version.edit.add-dependency.type.${x}`)
+              "
             />
             <div class="edit-info">
               <input
                 v-model="newDependencyId"
                 type="text"
                 oninput="this.value = this.value.replace(' ', '')"
-                :placeholder="`Enter the ${dependencyAddMode} ID${
-                  dependencyAddMode === 'project' ? '/slug' : ''
-                }`"
+                :placeholder="
+                  $t(
+                    `project.version.edit.add-dependency.field.id.placeholder.${dependencyAddMode}`
+                  )
+                "
                 @keyup.enter="addDependency"
               />
               <Multiselect
                 v-model="newDependencyType"
                 class="input"
-                placeholder="Select one"
-                :options="['required', 'optional', 'incompatible', 'embedded']"
-                :custom-label="
-                  (value) => value.charAt(0).toUpperCase() + value.slice(1)
+                :placeholder="
+                  $t(
+                    `project.version.edit.add-dependency.field.type.placeholder`
+                  )
                 "
+                :options="['required', 'optional', 'incompatible', 'embedded']"
+                :custom-label="(value) => $t(`dependency-type.${value}`)"
                 :searchable="false"
                 :close-on-select="true"
                 :show-labels="false"
@@ -475,7 +547,7 @@
               />
               <button class="iconified-button" @click="addDependency">
                 <PlusIcon />
-                Add
+                {{ $t('project.version.edit.add-dependency.action') }}
               </button>
             </div>
           </div>
@@ -488,11 +560,11 @@
           "
         >
           <div>
-            <h3>External Dependencies</h3>
+            <h3>
+              {{ $t('project.version.external-dependencies.title') }}
+            </h3>
             <InfoIcon
-              v-tooltip="
-                'Mods not part of the Modrinth platform but depended on by this project'
-              "
+              v-tooltip="$t('project.version.external-dependencies.info')"
             />
           </div>
           <div class="external-dependency">
@@ -516,11 +588,12 @@
           "
         >
           <h3>
-            Files<span
+            {{ $t('project.version.files.title') }}
+            <span
               v-if="mode === 'edit' || mode === 'create'"
               class="required"
-              >*</span
-            >
+              v-text="'*'"
+            />
           </h3>
           <div
             v-for="(file, index) in version.files"
@@ -535,16 +608,20 @@
               class="featured"
             >
               <StarIcon aria-hidden="true" />
-              Primary
+              {{ $t('project.version.files.file.primary') }}
             </div>
             <a
               :href="file.url"
               class="action iconified-button"
-              :title="`Download ${file.filename}`"
+              :title="
+                $t('project.version.file.action.download.title', {
+                  fileName: primaryFile.filename,
+                })
+              "
               tabindex="0"
             >
               <DownloadIcon aria-hidden="true" />
-              Download
+              {{ $t('generic.action.download') }}
             </a>
             <p v-if="mode === 'version'">({{ $formatBytes(file.size) }})</p>
             <button
@@ -556,7 +633,7 @@
               "
             >
               <TrashIcon aria-hidden="true" />
-              Remove
+              {{ $t('project.version.edit.files.file.action.remove') }}
             </button>
             <button
               v-if="
@@ -566,7 +643,7 @@
               @click="primaryFile = file"
             >
               <StarIcon aria-hidden="true" />
-              Make primary
+              {{ $t('project.version.edit.files.file.action.make-primary') }}
             </button>
           </div>
           <div v-if="mode === 'edit' || mode === 'create'">
@@ -581,7 +658,7 @@
                 @click="newFiles.splice(index, 1)"
               >
                 <TrashIcon aria-hidden="true" />
-                Remove
+                {{ $t('project.version.file.action.remove') }}
               </button>
             </div>
           </div>
@@ -602,27 +679,37 @@
             @change="(x) => x.forEach((y) => newFiles.push(y))"
           />
           <span v-if="mode === 'edit' || mode === 'create'">
-            You may upload multiple files, but this should only be used for
-            cases like sources or Javadocs.
-            <p
-              v-if="project.project_type.toLowerCase() === 'modpack'"
-              aria-label="Warning"
-            >
-              Modpack support is currently in alpha, and you may encounter
-              issues. Our documentation includes instructions on
-              <a
-                href="https://docs.modrinth.com/docs/modpacks/creating_modpacks/"
-                target="_blank"
-                class="text-link"
-                >creating modpacks</a
-              >. Join us on
-              <a
-                href="https://discord.gg/EUHuJHt"
-                target="_blank"
-                class="text-link"
-                >Discord</a
+            <p>
+              {{ $t('project.version.edit.files.info') }}
+            </p>
+            <p v-if="project.project_type.toLowerCase() === 'modpack'">
+              <IntlFormatted
+                message-id="project.version.edit.files.modpack-notice"
               >
-              for support.
+                <template #sr-only="{ children }">
+                  <span class="sr-only">
+                    <Fragment :of="children" />
+                  </span>
+                </template>
+                <template #doc-link="{ children }">
+                  <a
+                    href="https://docs.modrinth.com/docs/modpacks/creating_modpacks/"
+                    target="_blank"
+                    class="text-link"
+                  >
+                    <Fragment :of="children" />
+                  </a>
+                </template>
+                <template #discord-link="{ children }">
+                  <a
+                    href="https://discord.gg/EUHuJHt"
+                    target="_blank"
+                    class="text-link"
+                  >
+                    <Fragment :of="children" />
+                  </a>
+                </template>
+              </IntlFormatted>
             </p>
           </span>
         </section>
@@ -742,18 +829,34 @@ export default {
     if (!this.version || !this.version.game_versions) {
       return {}
     }
-    const title = `${
-      this.mode === 'create' ? 'Create Version' : this.version.name
-    } - ${this.project.title}`
-    const description = `Download ${this.project.title} ${
-      this.version.version_number
-    } on Modrinth. Supports ${this.$formatVersion(
-      this.version.game_versions
-    )} ${this.version.loaders
-      .map((x) => x.charAt(0).toUpperCase() + x.slice(1))
-      .join(' & ')}. Published on ${this.$dayjs(
-      this.version.date_published
-    ).format('MMM D, YYYY')}. ${this.version.downloads} downloads.`
+
+    const title =
+      this.mode === 'create'
+        ? this.$t('project.version.meta.title.create', {
+            project: this.project.title,
+          })
+        : this.$t('project.version.meta.title.default', {
+            version: this.version.version_number,
+            project: this.project.title,
+          })
+
+    const description = this.$t('project.version.meta.description', {
+      project: this.project.title,
+      version: this.version.version_number,
+      gameVersions: this.$formatVersion(this.version.game_versions),
+      loaders: this.$fmt.list(
+        this.version.loaders.map((loader) => this.$translateLoader(loader))
+      ),
+      published: new Date(this.version.date_published),
+      downloads: this.version.downloads,
+    })
+
+    this.$t(
+      {
+        id: 'test.test-string',
+      },
+      {}
+    )
 
     return {
       title,
@@ -852,7 +955,7 @@ export default {
       if (!this.version) {
         this.$nuxt.context.error({
           statusCode: 404,
-          message: 'The page could not be found',
+          message: this.$t('generic.error.404.message'),
         })
         return
       }
@@ -924,8 +1027,8 @@ export default {
       } catch {
         this.$notify({
           group: 'main',
-          title: 'Invalid Dependency',
-          text: 'The specified dependency does not exist',
+          title: this.$t('project.version.error.invalid-dependency.title'),
+          text: this.$t('project.version.error.invalid-dependency.message'),
           type: 'error',
         })
       }
@@ -1015,7 +1118,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })
@@ -1094,7 +1197,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })

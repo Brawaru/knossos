@@ -2,32 +2,36 @@
   <div>
     <ModalConfirm
       ref="modal_confirm"
-      title="Are you sure you want to delete this project?"
-      description="If you proceed, all versions and any attached data will be removed from our servers. This may break other projects, so be careful."
+      :title="$t('project.settings.delete-modal.title')"
+      :description="$t('project.settings.delete-modal.description')"
       :has-to-type="true"
       :confirmation-text="project.title"
-      proceed-label="Delete"
+      :proceed-label="$t('project.settings.delete-modal.action')"
       @proceed="deleteProject"
     />
     <div class="universal-card">
-      <h2>General settings</h2>
+      <h2>{{ $t('project.settings.general.title') }}</h2>
       <div class="adjacent-input">
         <label>
-          <span class="label__title">Edit project information</span>
+          <span class="label__title">
+            {{ $t('project.settings.general.edit.title') }}
+          </span>
           <span class="label__description">
-            Edit your project's name, description, categories, and more.
+            {{ $t('project.settings.general.edit.description') }}
           </span>
         </label>
-        <nuxt-link class="iconified-button" to="edit"
-          ><EditIcon />Edit</nuxt-link
-        >
+        <nuxt-link class="iconified-button" to="edit">
+          <EditIcon />
+          {{ $t('project.settings.general.edit.action') }}
+        </nuxt-link>
       </div>
       <div class="adjacent-input">
         <span class="label">
-          <span class="label__title">Delete project</span>
+          <span class="label__title">
+            {{ $t('project.settings.general.delete.title') }}
+          </span>
           <span class="label__description">
-            Removes your project from Modrinth's servers and search. Clicking on
-            this will delete your project, so be extra careful!
+            {{ $t('project.settings.general.delete.description') }}
           </span>
         </span>
         <button
@@ -37,18 +41,20 @@
           "
           @click="$refs.modal_confirm.show()"
         >
-          <TrashIcon />Delete project
+          <TrashIcon />
+          {{ $t('project.settings.general.delete.action') }}
         </button>
       </div>
     </div>
     <div class="universal-card">
-      <h2>Manage members</h2>
+      <h2>{{ $t('project.settings.members.title') }}</h2>
       <div class="adjacent-input">
         <span class="label">
-          <span class="label__title">Invite a member</span>
+          <span class="label__title">
+            {{ $t('project.settings.members.invite.title') }}
+          </span>
           <span class="label__description">
-            Enter the Modrinth username of the person you'd like to invite to be
-            a member of this project.
+            {{ $t('project.settings.members.invite.description') }}
           </span>
         </span>
         <div
@@ -59,15 +65,19 @@
             id="username"
             v-model="currentUsername"
             type="text"
-            placeholder="Username"
+            :placeholder="
+              $t('project.settings.members.field.username.placeholder')
+            "
           />
-          <label for="username" class="hidden">Username</label>
+          <label for="username" class="hidden">
+            {{ $t('project.settings.members.field.username.label') }}
+          </label>
           <button
             class="iconified-button brand-button"
             @click="inviteTeamMember"
           >
             <PlusIcon />
-            Invite
+            {{ $t('project.settings.members.action.invite') }}
           </button>
         </div>
       </div>
@@ -113,9 +123,11 @@
       <div class="content">
         <div v-if="member.oldRole !== 'Owner'" class="adjacent-input">
           <label :for="`member-${allTeamMembers[index].user.username}-role`">
-            <span class="label__title">Role</span>
+            <span class="label__title">
+              {{ $t('project.settings.member.role.title') }}
+            </span>
             <span class="label__description">
-              The title of the role that this member plays for this project.
+              {{ $t('project.settings.member.role.description') }}
             </span>
           </label>
           <input
@@ -132,11 +144,13 @@
           <label
             :for="`member-${allTeamMembers[index].user.username}-monetization-weight`"
           >
-            <span class="label__title">Monetization weight</span>
+            <span class="label__title">
+              {{ $t('project.settings.member.monetization-weight.title') }}
+            </span>
             <span class="label__description">
-              Relative to all other members' monetization weights, this
-              determines what portion of this project's revenue goes to this
-              member.
+              {{
+                $t('project.settings.member.monetization-weight.description')
+              }}
             </span>
           </label>
           <input
@@ -152,11 +166,13 @@
           v-if="member.role === 'Owner' && member.oldRole !== 'Owner'"
           class="known-errors"
         >
-          <li>A project can only have one 'Owner'.</li>
+          <li>{{ $t('project.settings.error.no-multiple-owners') }}</li>
         </ul>
         <template v-if="member.oldRole !== 'Owner'">
           <span class="label">
-            <span class="label__title">Permissions</span>
+            <span class="label__title">
+              {{ $t('project.settings.member.permissions.title') }}
+            </span>
           </span>
           <div class="permissions">
             <Checkbox
@@ -165,7 +181,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & UPLOAD_VERSION) !== UPLOAD_VERSION
               "
-              label="Upload version"
+              :label="$t('project.settings.member.permission.upload-version')"
               @input="allTeamMembers[index].permissions ^= UPLOAD_VERSION"
             />
             <Checkbox
@@ -174,7 +190,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & DELETE_VERSION) !== DELETE_VERSION
               "
-              label="Delete version"
+              :label="$t('project.settings.member.permission.delete-version')"
               @input="allTeamMembers[index].permissions ^= DELETE_VERSION"
             />
             <Checkbox
@@ -183,7 +199,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & EDIT_DETAILS) !== EDIT_DETAILS
               "
-              label="Edit details"
+              :label="$t('project.settings.member.permission.edit-details')"
               @input="allTeamMembers[index].permissions ^= EDIT_DETAILS"
             />
             <Checkbox
@@ -192,7 +208,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & EDIT_BODY) !== EDIT_BODY
               "
-              label="Edit body"
+              :label="$t('project.settings.member.permission.edit-body')"
               @input="allTeamMembers[index].permissions ^= EDIT_BODY"
             />
             <Checkbox
@@ -201,7 +217,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & MANAGE_INVITES) !== MANAGE_INVITES
               "
-              label="Manage invites"
+              :label="$t('project.settings.member.permission.manage-invites')"
               @input="allTeamMembers[index].permissions ^= MANAGE_INVITES"
             />
             <Checkbox
@@ -210,7 +226,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & REMOVE_MEMBER) !== REMOVE_MEMBER
               "
-              label="Remove member"
+              :label="$t('project.settings.member.permission.remove-member')"
               @input="allTeamMembers[index].permissions ^= REMOVE_MEMBER"
             />
             <Checkbox
@@ -218,7 +234,7 @@
               :disabled="
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER
               "
-              label="Edit member"
+              :label="$t('project.settings.member.permission.edit-member')"
               @input="allTeamMembers[index].permissions ^= EDIT_MEMBER"
             />
             <Checkbox
@@ -227,7 +243,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & DELETE_PROJECT) !== DELETE_PROJECT
               "
-              label="Delete project"
+              :label="$t('project.settings.member.permission.delete-project')"
               @input="allTeamMembers[index].permissions ^= DELETE_PROJECT"
             />
             <Checkbox
@@ -236,7 +252,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & VIEW_ANALYTICS) !== VIEW_ANALYTICS
               "
-              label="View analytics"
+              :label="$t('project.settings.member.permission.view-analytics')"
               @input="allTeamMembers[index].permissions ^= VIEW_ANALYTICS"
             />
             <Checkbox
@@ -245,7 +261,7 @@
                 (currentMember.permissions & EDIT_MEMBER) !== EDIT_MEMBER ||
                 (currentMember.permissions & VIEW_PAYOUTS) !== VIEW_PAYOUTS
               "
-              label="View revenue"
+              :label="$t('project.settings.member.permission.view-payouts')"
               @input="allTeamMembers[index].permissions ^= VIEW_PAYOUTS"
             />
           </div>
@@ -260,7 +276,7 @@
             @click="removeTeamMember(index)"
           >
             <TrashIcon />
-            Remove member
+            {{ $t('project.settings.member.action.remove') }}
           </button>
           <button
             v-if="
@@ -272,7 +288,7 @@
             @click="transferOwnership(index)"
           >
             <UserIcon />
-            Transfer ownership
+            {{ $t('project.settings.member.action.make-owner') }}
           </button>
           <button
             class="iconified-button brand-button"
@@ -282,7 +298,7 @@
             @click="updateTeamMember(index)"
           >
             <CheckIcon />
-            Save changes
+            {{ $t('generic.action.save-changes') }}
           </button>
         </div>
       </div>

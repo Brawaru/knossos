@@ -6,6 +6,7 @@ import '~/modules/i18n/templates/i18n'
 import {
   RichArgument,
   ValueArgument,
+  DateArgument,
   NumberArgument,
 } from '~/modules/i18n/templates/i18n.types'
 
@@ -248,13 +249,113 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'component.version-filter.action.clear': never
 
+    'dashboard.title': never
+
+    'dependency-type.required': never
+
+    'dependency-type.optional': never
+
+    'dependency-type.incompatible': never
+
+    'dependency-type.embedded': never
+
+    'error-page.title': never
+
+    'error-page.action.home': never
+
+    'error-page.action.discord': never
+
+    'error-page.default-message': never
+
+    'external-resource.discord': never
+
+    'footer.section.information.title': never
+
+    'footer.section.information.open-source': {
+      'gh-link': RichArgument
+    }
+
+    'footer.section.legal.title': never
+
+    'footer.section.legal.link.terms': never
+
+    'footer.section.legal.link.privacy': never
+
+    'footer.section.legal.link.rules': never
+
+    'footer.section.legal.link.license': never
+
+    'footer.section.resources.title': never
+
+    'footer.section.resources.link.blog': never
+
+    'footer.section.resources.link.docs': never
+
+    'footer.section.resources.link.status': never
+
+    'footer.section.resources.link.github': never
+
+    'footer.section.interact.title': never
+
+    'footer.section.interact.link.discord': never
+
+    'footer.section.interact.link.twitter': never
+
+    'footer.section.interact.link.mastodon': never
+
+    'footer.section.interact.link.crowdin': never
+
+    'footer.notice.legal-mojang': never
+
     'generic.action.cancel': never
 
     'generic.action.continue': never
 
+    'generic.action.delete': never
+
+    'generic.action.download': never
+
+    'generic.action.edit': never
+
+    'generic.action.report': never
+
+    'generic.action.save': never
+
+    'generic.action.save-changes': never
+
+    'generic.error.404.message': never
+
     'generic.error.title': never
 
     'generic.label.beta': never
+
+    'generic.placeholder.select-one': never
+
+    'generic.placeholder.valid-url': never
+
+    'generic.title.settings': never
+
+    'header.action.switch-theme': never
+
+    'header.link.skip-to-content': never
+
+    'header.link.home': never
+
+    'header.navigation.aria-label': never
+
+    'header.profile-dropdown.action.log-out': never
+
+    'header.profile-dropdown.action.sign-in': never
+
+    'header.profile-dropdown.avatar.alt': never
+
+    'header.profile-dropdown.link.profile': never
+
+    'header.profile-dropdown.link.follows': never
+
+    'layout.action.change-theme': never
+
+    'layout.action.create-project': never
 
     'loader.bukkit': never
 
@@ -290,6 +391,229 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'markdown-editor.tab.preview': never
 
+    'mobile-navigation.action.browse': never
+
+    'moderation.title': never
+
+    'notifications.title': never
+
+    'project.action.submit-for-review': never
+
+    'project.changelog.item.default': {
+      version: ValueArgument
+      span: RichArgument
+      author: ValueArgument
+      publishedAt: DateArgument
+    }
+
+    'project.changelog.item.authorless': {
+      version: ValueArgument
+      span: RichArgument
+      publishedAt: DateArgument
+    }
+
+    'project.changelog.meta.title': {
+      project: ValueArgument
+    }
+
+    'project.changelog.meta.description': {
+      project: ValueArgument
+      versions: NumberArgument
+    }
+
+    'project.edit.title': never
+
+    'project.edit.field.name.name': never
+
+    'project.edit.field.name.description': never
+
+    'project.edit.field.name.placeholder': never
+
+    'project.edit.field.description.name': never
+
+    'project.edit.field.description.description': never
+
+    'project.edit.field.description.placeholder': never
+
+    'project.edit.field.categories.name': never
+
+    'project.edit.field.categories.description': never
+
+    'project.edit.field.categories.placeholder': never
+
+    'project.edit.field.additional-categories.name': never
+
+    'project.edit.field.additional-categories.description': never
+
+    'project.edit.field.additional-categories.placeholder': never
+
+    'project.edit.field.slug.name': never
+
+    'project.edit.field.icon.name': never
+
+    'project.edit.field.icon.preview.alt': never
+
+    'project.edit.field.icon.prompt': never
+
+    'project.edit.field.icon.action.revert': never
+
+    'project.edit.field.environments.name': never
+
+    'project.edit.field.environments.description': never
+
+    'project.edit.field.environments.client.name': never
+
+    'project.edit.field.environments.server.name': never
+
+    'project.edit.field.environments.value.required': never
+
+    'project.edit.field.environments.value.optional': never
+
+    'project.edit.field.environments.value.unsupported': never
+
+    'project.edit.field.body.name': never
+
+    'project.edit.field.body.title': never
+
+    'project.edit.field.body.description': {
+      'md-help-link': RichArgument
+    }
+
+    'project.edit.field.body.empty-preview': never
+
+    'project.edit.field.external-links.title': never
+
+    'project.edit.field.external-links.issues-url.name': never
+
+    'project.edit.field.external-links.issues-url.title': never
+
+    'project.edit.field.external-links.source-url.name': never
+
+    'project.edit.field.external-links.source-url.title': never
+
+    'project.edit.field.external-links.wiki-url.name': never
+
+    'project.edit.field.external-links.wiki-url.title': never
+
+    'project.edit.field.external-links.discord-url.name': never
+
+    'project.edit.field.external-links.discord-url.title': never
+
+    'project.edit.field.license.name': never
+
+    'project.edit.field.license.description': {
+      'guide-link': RichArgument
+    }
+
+    'project.edit.field.license.default.placeholder': never
+
+    'project.edit.field.license.custom.placeholder': never
+
+    'project.edit.field.donation-links.name': never
+
+    'project.edit.field.donation-links.action.add': never
+
+    'project.edit.field.donation-links.action.remove': never
+
+    'project.edit.field.donation-links.link.name': never
+
+    'project.edit.field.donation-links.link.title': never
+
+    'project.edit.field.donation-links.link-platform.name': never
+
+    'project.edit.field.donation-links.link-platform.title': never
+
+    'project.gallery.action.add-image.default': never
+
+    'project.gallery.action.add-image.non-empty': never
+
+    'project.gallery.meta.title': {
+      project: ValueArgument
+    }
+
+    'project.gallery.meta.description': {
+      images: NumberArgument
+      project: ValueArgument
+    }
+
+    'project.gallery.item.action.remove': never
+
+    'project.gallery.item.field.title.placeholder': never
+
+    'project.gallery.item.field.description.placeholder': never
+
+    'project.gallery.item.field.featured.label': never
+
+    'project.gallery.item.field.file.prompt': never
+
+    'project.settings.error.no-multiple-owners': never
+
+    'project.settings.general.title': never
+
+    'project.settings.general.edit.title': never
+
+    'project.settings.general.edit.description': never
+
+    'project.settings.general.edit.action': never
+
+    'project.settings.general.delete.title': never
+
+    'project.settings.general.delete.description': never
+
+    'project.settings.general.delete.action': never
+
+    'project.settings.members.title': never
+
+    'project.settings.members.invite.title': never
+
+    'project.settings.members.invite.description': never
+
+    'project.settings.members.field.username.label': never
+
+    'project.settings.members.field.username.placeholder': never
+
+    'project.settings.members.action.invite': never
+
+    'project.settings.member.role.title': never
+
+    'project.settings.member.role.description': never
+
+    'project.settings.member.monetization-weight.title': never
+
+    'project.settings.member.monetization-weight.description': never
+
+    'project.settings.member.permissions.title': never
+
+    'project.settings.member.action.remove': never
+
+    'project.settings.member.action.make-owner': never
+
+    'project.settings.member.permission.upload-version': never
+
+    'project.settings.member.permission.delete-version': never
+
+    'project.settings.member.permission.edit-details': never
+
+    'project.settings.member.permission.edit-body': never
+
+    'project.settings.member.permission.manage-invites': never
+
+    'project.settings.member.permission.remove-member': never
+
+    'project.settings.member.permission.edit-member': never
+
+    'project.settings.member.permission.delete-project': never
+
+    'project.settings.member.permission.view-analytics': never
+
+    'project.settings.member.permission.view-payouts': never
+
+    'project.settings.delete-modal.title': never
+
+    'project.settings.delete-modal.description': never
+
+    'project.settings.delete-modal.action': never
+
     'project.stats.downloads': {
       downloads: NumberArgument
       counter: ValueArgument
@@ -309,6 +633,187 @@ declare module '~/modules/i18n/templates/i18n.types' {
       projectType: /* clause */ 'other'
       ago: ValueArgument
     }
+
+    'project.validation-error.no-name': never
+
+    'project.validation-error.no-description': never
+
+    'project.validation-error.no-slug': never
+
+    'project.validation-error.no-body': never
+
+    'project.validation-error.no-versions': never
+
+    'project.validation-error.no-license': never
+
+    'project.version.status.featured': never
+
+    'project.version.status.auto-featured': never
+
+    'project.version.changelog.title': never
+
+    'project.version.changelog.empty': never
+
+    'project.version.loaders.title': never
+
+    'project.version.downloads.title': never
+
+    'project.version.version-number.title': never
+
+    'project.version.game-versions.title': never
+
+    'project.version.published.title': never
+
+    'project.version.published.value.default': {
+      publishedAt: DateArgument
+      author: ValueArgument
+    }
+
+    'project.version.published.value.authorless': {
+      publishedAt: DateArgument
+    }
+
+    'project.version.version-id.title': never
+
+    'project.version.dependencies.title': never
+
+    'project.version.external-dependencies.title': never
+
+    'project.version.external-dependencies.info': never
+
+    'project.version.files.title': never
+
+    'project.version.files.file.primary': never
+
+    'project.version.file.status.primary': never
+
+    'project.version.file.action.remove': never
+
+    'project.version.file.action.download.title': {
+      fileName: ValueArgument
+    }
+
+    'project.version.file.action.download.tooltip': {
+      fileName: ValueArgument
+      fileSize: ValueArgument
+    }
+
+    'project.version.action.back-to-list': never
+
+    'project.version.action.download-file': {
+      fileName: ValueArgument
+    }
+
+    'project.version.dependency.version-bound': {
+      version: ValueArgument
+      type: /* clause */
+        | 'required'
+        | /* clause */ 'optional'
+        | /* clause */ 'incompatible'
+        | /* clause */ 'embedded'
+        | /* clause */ 'other'
+    }
+
+    'project.version.dependency.project-bound': {
+      type: /* clause */
+        | 'required'
+        | /* clause */ 'optional'
+        | /* clause */ 'incompatible'
+        | /* clause */ 'embedded'
+        | /* clause */ 'other'
+    }
+
+    'project.version.dependency.unknown-project': never
+
+    'project.version.deletion-modal.title': never
+
+    'project.version.deletion-modal.description': never
+
+    'project.version.deletion-modal.action': never
+
+    'project.version.meta.title.create': {
+      project: ValueArgument
+    }
+
+    'project.version.meta.title.default': {
+      version: ValueArgument
+      project: ValueArgument
+    }
+
+    'project.version.meta.description': {
+      project: ValueArgument
+      version: ValueArgument
+      gameVersions: ValueArgument
+      loaders: ValueArgument
+      published: DateArgument
+      downloads: NumberArgument
+    }
+
+    'project.version.metadata.title': never
+
+    'project.version.metadata.release-channel.title': never
+
+    'project.version.edit.title': never
+
+    'project.version.edit.add-dependency.title': never
+
+    'project.version.edit.add-dependency.type.project': never
+
+    'project.version.edit.add-dependency.type.version': never
+
+    'project.version.edit.add-dependency.action': never
+
+    'project.version.edit.add-dependency.field.id.placeholder.project': never
+
+    'project.version.edit.add-dependency.field.id.placeholder.version': never
+
+    'project.version.edit.add-dependency.field.type.placeholder': never
+
+    'project.version.edit.add-dependency.field.test-something': never
+
+    'project.version.edit.dependency.action.remove': never
+
+    'project.version.edit.field.loaders.placeholder': never
+
+    'project.version.edit.field.game-versions.placeholder': never
+
+    'project.version.edit.field.game-versions.show-snapshots': never
+
+    'project.version.edit.files.file.action.remove': never
+
+    'project.version.edit.files.file.action.make-primary': never
+
+    'project.version.edit.files.info': never
+
+    'project.version.edit.files.modpack-notice': {
+      'sr-only': RichArgument
+      'doc-link': RichArgument
+      'discord-link': RichArgument
+    }
+
+    'project.version.error.invalid-dependency.title': never
+
+    'project.version.error.invalid-dependency.message': never
+
+    'project.version.create.title': never
+
+    'project.version.create.action.create': never
+
+    'project.version.validation-error.no-version-number': never
+
+    'project.version.validation-error.no-game-versions': never
+
+    'project.version.validation-error.no-files': never
+
+    'project.version.validation-error.no-loaders': never
+
+    'project.versions.action.create': never
+
+    'project.versions.column.version': never
+
+    'project.versions.column.supports': never
+
+    'project.versions.column.stats': never
 
     'project-type.mod-and-plugin.singular': never
 
@@ -346,6 +851,12 @@ declare module '~/modules/i18n/templates/i18n.types' {
       side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
     }
 
+    'project-release-channel.release': never
+
+    'project-release-channel.beta': never
+
+    'project-release-channel.alpha': never
+
     'report-type.spam': never
 
     'report-type.copyright': never
@@ -355,6 +866,46 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'report-type.malicious': never
 
     'report-type.name-squatting': never
+
+    'unit.size.bytes.short': {
+      value: ValueArgument
+    }
+
+    'unit.size.bytes.long': {
+      value: NumberArgument
+    }
+
+    'unit.size.kibibytes.short': {
+      value: ValueArgument
+    }
+
+    'unit.size.kibibytes.long': {
+      value: NumberArgument
+    }
+
+    'unit.size.mibibytes.short': {
+      value: ValueArgument
+    }
+
+    'unit.size.mibibytes.long': {
+      value: NumberArgument
+    }
+
+    'unit.size.gibibytes.short': {
+      value: ValueArgument
+    }
+
+    'unit.size.gibibytes.long': {
+      value: NumberArgument
+    }
+
+    'test.test-string': {
+      something: ValueArgument
+      somethingElse: /* clause */ 'owo' | /* clause */ 'other'
+      randomNumber: NumberArgument
+      randomCountOfPeople: NumberArgument
+      wrapper: RichArgument
+    }
   }
 }
 

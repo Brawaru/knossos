@@ -3,7 +3,9 @@
     <header class="site-header" role="presentation">
       <section class="navbar card columns" role="navigation">
         <section class="skip column" role="presentation">
-          <a href="#main">Skip to Main Content</a>
+          <a href="#main">
+            {{ $t('header.link.skip-to-content') }}
+          </a>
           <a
             v-show="!!registeredSkipLink"
             :href="(registeredSkipLink || {}).id"
@@ -11,29 +13,33 @@
           >
         </section>
         <section class="logo column" role="presentation">
-          <NuxtLink class="button-base" to="/" aria-label="Modrinth home page">
+          <NuxtLink
+            class="button-base"
+            to="/"
+            :aria-label="$t('header.link.home')"
+          >
             <ModrinthLogo aria-hidden="true" class="text-logo" />
           </NuxtLink>
         </section>
         <section class="nav-group columns" role="presentation">
-          <section class="nav" aria-label="Page links">
+          <section class="nav" :aria-label="$t('header.navigation.aria-label')">
             <NavRow
               class="navigation"
               :links="[
                 {
-                  label: 'Mods',
+                  label: $t('project-type.mod.plural'),
                   href: '/mods',
                 },
                 {
-                  label: 'Plugins',
+                  label: $t('project-type.plugin.plural'),
                   href: '/plugins',
                 },
                 {
-                  label: 'Resource Packs',
+                  label: $t('project-type.resourcepack.plural'),
                   href: '/resourcepacks',
                 },
                 {
-                  label: 'Modpacks',
+                  label: $t('project-type.modpack.plural'),
                   href: '/modpacks',
                 },
               ]"
@@ -52,7 +58,7 @@
               </nuxt-link>
               <button
                 class="control-button button-transparent"
-                title="Switch theme"
+                :title="$t('header.action.switch-theme')"
                 @click="changeTheme"
               >
                 <MoonIcon
@@ -74,7 +80,7 @@
                   <Avatar
                     :src="$auth.user.avatar_url"
                     class="user-icon"
-                    alt="Your avatar"
+                    :alt="$t('header.profile-dropdown.avatar.alt')"
                     aria-hidden="true"
                     circle
                   />
@@ -87,7 +93,9 @@
                   >
                     <div class="title profile-link">
                       <div class="username">@{{ $auth.user.username }}</div>
-                      <div class="prompt">Visit your profile</div>
+                      <div class="prompt">
+                        {{ $t('header.profile-dropdown.link.profile') }}
+                      </div>
                     </div>
                   </NuxtLink>
                   <hr class="divider" />
@@ -96,28 +104,40 @@
                     @click="$refs.modal_creation.show()"
                   >
                     <PlusIcon class="icon" />
-                    <span class="title">Create a project</span>
+                    <span class="title">
+                      {{ $t('layout.action.create-project') }}
+                    </span>
                   </button>
                   <hr class="divider" />
                   <NuxtLink class="item button-transparent" to="/notifications">
                     <NotificationIcon class="icon" />
-                    <span class="title">Notifications</span>
+                    <span class="title">
+                      {{ $t('notifications.title') }}
+                    </span>
                   </NuxtLink>
                   <NuxtLink class="item button-transparent" to="/dashboard">
                     <ChartIcon class="icon" />
-                    <span class="title">Dashboard</span
-                    ><span class="beta-badge">BETA</span>
+                    <span class="title">
+                      {{ $t('dashboard.title') }}
+                    </span>
+                    <span class="beta-badge">
+                      {{ $t('generic.label.beta') }}
+                    </span>
                   </NuxtLink>
                   <NuxtLink
                     class="item button-transparent"
                     to="/settings/follows"
                   >
                     <HeartIcon class="icon" />
-                    <span class="title">Following</span>
+                    <span class="title">
+                      {{ $t('header.profile-dropdown.link.follows') }}
+                    </span>
                   </NuxtLink>
                   <NuxtLink class="item button-transparent" to="/settings">
                     <SettingsIcon class="icon" />
-                    <span class="title">Settings</span>
+                    <span class="title">
+                      {{ $t('generic.title.settings') }}
+                    </span>
                   </NuxtLink>
                   <NuxtLink
                     v-if="
@@ -128,12 +148,16 @@
                     to="/moderation"
                   >
                     <ModerationIcon class="icon" />
-                    <span class="title">Moderation</span>
+                    <span class="title">
+                      {{ $t('moderation.title') }}
+                    </span>
                   </NuxtLink>
                   <hr class="divider" />
                   <button class="item button-transparent" @click="logout">
                     <LogOutIcon class="icon" />
-                    <span class="dropdown-item__text">Log out</span>
+                    <span class="dropdown-item__text">
+                      {{ $t('header.profile-dropdown.action.log-out') }}
+                    </span>
                   </button>
                 </div>
               </div>
@@ -143,8 +167,8 @@
                   class="log-in-button header-button brand-button"
                 >
                   <GitHubIcon aria-hidden="true" />
-                  Sign in with GitHub</a
-                >
+                  {{ $t('header.profile-dropdown.action.sign-in') }}
+                </a>
               </section>
             </section>
           </section>
@@ -165,7 +189,7 @@
             @click="toggleBrowseMenu()"
           >
             <DropdownIcon :class="{ closed: !isBrowseMenuOpen }" />
-            <span>Browse</span>
+            <span>{{ $t('mobile-navigation.action.browse') }}</span>
           </button>
           <div class="spacer"></div>
           <button class="tab button-animation" @click="toggleMobileMenu()">
@@ -183,7 +207,9 @@
             class="tab iconified-button"
             @click.native="isBrowseMenuOpen = false"
           >
-            <span>Mods</span>
+            <span>
+              {{ $t('project-type.mod.plural') }}
+            </span>
           </NuxtLink>
           <NuxtLink
             :tabindex="isBrowseMenuOpen ? 0 : -1"
@@ -191,7 +217,9 @@
             class="tab iconified-button"
             @click.native="isBrowseMenuOpen = false"
           >
-            <span>Plugins</span>
+            <span>
+              {{ $t('project-type.plugin.plural') }}
+            </span>
           </NuxtLink>
 
           <NuxtLink
@@ -200,7 +228,9 @@
             class="tab iconified-button"
             @click.native="isBrowseMenuOpen = false"
           >
-            <span>Resource Packs</span>
+            <span>
+              {{ $t('project-type.resourcepack.plural') }}
+            </span>
           </NuxtLink>
           <NuxtLink
             :tabindex="isBrowseMenuOpen ? 0 : -1"
@@ -208,7 +238,9 @@
             class="tab iconified-button"
             @click.native="isBrowseMenuOpen = false"
           >
-            <span>Modpacks</span>
+            <span>
+              {{ $t('project-type.modpack.plural') }}
+            </span>
           </NuxtLink>
         </div>
       </section>
@@ -224,11 +256,13 @@
                 :src="$auth.user.avatar_url"
                 class="user-icon"
                 aria-hidden="true"
-                alt="User profile icon"
+                :alt="$t('header.profile-dropdown.avatar.alt')"
               />
               <div class="profile-link">
                 <div class="username">@{{ $auth.user.username }}</div>
-                <div class="prompt">Visit your profile</div>
+                <div class="prompt">
+                  {{ $t('header.profile-dropdown.link.profile') }}
+                </div>
               </div>
             </NuxtLink>
             <button
@@ -237,7 +271,9 @@
               @click="$refs.modal_creation.show()"
             >
               <PlusIcon class="icon" />
-              <span class="dropdown-item__text">Create a project</span>
+              <span class="dropdown-item__text">
+                {{ $t('layout.action.create-project') }}
+              </span>
             </button>
             <NuxtLink
               v-if="$auth.user"
@@ -245,7 +281,9 @@
               to="/notifications"
             >
               <NotificationIcon class="icon" />
-              <span class="dropdown-item__text">Notifications</span>
+              <span class="dropdown-item__text">
+                {{ $t('notifications.title') }}
+              </span>
             </NuxtLink>
             <NuxtLink
               v-if="$auth.user"
@@ -253,8 +291,12 @@
               to="/dashboard"
             >
               <ChartIcon class="icon" />
-              <span class="dropdown-item__text">Dashboard</span>
-              <span class="beta-badge">BETA</span>
+              <span class="dropdown-item__text">
+                {{ $t('dashboard.title') }}
+              </span>
+              <span class="beta-badge">
+                {{ $t('generic.label.beta') }}
+              </span>
             </NuxtLink>
             <NuxtLink
               v-if="$auth.user"
@@ -262,11 +304,15 @@
               to="/settings/follows"
             >
               <HeartIcon class="icon" />
-              <span class="dropdown-item__text">Following</span>
+              <span class="dropdown-item__text">
+                {{ $t('header.profile-dropdown.link.follows') }}
+              </span>
             </NuxtLink>
             <NuxtLink class="iconified-button raised-button" to="/settings">
               <SettingsIcon class="icon" />
-              <span class="dropdown-item__text">Settings</span>
+              <span class="dropdown-item__text">
+                {{ $t('generic.title.settings') }}
+              </span>
             </NuxtLink>
             <NuxtLink
               v-if="
@@ -277,12 +323,16 @@
               to="/moderation"
             >
               <ModerationIcon class="icon" />
-              <span class="dropdown-item__text">Moderation</span>
+              <span class="dropdown-item__text">
+                {{ $t('moderation.title') }}
+              </span>
             </NuxtLink>
             <button class="iconified-button raised-button" @click="changeTheme">
               <MoonIcon v-if="$colorMode.value === 'light'" class="icon" />
               <SunIcon v-else class="icon" />
-              <span class="dropdown-item__text">Change theme</span>
+              <span class="dropdown-item__text">
+                {{ $t('layout.action.change-theme') }}
+              </span>
             </button>
             <button
               v-if="$auth.user"
@@ -290,12 +340,14 @@
               @click="logout"
             >
               <LogOutIcon class="icon" />
-              <span class="dropdown-item__text">Log out</span>
+              <span class="dropdown-item__text">
+                {{ $t('header.profile-dropdown.action.log-out') }}
+              </span>
             </button>
             <a v-else :href="authUrl" class="iconified-button brand-button">
               <GitHubIcon aria-hidden="true" />
-              Sign in with GitHub</a
-            >
+              {{ $t('header.profile-dropdown.action.sign-in') }}
+            </a>
           </div>
         </div>
       </section>
@@ -313,17 +365,24 @@
       <Nuxt id="main" />
     </main>
     <footer>
-      <div class="logo-info" role="region" aria-label="Modrinth information">
+      <div
+        class="logo-info"
+        role="region"
+        :aria-label="$t('footer.section.information.title')"
+      >
         <ModrinthLogo aria-hidden="true" class="text-logo" />
         <p>
-          Modrinth is
-          <a
-            :target="$external()"
-            href="https://github.com/modrinth"
-            class="text-link"
-          >
-            open source</a
-          >.
+          <IntlFormatted message-id="footer.section.information.open-source">
+            <template #gh-link="{ children }">
+              <a
+                :target="$external()"
+                href="https://github.com/modrinth"
+                class="text-link"
+              >
+                <Fragment :of="children" />
+              </a>
+            </template>
+          </IntlFormatted>
         </p>
         <p>
           {{ owner }}/{{ slug }} {{ branch }}@<a
@@ -335,45 +394,82 @@
         </p>
         <p>© Rinth, Inc.</p>
       </div>
-      <div class="links links-1" role="region" aria-label="Legal">
-        <h4 aria-hidden="true">Legal</h4>
-        <nuxt-link to="/legal/terms">Terms</nuxt-link>
-        <nuxt-link to="/legal/privacy">Privacy</nuxt-link>
-        <nuxt-link to="/legal/rules">Rules</nuxt-link>
-        <nuxt-link to="/legal/security">Security</nuxt-link>
+      <div
+        class="links links-1"
+        role="region"
+        :aria-label="$t('footer.section.legal.title')"
+      >
+        <h4 aria-hidden="true">
+          {{ $t('footer.section.legal.title') }}
+        </h4>
+        <nuxt-link to="/legal/terms">
+          {{ $t('footer.section.legal.link.terms') }}
+        </nuxt-link>
+        <nuxt-link to="/legal/privacy">
+          {{ $t('footer.section.legal.link.privacy') }}
+        </nuxt-link>
+        <nuxt-link to="/legal/rules">
+          {{ $t('footer.section.legal.link.rules') }}
+        </nuxt-link>
+        <nuxt-link to="/legal/security">
+          {{ $t('footer.section.legal.link.security') }}
+        </nuxt-link>
       </div>
-      <div class="links links-2" role="region" aria-label="Resources">
-        <h4 aria-hidden="true">Resources</h4>
-        <a :target="$external()" href="https://blog.modrinth.com">Blog</a>
-        <a :target="$external()" href="https://docs.modrinth.com">Docs</a>
-        <a :target="$external()" href="https://status.modrinth.com">Status</a>
-        <a :target="$external()" href="https://github.com/modrinth">GitHub</a>
+      <div
+        class="links links-2"
+        role="region"
+        :aria-label="$t('footer.section.resources.title')"
+      >
+        <h4 aria-hidden="true">
+          {{ $t('footer.section.resources.title') }}
+        </h4>
+        <a :target="$external()" href="https://blog.modrinth.com">
+          {{ $t('footer.section.resources.link.blog') }}
+        </a>
+        <a :target="$external()" href="https://docs.modrinth.com">
+          {{ $t('footer.section.resources.link.docs') }}
+        </a>
+        <a :target="$external()" href="https://status.modrinth.com">
+          {{ $t('footer.section.resources.link.status') }}
+        </a>
+        <a :target="$external()" href="https://github.com/modrinth">
+          {{ $t('footer.section.resources.link.github') }}
+        </a>
       </div>
-      <div class="links links-3" role="region" aria-label="Interact">
-        <h4 aria-hidden="true">Interact</h4>
-        <a :target="$external()" href="https://discord.gg/EUHuJHt">Discord</a>
-        <a :target="$external()" href="https://twitter.com/modrinth">Twitter</a>
+      <div
+        class="links links-3"
+        role="region"
+        :aria-label="$t('footer.section.interact.title')"
+      >
+        <h4 aria-hidden="true">
+          {{ $t('footer.section.interact.title') }}
+        </h4>
+        <a :target="$external()" href="https://discord.gg/EUHuJHt">
+          {{ $t('footer.section.interact.link.discord') }}
+        </a>
+        <a :target="$external()" href="https://twitter.com/modrinth">
+          {{ $t('footer.section.interact.link.twitter') }}
+        </a>
         <a :target="$external()" rel="me" href="https://floss.social/@modrinth">
-          Mastodon
+          {{ $t('footer.section.interact.link.mastodon') }}
         </a>
         <a :target="$external()" href="https://crowdin.com/project/modrinth">
-          Crowdin
+          {{ $t('footer.section.interact.link.crowdin') }}
         </a>
       </div>
       <div class="buttons">
         <button class="iconified-button raised-button" @click="changeTheme">
           <MoonIcon v-if="$colorMode.value === 'light'" aria-hidden="true" />
           <SunIcon v-else aria-hidden="true" />
-          Change theme
+          {{ $t('layout.action.change-theme') }}
         </button>
         <nuxt-link class="iconified-button raised-button" to="/settings">
           <SettingsIcon aria-hidden="true" />
-          Settings
+          {{ $t('generic.title.settings') }}
         </nuxt-link>
       </div>
       <div class="not-affiliated-notice">
-        NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH
-        MOJANG.
+        {{ $t('footer.notice.legal-mojang') }}
       </div>
     </footer>
   </div>

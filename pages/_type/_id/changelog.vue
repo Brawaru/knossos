@@ -19,33 +19,43 @@
         <div class="version-wrapper">
           <div class="version-header">
             <div class="version-header-text">
-              <h2 class="name">
-                <nuxt-link
-                  :to="`/${project.project_type}/${
-                    project.slug ? project.slug : project.id
-                  }/version/${encodeURI(version.displayUrlEnding)}`"
-                  >{{ version.name }}</nuxt-link
-                >
-              </h2>
-              <span v-if="members.find((x) => x.user.id === version.author_id)">
-                by
-                <nuxt-link
-                  class="text-link"
-                  :to="
-                    '/user/' +
-                    members.find((x) => x.user.id === version.author_id).user
-                      .username
-                  "
-                  >{{
-                    members.find((x) => x.user.id === version.author_id).user
-                      .username
-                  }}</nuxt-link
-                >
-              </span>
-              <span>
-                on
-                {{ $dayjs(version.date_published).format('MMM D, YYYY') }}</span
+              <IntlFormatted
+                :message-id="
+                  members.find((x) => x.user.id === version.author_id)
+                    ? 'project.changelog.item.default'
+                    : 'project.changelog.item.authorless'
+                "
+                :values="{ publishedAt: new Date(version.date_published) }"
+                :tags="['span']"
               >
+                <template #~version>
+                  <h2 class="name">
+                    <nuxt-link
+                      :to="`/${project.project_type}/${
+                        project.slug ? project.slug : project.id
+                      }/version/${encodeURI(version.displayUrlEnding)}`"
+                      v-text="version.name"
+                    />
+                  </h2>
+                </template>
+                <template
+                  v-if="members.find((x) => x.user.id === version.author_id)"
+                  #~author
+                >
+                  <nuxt-link
+                    class="text-link"
+                    :to="
+                      '/user/' +
+                      members.find((x) => x.user.id === version.author_id).user
+                        .username
+                    "
+                    v-text="
+                      members.find((x) => x.user.id === version.author_id).user
+                        .username
+                    "
+                  />
+                </template>
+              </IntlFormatted>
             </div>
             <a
               :href="$parent.findPrimary(version).url"
@@ -53,7 +63,7 @@
               :title="`Download ${version.name}`"
             >
               <DownloadIcon aria-hidden="true" />
-              Download
+              {{ $t('generic.action.download') }}
             </a>
           </div>
           <div
@@ -120,8 +130,14 @@ export default {
     })
   },
   head() {
-    const title = `${this.project.title} - Changelog`
-    const description = `Explore the changelog of ${this.project.title}'s ${this.versions.length} versions.`
+    const title = this.$t('project.changelog.meta.title', {
+      project: this.project.title,
+    })
+
+    const description = this.$t('project.changelog.meta.description', {
+      project: this.project.title,
+      versions: this.versions.length,
+    })
 
     return {
       title,
@@ -238,6 +254,7 @@ export default {
   display: flex;
   align-items: center;
   margin-top: 0.2rem;
+  column-gap: 0.25rem;
 
   .circle {
     min-width: 0.75rem;

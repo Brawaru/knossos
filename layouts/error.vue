@@ -2,17 +2,19 @@
   <div class="main">
     <div class="error">
       <Logo404 v-if="error.statusCode === 404" />
-      <h1 v-else>An error occured!</h1>
+      <h1 v-else>
+        {{ $t('error-page.title') }}
+      </h1>
       <p>{{ error.message }}</p>
       <div class="button-group">
         <nuxt-link to="/" class="iconified-button raised-button brand-button">
-          Go home
+          {{ $t('error-page.action.home') }}
         </nuxt-link>
         <a
           href="https://discord.gg/EUHuJHt"
           class="iconified-button raised-button"
         >
-          Get help on Discord
+          {{ $t('error-page.action.discord') }}
         </a>
       </div>
     </div>
@@ -33,7 +35,7 @@ export default {
       default() {
         return {
           statusCode: 1000,
-          message: 'Unknown error',
+          message: this.$t('error-page.default-message'),
         }
       },
     },
