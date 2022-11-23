@@ -1,32 +1,45 @@
 <template>
   <span :class="'version-badge ' + color + ' type--' + type">
-    <template v-if="color"
-      ><span class="circle" /> {{ $capitalizeString(type) }}</template
-    >
-    <template v-else-if="type === 'admin'"
-      ><ModrinthIcon /> Modrinth Team</template
-    >
-    <template v-else-if="type === 'moderator'"
-      ><ModeratorIcon /> Moderator</template
-    >
-    <template v-else-if="type === 'creator'"><CreatorIcon /> Creator</template>
-    <template v-else-if="type === 'approved'"><ListIcon /> Listed</template>
-    <template v-else-if="type === 'unlisted'"><EyeOffIcon /> Unlisted</template>
-    <template v-else-if="type === 'draft'"><DraftIcon /> Draft</template>
-    <template v-else-if="type === 'archived'"
-      ><ArchiveIcon /> Archived</template
-    >
-    <template v-else-if="type === 'rejected'"><CrossIcon /> Rejected</template>
-    <template v-else-if="type === 'processing'"
-      ><ProcessingIcon /> Under review</template
-    >
-    <template v-else
-      ><span class="circle" /> {{ $capitalizeString(type) }}</template
-    >
+    <template v-if="hasSlot">
+      <slot name="icon"><span class="circle" /></slot>
+      <slot>{{ $capitalizeString(type) }}</slot>
+    </template>
+    <template v-else>
+      <template v-if="color">
+        <span class="circle" /> {{ $capitalizeString(type) }}</template
+      >
+      <template v-else-if="type === 'admin'">
+        <ModrinthIcon /> Modrinth Team
+      </template>
+      <template v-else-if="type === 'moderator'">
+        <ModeratorIcon /> Moderator
+      </template>
+      <template v-else-if="type === 'creator'">
+        <CreatorIcon /> Creator
+      </template>
+      <template v-else-if="type === 'approved'"> <ListIcon /> Listed </template>
+      <template v-else-if="type === 'unlisted'">
+        <EyeOffIcon /> Unlisted
+      </template>
+      <template v-else-if="type === 'draft'"> <DraftIcon /> Draft </template>
+      <template v-else-if="type === 'archived'">
+        <ArchiveIcon /> Archived
+      </template>
+      <template v-else-if="type === 'rejected'">
+        <CrossIcon /> Rejected
+      </template>
+      <template v-else-if="type === 'processing'">
+        <ProcessingIcon /> Under review
+      </template>
+      <template v-else>
+        <span class="circle" /> {{ $capitalizeString(type) }}
+      </template>
+    </template>
   </span>
 </template>
 
 <script>
+// TODO: yeet all hardcoded strings from this component
 import ModrinthIcon from '~/assets/images/logo.svg?inline'
 import ModeratorIcon from '~/assets/images/sidebar/admin.svg?inline'
 import CreatorIcon from '~/assets/images/utils/box.svg?inline'
@@ -58,6 +71,16 @@ export default {
     color: {
       type: String,
       default: '',
+    },
+  },
+  computed: {
+    /** @returns {boolean} */
+    hasSlot() {
+      return 'default' in this.$scopedSlots
+    },
+    /** @returns {boolean} */
+    hasIconSlot() {
+      return 'icon' in this.$scopedSlots
     },
   },
 }

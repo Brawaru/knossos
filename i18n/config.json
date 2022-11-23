@@ -5,12 +5,25 @@
     {
       "code": "en-US",
       "file": "~/i18n/en-US/index.toml",
-      "additionalImports": [],
+      "additionalImports": ["@formatjs/intl-numberformat/locale-data/en.js"],
       "importedData": {
+        "fees-explainer.html": "~/i18n/en-US/fees-explainer.html",
         "starter.md": "~/i18n/en-US/starter.md"
       },
       "data": {
         "displayName": "American English"
+      }
+    },
+    {
+      "code": "uk",
+      "file": "~/i18n/uk/index.toml",
+      "additionalImports": ["@formatjs/intl-numberformat/locale-data/uk.js"],
+      "importedData": {
+        "fees-explainer.html": "~/i18n/uk/fees-explainer.html",
+        "starter.md": "~/i18n/uk/starter.md"
+      },
+      "data": {
+        "displayName": "Українська"
       }
     }
   ]

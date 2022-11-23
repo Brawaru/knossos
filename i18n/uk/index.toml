@@ -243,7 +243,7 @@ title = "Legal"
 link.terms = "Terms"
 link.privacy = "Privacy"
 link.rules = "Rules"
-link.security = "Security"
+link.license = "License"
 
 [footer.section.resources]
 title = "Resources"
@@ -303,18 +303,13 @@ navigation.aria-label = "Page links"
 action.log-out = "Log out"
 action.sign-in = "Sign in with GitHub"
 avatar.alt = "Your avatar"
-link.profile = "Visit your profile"
+link.profile = "Go to my profile"
 link.follows = "Following"
 link.dashboard = "Dashboard"
 
 [layout.action]
 change-theme = "Change theme"
 create-project = "Create a project"
-
-[legal.common]
-warning = """\
-<sr-only>Warning:</sr-only>
-Due to the nature of this page, the only official version of this content is in English."""
 
 [loader]
 bukkit = "Bukkit"
@@ -357,7 +352,6 @@ action.unfollow = "Unfollow"
 external-resources.title = "External resources"
 members.title = "Project members"
 description.title = "Description"
-meta.title = "{project} - Minecraft {projectType, select, mod {Mod} mod_and_plugin {Mod and Plugin} plugin {Plugin} modpack {Modpack} resourcepack {Resource Pack} other {Project}}"
 
 [project.technical-info]
 title = "Technical information"
@@ -491,6 +485,7 @@ link-platform.title = "The donation platform of the link."
 title = "Gallery"
 action.add-image.default = "Add an image"
 action.add-image.non-empty = "Add another image"
+meta.title = "{project} - Gallery" # TODO: merge with title
 meta.description = """\
 View {images, plural, one {# image} other {# images}} of {project} on \
 Modrinth."""

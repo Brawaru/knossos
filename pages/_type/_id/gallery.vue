@@ -334,8 +334,10 @@ export default {
     this.gallery = JSON.parse(JSON.stringify(this.project.gallery))
   },
   head() {
-    const title = this.$t('project.gallery.meta.description', {
+    console.log(this)
+    const title = this.$t('generic.meta.project-page-title', {
       project: this.project.title,
+      page: this.$t('project.gallery.title'),
     })
     const description = this.$t('project.gallery.meta.description', {
       images: this.project.gallery.length,

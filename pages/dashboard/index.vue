@@ -1,45 +1,22 @@
 <template>
   <div>
     <section class="universal-card">
-      <h2>Overview</h2>
+      <h2>{{ $t('dashboard.overview.title') }}</h2>
       <div class="metrics">
         <div class="metric">
-          <div class="label">Total downloads</div>
-          <div class="value">
-            {{
-              $formatNumber(
-                $user.projects.reduce((agg, x) => agg + x.downloads, 0)
-              )
-            }}
+          <div class="label">
+            {{ $t('dashboard.overview.metric.downloads.title') }}
           </div>
-          <span
-            >from {{ $user.projects.length }} project{{
-              $user.projects.length === 1 ? '' : 's'
-            }}</span
-          >
-          <!--          <NuxtLink class="goto-link" to="/dashboard/analytics"-->
-          <!--            >View breakdown-->
-          <!--            <ChevronRightIcon-->
-          <!--              class="featured-header-chevron"-->
-          <!--              aria-hidden="true"-->
-          <!--          /></NuxtLink>-->
-        </div>
-        <div class="metric">
-          <div class="label">Total followers</div>
           <div class="value">
-            {{
-              $formatNumber(
-                $user.projects.reduce((agg, x) => agg + x.followers, 0)
-              )
-            }}
+            {{ formatAmount(totalDownloads) }}
           </div>
           <span>
-            <span
-              >from {{ $user.projects.length }} project{{
-                $user.projects.length === 1 ? '' : 's'
-              }}</span
-            ></span
-          >
+            {{
+              $t('dashboard.overview.metric.downloads.label', {
+                projects: userProjects,
+              })
+            }}
+          </span>
           <!--          <NuxtLink class="goto-link" to="/dashboard/analytics"-->
           <!--            >View breakdown-->
           <!--            <ChevronRightIcon-->
@@ -48,39 +25,79 @@
           <!--          /></NuxtLink>-->
         </div>
         <div class="metric">
-          <div class="label">Total revenue</div>
-          <div class="value">{{ $formatMoney(payouts.all_time) }}</div>
-          <span>{{ $formatMoney(payouts.last_month) }} this month</span>
-          <!--          <NuxtLink class="goto-link" to="/dashboard/analytics"-->
-          <!--            >View breakdown-->
-          <!--            <ChevronRightIcon-->
-          <!--              class="featured-header-chevron"-->
-          <!--              aria-hidden="true"-->
-          <!--          /></NuxtLink>-->
-        </div>
-        <div class="metric">
-          <div class="label">Current balance</div>
+          <div class="label">
+            {{ $t('dashboard.overview.metric.followers.title') }}
+          </div>
           <div class="value">
-            {{ $formatMoney($auth.user.payout_data.balance) }}
+            {{ $fmt.compactNumber(totalFollowers) }}
+          </div>
+          <span>
+            <span>
+              {{
+                $t('dashboard.overview.metric.downloads.label', {
+                  projects: userProjects,
+                })
+              }}
+            </span>
+          </span>
+          <!--          <NuxtLink class="goto-link" to="/dashboard/analytics"-->
+          <!--            >View breakdown-->
+          <!--            <ChevronRightIcon-->
+          <!--              class="featured-header-chevron"-->
+          <!--              aria-hidden="true"-->
+          <!--          /></NuxtLink>-->
+        </div>
+        <div class="metric">
+          <div class="label">
+            {{ $t('dashboard.overview.metric.revenue.title') }}
+          </div>
+          <div class="value">{{ formatAmount(payouts.all_time) }}</div>
+          <span>
+            {{
+              $t('dashboard.overview.metric.revenue.label', {
+                amount: formatAmount(payouts.last_month),
+              })
+            }}
+          </span>
+          <!--          <NuxtLink class="goto-link" to="/dashboard/analytics"-->
+          <!--            >View breakdown-->
+          <!--            <ChevronRightIcon-->
+          <!--              class="featured-header-chevron"-->
+          <!--              aria-hidden="true"-->
+          <!--          /></NuxtLink>-->
+        </div>
+        <div class="metric">
+          <div class="label">
+            {{ $t('dashboard.overview.metric.balance.title') }}
+          </div>
+          <div class="value">
+            {{ formatAmount(userBalance) }}
           </div>
           <NuxtLink
-            v-if="$auth.user.payout_data.balance >= minWithdraw"
+            v-if="userBalance >= minWithdraw"
             class="goto-link"
             to="/dashboard/revenue"
-            >Withdraw earnings
+          >
+            {{ $t('dashboard.overview.metric.balance.action') }}
             <ChevronRightIcon
               class="featured-header-chevron"
               aria-hidden="true"
-          /></NuxtLink>
-          <span v-else>${{ minWithdraw }} is the withdraw minimum</span>
+            />
+          </NuxtLink>
+          <span v-else>
+            {{
+              $t('dashboard.overview.metric.balance.label', {
+                minimumAmount: formatAmount(minWithdraw),
+              })
+            }}
+          </span>
         </div>
       </div>
     </section>
     <section class="universal-card more-soon">
-      <h2>More coming soon!</h2>
+      <h2>{{ $t('dashboard.overview.more-soon.title') }}</h2>
       <p>
-        Stay tuned for more metrics and analytics (pretty graphs, anyone? 👀)
-        coming to the creators dashboard soon!
+        {{ $t('dashboard.overview.more-soon.description') }}
       </p>
     </section>
   </div>
@@ -114,8 +131,44 @@ export default {
     }
   },
   fetch() {},
-  head: {
-    title: 'Creator dashboard - Modrinth',
+  computed: {
+    /** @returns {number} */
+    totalDownloads() {
+      return this.$user.projects.reduce((agg, x) => agg + x.downloads, 0)
+    },
+    /** @returns {number} */
+    totalFollowers() {
+      return this.$user.projects.reduce((agg, x) => agg + x.followers, 0)
+    },
+    /** @returns {number} */
+    userProjects() {
+      return this.$user.projects.length
+    },
+    /** @returns {number} */
+    userBalance() {
+      return this.$auth.user.payout_data.balance
+    },
+  },
+  methods: {
+    /**
+     * @param {number} amount
+     * @returns {string}
+     */
+    formatAmount(amount) {
+      return String(
+        this.$fmt.compactNumber(amount, {
+          currency: 'USD',
+          maximumFractionDigits: 2,
+        })
+      )
+    },
+  },
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('dashboard.title'),
+      }),
+    }
   },
   methods: {},
 }

@@ -3,7 +3,7 @@
     <div v-if="currentMember" class="card header-buttons">
       <nuxt-link to="version/create" class="brand-button iconified-button">
         <PlusIcon />
-        Create a version
+        {{ $t('project.versions.action.create') }}
       </nuxt-link>
     </div>
     <VersionFilterControl
@@ -38,15 +38,19 @@
       >
         <a
           v-tooltip="
-            $parent.findPrimary(version).filename +
-            ' (' +
-            $formatBytes($parent.findPrimary(version).size) +
-            ')'
+            $t('project.versions.row.action.download.tooltip', {
+              fileName: $parent.findPrimary(version).filename,
+              fileSize: $formatFileSize($parent.findPrimary(version).size),
+            })
           "
           :href="$parent.findPrimary(version).url"
           class="download-button"
           :class="version.version_type"
-          :title="`Download ${version.name}`"
+          :title="
+            $t('project.versions.row.action.download.title', {
+              version: version.name,
+            })
+          "
           @click.stop="(event) => event.stopPropagation()"
         >
           <DownloadIcon aria-hidden="true" />
@@ -55,17 +59,17 @@
         <div class="version__metadata">
           <VersionBadge
             v-if="version.version_type === 'release'"
-            type="release"
+            :type="$t('project-release-channel.release')"
             color="green"
           />
           <VersionBadge
             v-else-if="version.version_type === 'beta'"
-            type="beta"
+            :type="$t('project-release-channel.beta')"
             color="orange"
           />
           <VersionBadge
             v-else-if="version.version_type === 'alpha'"
-            type="alpha"
+            :type="$t('project-release-channel.alpha')"
             color="red"
           />
           <span class="divider" />
@@ -73,20 +77,31 @@
         </div>
         <div class="version__supports">
           <span>
-            {{ version.loaders.map((x) => $formatCategory(x)).join(', ') }}
+            {{ $fmt.list(version.loaders.map((x) => $translateLoader(x))) }}
           </span>
           <span>{{ $formatVersion(version.game_versions) }}</span>
         </div>
         <div class="version__stats">
           <span>
-            <strong>{{ $formatNumber(version.downloads) }}</strong>
-            downloads
+            <IntlFormatted
+              message-id="project.version.stats.downloads"
+              :values="{
+                downloads: $fmt.compactNumber(version.downloads),
+              }"
+            >
+              <template #~counter="{ values: { downloads } }">
+                <strong>{{ String(downloads) }}</strong>
+              </template>
+            </IntlFormatted>
           </span>
           <span>
-            Published on
-            <strong>{{
-              $dayjs(version.date_published).format('MMM D, YYYY')
-            }}</strong>
+            <IntlFormatted
+              message-id="project.versions.row.stats.published"
+              :values="{
+                published: new Date(version.date_published),
+              }"
+              :tags="['strong']"
+            />
           </span>
         </div>
       </div>
@@ -137,14 +152,18 @@ export default {
       this.currentPage = parseInt(this.$route.query.page)
   },
   head() {
-    const title = `${this.project.title} - Versions`
-    const description = `Download and browse ${this.versions.length} ${
-      this.project.title
-    } versions. ${this.$formatNumber(
-      this.project.downloads
-    )} total downloads. Last updated ${this.$dayjs(
-      this.versions[0] ? this.versions[0].date_published : null
-    ).format('MMM D, YYYY')}.`
+    const title = this.$t('project.versions.meta.title', {
+      project: this.project.title,
+    })
+
+    const description = this.$t('project.versions.meta.description', {
+      versions: this.versions.length,
+      project: this.project.title,
+      downloads: this.$fmt.compactNumber(this.project.downloads),
+      lastUpdated: this.versions[0]
+        ? this.versions[0].date_published
+        : new Date(0), // I love when my project is updated on 1 January 1970
+    })
 
     return {
       title,

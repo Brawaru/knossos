@@ -92,7 +92,7 @@ export type MessageInputValues<C> = C extends never
  */
 export type TranslateFunction = <I extends MessageID>(
   descriptor: I | MessageDescriptor<I>,
-  values: MessageInputValues<CustomMessages[I]>,
+  values?: MessageInputValues<CustomMessages[I]>,
   opts?: Parameters<MessageFormatter>[1]
 ) => string
 

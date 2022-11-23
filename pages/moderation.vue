@@ -58,14 +58,14 @@
         <aside class="universal-card">
           <h1>Moderation</h1>
           <NavStack>
-            <NavStackItem link="" label="All"> </NavStackItem>
+            <NavStackItem link="" label="All">{{ '' }}</NavStackItem>
+            <!-- prettier-ignore-attribute v-for -->
             <NavStackItem
-              v-for="type in moderationTypes"
+              v-for="(type) in moderationTypes"
               :key="type"
               :link="'?type=' + type"
               :label="$formatProjectType(type) + 's'"
-            >
-            </NavStackItem>
+            />
           </NavStack>
         </aside>
       </div>

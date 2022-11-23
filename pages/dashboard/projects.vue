@@ -1,7 +1,7 @@
 <template>
   <div>
     <section class="universal-card">
-      <h2>Projects</h2>
+      <h2>{{ $t('dashboard.projects.title') }}</h2>
     </section>
   </div>
 </template>
@@ -13,8 +13,12 @@ export default {
     return {}
   },
   fetch() {},
-  head: {
-    title: 'Projects - Modrinth',
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('dashboard.projects.title'),
+      }),
+    }
   },
   methods: {},
 }

@@ -33,45 +33,10 @@
           >
             <h1 class="title">{{ project.title }}</h1>
           </nuxt-link>
-          <div
-            v-if="
-              project.project_type !== 'resourcepack' &&
-              project.project_type !== 'plugin'
-            "
-          >
-            <div
-              v-if="
-                project.client_side === 'optional' &&
-                project.server_side === 'optional'
-              "
-              class="side-descriptor"
-            >
+          <div v-if="sideTip != null">
+            <div class="side-descriptor">
               <InfoIcon aria-hidden="true" />
-              Universal {{ projectTypeDisplay }}
-            </div>
-            <div
-              v-else-if="
-                (project.client_side === 'optional' ||
-                  project.client_side === 'required') &&
-                (project.server_side === 'optional' ||
-                  project.server_side === 'unsupported')
-              "
-              class="side-descriptor"
-            >
-              <InfoIcon aria-hidden="true" />
-              Client {{ projectTypeDisplay }}
-            </div>
-            <div
-              v-else-if="
-                (project.server_side === 'optional' ||
-                  project.server_side === 'required') &&
-                (project.client_side === 'optional' ||
-                  project.client_side === 'unsupported')
-              "
-              class="side-descriptor"
-            >
-              <InfoIcon aria-hidden="true" />
-              Server {{ projectTypeDisplay }}
+              {{ sideTip }}
             </div>
           </div>
 
@@ -87,33 +52,49 @@
           <div class="primary-stat">
             <DownloadIcon class="primary-stat__icon" aria-hidden="true" />
             <div class="primary-stat__text">
-              <span class="primary-stat__counter">
-                {{ $formatNumber(project.downloads) }}
-              </span>
-              download<span v-if="project.downloads !== 1">s</span>
+              <IntlFormatted
+                message-id="project.stats.downloads"
+                :values="{
+                  downloads: $fmt.compactNumber(project.downloads),
+                }"
+              >
+                <template #~counter="{ values: { downloads } }">
+                  <span class="primary-stat__counter">
+                    {{ String(downloads) }}
+                  </span>
+                </template>
+              </IntlFormatted>
             </div>
           </div>
           <div class="primary-stat">
             <HeartIcon class="primary-stat__icon" aria-hidden="true" />
             <div class="primary-stat__text">
-              <span class="primary-stat__counter">
-                {{ $formatNumber(project.followers) }}
-              </span>
-              follower<span v-if="project.followers !== 1">s</span>
+              <IntlFormatted
+                message-id="project.stats.followers"
+                :values="{
+                  followers: $fmt.compactNumber(project.followers),
+                }"
+              >
+                <template #~counter="{ values: { followers } }">
+                  <span class="primary-stat__counter">
+                    {{ String(followers) }}
+                  </span>
+                </template>
+              </IntlFormatted>
             </div>
           </div>
           <div class="dates">
             <div
-              v-tooltip="
-                $dayjs(project.published).format('MMMM D, YYYY [at] h:mm:ss A')
-              "
+              v-tooltip="$fmt.date(project.published, { dateStyle: 'long' })"
               class="date"
             >
               <CalendarIcon aria-hidden="true" />
-              <span class="label">Created</span>
-              <span class="value">{{
-                $dayjs(project.published).fromNow()
-              }}</span>
+              {{
+                $t('project.stats.created', {
+                  ago: $fmt.timeDifference(project.published),
+                  projectType: safeProjectType,
+                })
+              }}
             </div>
             <div
               v-tooltip="
@@ -122,8 +103,12 @@
               class="date"
             >
               <UpdateIcon aria-hidden="true" />
-              <span class="label">Updated</span>
-              <span class="value">{{ $dayjs(project.updated).fromNow() }}</span>
+              {{
+                $t('project.stats.updated', {
+                  ago: $fmt.timeDifference(project.updated),
+                  projectType: safeProjectType,
+                })
+              }}
             </div>
           </div>
           <hr class="card-divider" />
@@ -134,7 +119,7 @@
                 @click="$refs.modal_project_report.show()"
               >
                 <ReportIcon aria-hidden="true" />
-                Report
+                {{ $t('generic.action.report') }}
               </button>
               <button
                 v-if="!$user.follows.find((x) => x.id === project.id)"
@@ -142,7 +127,7 @@
                 @click="$store.dispatch('user/followProject', project)"
               >
                 <HeartIcon aria-hidden="true" />
-                Follow
+                {{ $t('project.action.follow') }}
               </button>
               <button
                 v-if="$user.follows.find((x) => x.id === project.id)"
@@ -150,62 +135,68 @@
                 @click="$store.dispatch('user/unfollowProject', project)"
               >
                 <HeartIcon fill="currentColor" aria-hidden="true" />
-                Unfollow
+                {{ $t('project.action.unfollow') }}
               </button>
             </template>
             <template v-else>
               <a class="iconified-button" :href="authUrl">
                 <ReportIcon aria-hidden="true" />
-                Report
+                {{ $t('generic.action.report') }}
               </a>
               <a class="iconified-button" :href="authUrl">
                 <HeartIcon fill="currentColor" aria-hidden="true" />
-                Follow
+                {{ $t('project.action.follow') }}
               </a>
             </template>
           </div>
         </div>
         <div
           v-if="
-            currentMember &&
+            /* currentMember &&
             (project.status !== 'approved' ||
               (project.moderator_message &&
                 (project.moderator_message.message ||
-                  project.moderator_message.body)))
+                  project.moderator_message.body))) */ true
           "
           class="project-status card"
         >
-          <h3 class="card-header">Project status</h3>
+          <h3 class="card-header">
+            {{ $t('project.status.title') }}
+          </h3>
           <div class="status-info"></div>
           <p>
-            Your project is currently:
-            <Badge :type="project.status" />
+            <IntlFormatted
+              message-id="project.status.description"
+              :values="{ status: project.status }"
+            >
+              <template #badge="{ children }">
+                <ProjectStatusBadge :status="project.status">
+                  <Fragment :of="children" />
+                </ProjectStatusBadge>
+              </template>
+            </IntlFormatted>
           </p>
           <div class="message">
             <p v-if="project.status === 'rejected'">
-              Your project has been rejected by Modrinth's staff. In most cases,
-              you can resubmit for review after addressing the staff's message,
-              which is below. Do not resubmit until you've addressed the message
-              from the moderators!
+              {{ $t('project.status.explanation.rejected') }}
             </p>
             <p v-if="project.status === 'processing'">
-              Your project is currently not viewable by people who are not part
-              of your team. Please wait for our moderators to manually review
-              your project to see if it abides by our
-              <nuxt-link class="text-link" to="/legal/rules"
-                >content rules!
-              </nuxt-link>
+              <IntlFormatted message-id="project.status.explanation.processing">
+                <template #rules-link="{ children }">
+                  <nuxt-link class="text-link" to="/legal/rules">
+                    <Fragment :of="children" />
+                  </nuxt-link>
+                </template>
+              </IntlFormatted>
             </p>
             <p v-if="project.status === 'draft'">
-              Your project is currently not viewable by people who are not part
-              of your team. If you would like to publish your project, click the
-              button below to send your project in for review.
+              {{ $t('project.status.explanation.draft') }}
             </p>
             <div v-if="project.moderator_message">
               <hr class="card-divider" />
               <div v-if="project.moderator_message.body">
                 <h3 class="card-header">
-                  Message from the Modrinth moderators:
+                  {{ $t('project.status.moderator-message.title') }}
                 </h3>
                 <p
                   v-if="project.moderator_message.message"
@@ -221,7 +212,7 @@
               </div>
               <div v-else>
                 <h3 class="card-header">
-                  Message from the Modrinth moderators:
+                  {{ $t('project.status.moderator-message.title') }}
                 </h3>
                 <p>{{ project.moderator_message.message }}</p>
               </div>
@@ -239,7 +230,7 @@
               @click="submitForReview"
             >
               <CheckIcon />
-              Resubmit for review
+              {{ $t('project.status.action.resubmit') }}
             </button>
             <button
               v-if="project.status === 'draft'"
@@ -247,7 +238,7 @@
               @click="submitForReview"
             >
               <CheckIcon />
-              Submit for review
+              {{ $t('project.action.submit-for-review') }}
             </button>
             <button
               v-if="project.status === 'approved'"
@@ -255,17 +246,16 @@
               @click="clearMessage"
             >
               <ClearIcon />
-              Clear message
+              {{ $t('project.status.action.clear-mod-message') }}
             </button>
           </div>
           <div v-if="showKnownErrors" class="known-errors">
             <ul>
               <li v-if="project.body === ''">
-                Your project must have a body to submit for review.
+                {{ $t('project.validation-error.no-body') }}
               </li>
               <li v-if="project.versions.length < 1">
-                Your project must have at least one version to submit for
-                review.
+                {{ $t('project.validation-error.no-versions') }}
               </li>
               <li
                 v-if="
@@ -288,7 +278,9 @@
               project.donation_urls.length > 0
             "
           >
-            <h3 class="card-header">External resources</h3>
+            <h3 class="card-header">
+              {{ $t('project.external-resources.title') }}
+            </h3>
             <div class="links">
               <a
                 v-if="project.issues_url"
@@ -297,7 +289,7 @@
                 :target="$external()"
               >
                 <IssuesIcon aria-hidden="true" />
-                <span>Issues</span>
+                <span>{{ $t('project.external-resource.issues') }}</span>
               </a>
               <a
                 v-if="project.source_url"
@@ -306,7 +298,7 @@
                 :target="$external()"
               >
                 <CodeIcon aria-hidden="true" />
-                <span>Source</span>
+                <span>{{ $t('project.external-resource.source') }}</span>
               </a>
               <a
                 v-if="project.wiki_url"
@@ -315,7 +307,7 @@
                 :target="$external()"
               >
                 <WikiIcon aria-hidden="true" />
-                <span>Wiki</span>
+                <span>{{ $t('project.external-resource.wiki') }}</span>
               </a>
               <a
                 v-if="project.discord_url"
@@ -323,7 +315,7 @@
                 :target="$external()"
               >
                 <DiscordIcon class="shrink" aria-hidden="true" />
-                <span>Discord</span>
+                <span>{{ $t('project.external-resource.discord') }}</span>
               </a>
               <a
                 v-for="(donation, index) in project.donation_urls"
@@ -353,21 +345,33 @@
                 />
                 <HeartIcon v-else-if="donation.id === 'github'" />
                 <UnknownIcon v-else />
-                <span v-if="donation.id === 'bmac'">Buy Me a Coffee</span>
-                <span v-else-if="donation.id === 'patreon'">Patreon</span>
-                <span v-else-if="donation.id === 'paypal'">PayPal</span>
-                <span v-else-if="donation.id === 'ko-fi'">Ko-fi</span>
-                <span v-else-if="donation.id === 'github'"
-                  >GitHub Sponsors</span
-                >
-                <span v-else>Donate</span>
+                <span v-if="donation.id === 'bmac'">
+                  {{ $t('project.external-resource.bmac') }}
+                </span>
+                <span v-else-if="donation.id === 'patreon'">
+                  {{ $t('project.external-resource.patreon') }}
+                </span>
+                <span v-else-if="donation.id === 'paypal'">
+                  {{ $t('project.external-resource.paypal') }}
+                </span>
+                <span v-else-if="donation.id === 'ko-fi'">
+                  {{ $t('project.external-resource.ko-fi') }}
+                </span>
+                <span v-else-if="donation.id === 'github'">
+                  {{ $t('project.external-resource.github-sponsors') }}
+                </span>
+                <span v-else>
+                  {{ $t('project.external-resource.donate') }}
+                </span>
               </a>
             </div>
             <hr class="card-divider" />
           </template>
           <template v-if="featuredVersions.length > 0">
             <div class="featured-header">
-              <h3 class="card-header">Featured versions</h3>
+              <h3 class="card-header">
+                {{ $t('project.featured-versions.title') }}
+              </h3>
               <nuxt-link
                 v-if="project.versions.length > 0 || currentMember"
                 :to="`/${project.project_type}/${
@@ -375,7 +379,7 @@
                 }/versions`"
                 class="goto-link"
               >
-                See all
+                {{ $t('project.featured-versions.action') }}
                 <ChevronRightIcon
                   class="featured-header-chevron"
                   aria-hidden="true"
@@ -396,14 +400,18 @@
             >
               <a
                 v-tooltip="
-                  findPrimary(version).filename +
-                  ' (' +
-                  $formatBytes(findPrimary(version).size) +
-                  ')'
+                  $t('project.version.file.action.download.tooltip', {
+                    fileName: findPrimary(version).filename,
+                    fileSize: $formatFileSize(findPrimary(version).size),
+                  })
                 "
                 :href="findPrimary(version).url"
                 class="download download-button"
-                :title="`Download ${version.name}`"
+                :title="
+                  $t('project.version.file.action.download.title', {
+                    fileName: findPrimary(version).filename,
+                  })
+                "
                 @click.stop="(event) => event.stopPropagation()"
               >
                 <DownloadIcon aria-hidden="true" />
@@ -426,26 +434,14 @@
                   }}
                   {{ $formatVersion(version.game_versions) }}
                 </div>
-                <Badge
-                  v-if="version.version_type === 'release'"
-                  type="release"
-                  color="green"
-                />
-                <Badge
-                  v-else-if="version.version_type === 'beta'"
-                  type="beta"
-                  color="orange"
-                />
-                <Badge
-                  v-else-if="version.version_type === 'alpha'"
-                  type="alpha"
-                  color="red"
-                />
+                <ReleaseChannelBadge :channel="version.version_type" />
               </div>
             </div>
             <hr class="card-divider" />
           </template>
-          <h3 class="card-header">Project members</h3>
+          <h3 class="card-header">
+            {{ $t('project.members.title') }}
+          </h3>
           <div
             v-for="member in members"
             :key="member.user.id"
@@ -467,10 +463,14 @@
             </div>
           </div>
           <hr class="card-divider" />
-          <h3 class="card-header">Technical information</h3>
+          <h3 class="card-header">
+            {{ $t('project.technical-info.title') }}
+          </h3>
           <div class="infos">
             <div class="info">
-              <div class="key">License</div>
+              <div class="key">
+                {{ $t('project.technical-info.license') }}
+              </div>
               <div class="value uppercase">
                 <a
                   v-if="project.license.url"
@@ -489,9 +489,15 @@
               "
               class="info"
             >
-              <div class="key">Client side</div>
+              <div class="key">
+                {{ $t('project.technical-info.client-side') }}
+              </div>
               <div class="value">
-                {{ project.client_side }}
+                {{
+                  $t(`side-requirement.${project.client_side}`, {
+                    side: 'client',
+                  })
+                }}
               </div>
             </div>
             <div
@@ -501,13 +507,21 @@
               "
               class="info"
             >
-              <div class="key">Server side</div>
+              <div class="key">
+                {{ $t('project.technical-info.server-side') }}
+              </div>
               <div class="value">
-                {{ project.server_side }}
+                {{
+                  $t(`side-requirement.${project.server_side}`, {
+                    side: 'server',
+                  })
+                }}
               </div>
             </div>
             <div class="info">
-              <div class="key">Project ID</div>
+              <div class="key">
+                {{ $t('project.technical-info.project-id') }}
+              </div>
               <div class="value lowercase">
                 <CopyCode :text="project.id" />
               </div>
@@ -516,55 +530,66 @@
         </div>
       </article>
       <section class="normal-page__content">
-        <div
-          v-if="project.status === 'unlisted'"
-          class="card warning"
-          aria-label="Warning"
-        >
-          {{ project.title }} is not viewable in search — either because the
-          author has marked it as such or because it has been found to be in
-          violation of one of
-          <nuxt-link to="/legal/rules">Modrinth's content rules</nuxt-link>.
-          Modrinth makes no guarantees as to whether {{ project.title }} is safe
-          for use in a multiplayer context.
-        </div>
-        <div
-          v-if="project.status === 'archived'"
-          class="card warning"
-          aria-label="Warning"
-        >
-          {{ project.title }} has been archived by the project author.
-          {{ project.title }} will not receive any further updates unless the
-          author decides to unarchive the project.
-        </div>
-        <div
-          v-if="project.status === 'abandoned'"
-          class="card warning"
-          aria-label="Warning"
-        >
-          {{ project.title }} has been marked as abandoned by Modrinth's
-          moderators. {{ project.title }} will not receive any further updates
-          unless the author decides to return.
-        </div>
-        <div
-          v-if="project.project_type === 'modpack'"
-          class="card warning"
-          aria-label="Warning"
-        >
-          To install {{ project.title }}, visit
-          <a
-            href="https://docs.modrinth.com/docs/modpacks/playing_modpacks/"
-            :target="$external()"
-            >our documentation</a
+        <div v-if="project.status === 'unlisted'" class="card warning">
+          <IntlFormatted
+            message-id="project.notice.is-unlisted"
+            :values="{ project: project.title }"
           >
-          which provides instructions on using
-          <a href="https://atlauncher.com/about" :target="$external()">
-            ATLauncher</a
-          >, <a href="https://multimc.org/" :target="$external()">MultiMC</a>,
-          and
-          <a href="https://prismlauncher.org" :target="$external()">
-            Prism Launcher</a
-          >.
+            <template #sr-only="{ children }">
+              <span class="sr-only"><Fragment :of="children" /></span>
+            </template>
+            <template #rules-link="{ children }">
+              <nuxt-link to="/legal/rules">
+                <Fragment :of="children" />
+              </nuxt-link>
+            </template>
+          </IntlFormatted>
+        </div>
+        <div v-if="project.status === 'archived'" class="card warning">
+          <IntlFormatted
+            message-id="project.notice.is-archived"
+            :values="{ project: project.title }"
+          >
+            <template #sr-only="{ children }">
+              <span class="sr-only"><Fragment :of="children" /></span>
+            </template>
+          </IntlFormatted>
+        </div>
+        <div v-if="project.status === 'abandoned'" class="card warning">
+          <IntlFormatted
+            message-id="project.notice.is-abandoned"
+            :values="{ project: project.title }"
+          >
+            <template #sr-only="{ children }">
+              <span class="sr-only"><Fragment :of="children" /></span>
+            </template>
+          </IntlFormatted>
+        </div>
+        <div v-if="project.project_type === 'modpack'" class="card warning">
+          <IntlFormatted
+            message-id="project.notice.is-modpack"
+            :values="{ project: project.title }"
+          >
+            <template #sr-only="{ children }">
+              <span class="sr-only"><Fragment :of="children" /></span>
+            </template>
+
+            <template #atl-link="{ children }">
+              <a href="https://atlauncher.com/about" :target="$external()">
+                <Fragment :of="children" />
+              </a>
+            </template>
+            <template #mmc-link="{ children }">
+              <a href="https://multimc.org/" :target="$external()">
+                <Fragment :of="children" />
+              </a>
+            </template>
+            <template #pl-link="{ children }">
+              <a href="https://prismlauncher.org" :target="$external()">
+                <Fragment :of="children" />
+              </a>
+            </template>
+          </IntlFormatted>
         </div>
         <Advertisement
           v-if="project.status === 'approved' || project.status === 'unlisted'"
@@ -574,34 +599,34 @@
         <NavRow
           :links="[
             {
-              label: 'Description',
+              label: $t('project.description.title'),
               href: `/${project.project_type}/${
                 project.slug ? project.slug : project.id
               }`,
             },
             {
-              label: 'Gallery',
+              label: $t('project.gallery.title'),
               href: `/${project.project_type}/${
                 project.slug ? project.slug : project.id
               }/gallery`,
               shown: project.gallery.length > 0 || !!currentMember,
             },
             {
-              label: 'Changelog',
+              label: $t('project.changelog.title'),
               href: `/${project.project_type}/${
                 project.slug ? project.slug : project.id
               }/changelog`,
               shown: project.versions.length > 0,
             },
             {
-              label: 'Versions',
+              label: $t('project.versions.title'),
               href: `/${project.project_type}/${
                 project.slug ? project.slug : project.id
               }/versions`,
               shown: project.versions.length > 0 || !!currentMember,
             },
             {
-              label: 'Settings',
+              label: $t('project.settings.title'),
               href: `/${project.project_type}/${
                 project.slug ? project.slug : project.id
               }/settings`,
@@ -629,7 +654,9 @@
               project.donation_urls.length > 0
             "
           >
-            <h3 class="card-header">External resources</h3>
+            <h3 class="card-header">
+              {{ $t('project.external-resources.title') }}
+            </h3>
             <div class="links">
               <a
                 v-if="project.issues_url"
@@ -638,7 +665,9 @@
                 :target="$external()"
               >
                 <IssuesIcon aria-hidden="true" />
-                <span>Issues</span>
+                <span>
+                  {{ $t('project.external-resource.issues') }}
+                </span>
               </a>
               <a
                 v-if="project.source_url"
@@ -647,7 +676,9 @@
                 :target="$external()"
               >
                 <CodeIcon aria-hidden="true" />
-                <span>Source</span>
+                <span>
+                  {{ $t('project.external-resource.source') }}
+                </span>
               </a>
               <a
                 v-if="project.wiki_url"
@@ -656,7 +687,9 @@
                 :target="$external()"
               >
                 <WikiIcon aria-hidden="true" />
-                <span>Wiki</span>
+                <span>
+                  {{ $t('project.external-resource.wiki') }}
+                </span>
               </a>
               <a
                 v-if="project.discord_url"
@@ -664,7 +697,9 @@
                 :target="$external()"
               >
                 <DiscordIcon class="shrink" aria-hidden="true" />
-                <span>Discord</span>
+                <span>
+                  {{ $t('project.external-resource.discord') }}
+                </span>
               </a>
               <a
                 v-for="(donation, index) in project.donation_urls"
@@ -694,21 +729,33 @@
                 />
                 <HeartIcon v-else-if="donation.id === 'github'" />
                 <UnknownIcon v-else />
-                <span v-if="donation.id === 'bmac'">Buy Me a Coffee</span>
-                <span v-else-if="donation.id === 'patreon'">Patreon</span>
-                <span v-else-if="donation.id === 'paypal'">PayPal</span>
-                <span v-else-if="donation.id === 'ko-fi'">Ko-fi</span>
-                <span v-else-if="donation.id === 'github'"
-                  >GitHub Sponsors</span
-                >
-                <span v-else>Donate</span>
+                <span v-if="donation.id === 'bmac'">
+                  {{ $t('project.external-resource.bmac') }}
+                </span>
+                <span v-else-if="donation.id === 'patreon'">
+                  {{ $t('project.external-resource.patreon') }}
+                </span>
+                <span v-else-if="donation.id === 'paypal'">
+                  {{ $t('project.external-resource.paypal') }}
+                </span>
+                <span v-else-if="donation.id === 'ko-fi'">
+                  {{ $t('project.external-resource.ko-fi') }}
+                </span>
+                <span v-else-if="donation.id === 'github'">
+                  {{ $t('project.external-resource.github-sponsors') }}
+                </span>
+                <span v-else>
+                  {{ $t('project.external-resource.donate') }}
+                </span>
               </a>
             </div>
             <hr class="card-divider" />
           </template>
           <template v-if="featuredVersions.length > 0">
             <div class="featured-header">
-              <h3 class="card-header">Featured versions</h3>
+              <h3 class="card-header">
+                {{ $t('project.featured-versions.title') }}
+              </h3>
               <nuxt-link
                 v-if="project.versions.length > 0 || currentMember"
                 :to="`/${project.project_type}/${
@@ -716,7 +763,7 @@
                 }/versions`"
                 class="goto-link"
               >
-                See all
+                {{ $t('project.featured-versions.action') }}
                 <ChevronRightIcon
                   class="featured-header-chevron"
                   aria-hidden="true"
@@ -737,14 +784,18 @@
             >
               <a
                 v-tooltip="
-                  findPrimary(version).filename +
-                  ' (' +
-                  $formatBytes(findPrimary(version).size) +
-                  ')'
+                  $t('project.version.file.action.download.tooltip', {
+                    fileName: findPrimary(version).filename,
+                    fileSize: $formatFileSize(findPrimary(version).size),
+                  })
                 "
                 :href="findPrimary(version).url"
                 class="download download-button"
-                :title="`Download ${version.name}`"
+                :title="
+                  $t('project.version.file.action.download.title', {
+                    fileName: version.name,
+                  })
+                "
                 @click.stop="(event) => event.stopPropagation()"
               >
                 <DownloadIcon aria-hidden="true" />
@@ -763,30 +814,18 @@
                   class="game-version item"
                 >
                   {{
-                    version.loaders.map((x) => $formatCategory(x)).join(', ')
+                    $fmt.list(version.loaders.map((x) => $translateLoader(x)))
                   }}
                   {{ $formatVersion(version.game_versions) }}
                 </div>
-                <Badge
-                  v-if="version.version_type === 'release'"
-                  type="release"
-                  color="green"
-                />
-                <Badge
-                  v-else-if="version.version_type === 'beta'"
-                  type="beta"
-                  color="orange"
-                />
-                <Badge
-                  v-else-if="version.version_type === 'alpha'"
-                  type="alpha"
-                  color="red"
-                />
+                <ReleaseChannelBadge :channel="version.version_type" />
               </div>
             </div>
             <hr class="card-divider" />
           </template>
-          <h3 class="card-header">Project members</h3>
+          <h3 class="card-header">
+            {{ $t('project.members.title') }}
+          </h3>
           <div
             v-for="member in members"
             :key="member.user.id"
@@ -808,10 +847,12 @@
             </div>
           </div>
           <hr class="card-divider" />
-          <h3 class="card-header">Technical information</h3>
+          <h3 class="card-header">
+            {{ $t('project.technical-info.title') }}
+          </h3>
           <div class="infos">
             <div class="info">
-              <div class="key">License</div>
+              <div class="key">{{ $t('project.technical-info.license') }}</div>
               <div class="value uppercase">
                 <a
                   v-if="project.license.url"
@@ -830,9 +871,15 @@
               "
               class="info"
             >
-              <div class="key">Client side</div>
+              <div class="key">
+                {{ $t('project.technical-info.client-side') }}
+              </div>
               <div class="value">
-                {{ project.client_side }}
+                {{
+                  $t(`side-requirement.${project.client_side}`, {
+                    side: 'client',
+                  })
+                }}
               </div>
             </div>
             <div
@@ -842,13 +889,21 @@
               "
               class="info"
             >
-              <div class="key">Server side</div>
+              <div class="key">
+                {{ $t('project.technical-info.server-side') }}
+              </div>
               <div class="value">
-                {{ project.server_side }}
+                {{
+                  $t(`side-requirement.${project.server_side}`, {
+                    side: 'server',
+                  })
+                }}
               </div>
             </div>
             <div class="info">
-              <div class="key">Project ID</div>
+              <div class="key">
+                {{ $t('project.technical-info.project-id') }}
+              </div>
               <div class="value lowercase">
                 <CopyCode :text="project.id" />
               </div>
@@ -881,19 +936,19 @@ import OpenCollectiveIcon from '~/assets/images/external/opencollective.svg?inli
 import UnknownIcon from '~/assets/images/utils/unknown-donation.svg?inline'
 import ChevronRightIcon from '~/assets/images/utils/chevron-right.svg?inline'
 import Advertisement from '~/components/ads/Advertisement'
-import Badge from '~/components/ui/Badge'
 import Categories from '~/components/ui/search/Categories'
 import ModalReport from '~/components/ui/ModalReport'
 import NavRow from '~/components/ui/NavRow'
 import CopyCode from '~/components/ui/CopyCode'
 import Avatar from '~/components/ui/Avatar'
+import ProjectStatusBadge from '~/components/ui/ProjectStatusBadge.vue'
+import ReleaseChannelBadge from '~/components/ui/ReleaseChannelBadge.vue'
 
 export default {
   components: {
     Avatar,
     CopyCode,
     NavRow,
-    Badge,
     Advertisement,
     ModalReport,
     IssuesIcon,
@@ -916,6 +971,8 @@ export default {
     PatreonIcon,
     KoFiIcon,
     ChevronRightIcon,
+    ProjectStatusBadge,
+    ReleaseChannelBadge,
   },
   async asyncData(data) {
     try {
@@ -1059,10 +1116,10 @@ export default {
     this.featuredVersions = this.$computeVersions(this.featuredVersions)
   },
   head() {
-    const title = `${this.project.title} - Minecraft ${
-      this.projectTypeDisplay.charAt(0).toUpperCase() +
-      this.projectTypeDisplay.slice(1)
-    }`
+    const title = this.$t('project.meta.title', {
+      project: this.project.title,
+      projectType: this.safeProjectType,
+    })
 
     return {
       title,
@@ -1114,11 +1171,23 @@ export default {
     authUrl() {
       return `${process.env.authURLBase}auth/init?url=${process.env.domain}${this.$route.path}`
     },
-    projectTypeDisplay() {
-      return this.$getProjectTypeForDisplay(
-        this.project.project_type,
-        this.loaders
-      )
+    coercedProjectType() {
+      return /** @type {import('vue/types/vue').Vue} */ (
+        this
+      ).$coerceProjectType(this.project.project_type, this.loaders)
+    },
+    safeProjectType() {
+      return this.coercedProjectType.replace(/-/g, '_')
+    },
+    projectSide() {
+      return /** @type {import('vue/types/vue').Vue} */ (
+        this
+      ).$computeProjectSide(this.project.client_side, this.project.server_side)
+    },
+    sideTip() {
+      return /** @type {import('vue/types/vue').Vue} */ (
+        this
+      ).$computeProjectTypeDisplay(this.projectSide, this.coercedProjectType)
     },
   },
   methods: {

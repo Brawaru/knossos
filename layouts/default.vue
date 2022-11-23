@@ -118,7 +118,7 @@
                   <NuxtLink class="item button-transparent" to="/dashboard">
                     <ChartIcon class="icon" />
                     <span class="title">
-                      {{ $t('dashboard.title') }}
+                      {{ $t('header.profile-dropdown.link.dashboard') }}
                     </span>
                     <span class="beta-badge">
                       {{ $t('generic.label.beta') }}
@@ -292,7 +292,7 @@
             >
               <ChartIcon class="icon" />
               <span class="dropdown-item__text">
-                {{ $t('dashboard.title') }}
+                {{ $t('header.profile-dropdown.link.dashboard') }}
               </span>
               <span class="beta-badge">
                 {{ $t('generic.label.beta') }}

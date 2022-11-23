@@ -20,6 +20,13 @@
       </aside>
     </div>
     <div class="normal-page__content">
+      <div v-if="$i18n.locale != 'en-US'" class="card warning">
+        <IntlFormatted message-id="legal.common.warning">
+          <template #sr-only="{ children }">
+            <span class="sr-only"><Fragment :of="children" /></span>
+          </template>
+        </IntlFormatted>
+      </div>
       <NuxtChild class="universal-card" />
     </div>
   </div>

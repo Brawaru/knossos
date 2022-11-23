@@ -6,8 +6,8 @@ import '~/modules/i18n/templates/i18n'
 import {
   RichArgument,
   ValueArgument,
-  DateArgument,
   NumberArgument,
+  DateArgument,
 } from '~/modules/i18n/templates/i18n.types'
 
 declare module '~/modules/i18n/templates/i18n.types' {
@@ -251,6 +251,74 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'dashboard.title': never
 
+    'dashboard.analytics.title': never
+
+    'dashboard.overview.title': never
+
+    'dashboard.overview.more-soon.title': never
+
+    'dashboard.overview.more-soon.description': never
+
+    'dashboard.overview.metric.downloads.title': never
+
+    'dashboard.overview.metric.downloads.label': {
+      projects: NumberArgument
+    }
+
+    'dashboard.overview.metric.followers.title': never
+
+    'dashboard.overview.metric.followers.label': {
+      projects: NumberArgument
+    }
+
+    'dashboard.overview.metric.revenue.title': never
+
+    'dashboard.overview.metric.revenue.label': {
+      amount: ValueArgument
+    }
+
+    'dashboard.overview.metric.balance.title': never
+
+    'dashboard.overview.metric.balance.label': {
+      minimumAmount: ValueArgument
+    }
+
+    'dashboard.overview.metric.balance.action': never
+
+    'dashboard.projects.title': never
+
+    'dashboard.revenue.title': never
+
+    'dashboard.revenue.withdraw.title': never
+
+    'dashboard.revenue.withdraw.description.default': {
+      strong: RichArgument
+      amount: ValueArgument
+      'enroll-cta': RichArgument
+    }
+
+    'dashboard.revenue.withdraw.description.below-minimum': {
+      strong: RichArgument
+      amount: ValueArgument
+      minimumAmount: ValueArgument
+    }
+
+    'dashboard.revenue.withdraw.description.no-earnings': never
+
+    'dashboard.revenue.withdraw.action.transfer': {
+      provider: ValueArgument
+    }
+
+    'dashboard.revenue.withdraw.action.settings': never
+
+    'dashboard.revenue.withdraw.action.enroll': never
+
+    'dashboard.revenue.fees.title': never
+
+    'dashboard.revenue.fees.description': {
+      amount: ValueArgument
+    }
+
     'dependency-type.required': never
 
     'dependency-type.optional': never
@@ -267,137 +335,89 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'error-page.default-message': never
 
-    'external-resource.discord': never
+    'project.external-resource.issues': never
 
-    'footer.section.information.title': never
+    'project.external-resource.source': never
 
-    'footer.section.information.open-source': {
-      'gh-link': RichArgument
-    }
+    'project.external-resource.wiki': never
 
-    'footer.section.legal.title': never
+    'project.external-resource.discord': never
 
-    'footer.section.legal.link.terms': never
+    'project.external-resource.bmac': never
 
-    'footer.section.legal.link.privacy': never
+    'project.external-resource.patreon': never
 
-    'footer.section.legal.link.rules': never
+    'project.external-resource.paypal': never
 
-    'footer.section.legal.link.license': never
+    'project.external-resource.ko-fi': never
 
-    'footer.section.resources.title': never
+    'project.external-resource.github-sponsors': never
 
-    'footer.section.resources.link.blog': never
-
-    'footer.section.resources.link.docs': never
-
-    'footer.section.resources.link.status': never
-
-    'footer.section.resources.link.github': never
-
-    'footer.section.interact.title': never
-
-    'footer.section.interact.link.discord': never
-
-    'footer.section.interact.link.twitter': never
-
-    'footer.section.interact.link.mastodon': never
-
-    'footer.section.interact.link.crowdin': never
-
-    'footer.notice.legal-mojang': never
-
-    'generic.action.cancel': never
-
-    'generic.action.continue': never
-
-    'generic.action.delete': never
-
-    'generic.action.download': never
-
-    'generic.action.edit': never
-
-    'generic.action.report': never
-
-    'generic.action.save': never
-
-    'generic.action.save-changes': never
-
-    'generic.error.404.message': never
-
-    'generic.error.title': never
-
-    'generic.label.beta': never
-
-    'generic.placeholder.select-one': never
-
-    'generic.placeholder.valid-url': never
-
-    'generic.title.settings': never
-
-    'header.action.switch-theme': never
-
-    'header.link.skip-to-content': never
-
-    'header.link.home': never
-
-    'header.navigation.aria-label': never
-
-    'header.profile-dropdown.action.log-out': never
-
-    'header.profile-dropdown.action.sign-in': never
-
-    'header.profile-dropdown.avatar.alt': never
-
-    'header.profile-dropdown.link.profile': never
-
-    'header.profile-dropdown.link.follows': never
-
-    'layout.action.change-theme': never
-
-    'layout.action.create-project': never
-
-    'loader.bukkit': never
-
-    'loader.bungeecord': never
-
-    'loader.fabric': never
-
-    'loader.forge': never
-
-    'loader.liteloader': never
-
-    'loader.minecraft': never
-
-    'loader.modloader': never
-
-    'loader.paper': never
-
-    'loader.purpur': never
-
-    'loader.quilt': never
-
-    'loader.rift': never
-
-    'loader.spigot': never
-
-    'loader.sponge': never
-
-    'loader.velocity': never
-
-    'loader.waterfall': never
-
-    'markdown-editor.tab.source': never
-
-    'markdown-editor.tab.preview': never
-
-    'mobile-navigation.action.browse': never
-
-    'moderation.title': never
-
-    'notifications.title': never
+    'project.external-resource.donate': never
 
     'project.action.submit-for-review': never
+
+    'project.action.follow': never
+
+    'project.action.unfollow': never
+
+    'project.external-resources.title': never
+
+    'project.members.title': never
+
+    'project.description.title': never
+
+    'project.meta.title': {
+      project: ValueArgument
+      projectType: /* clause */
+        | 'mod'
+        | /* clause */ 'mod_and_plugin'
+        | /* clause */ 'plugin'
+        | /* clause */ 'modpack'
+        | /* clause */ 'resourcepack'
+        | /* clause */ 'other'
+    }
+
+    'project.technical-info.title': never
+
+    'project.technical-info.license': never
+
+    'project.technical-info.client-side': never
+
+    'project.technical-info.server-side': never
+
+    'project.technical-info.project-id': never
+
+    'project.notice.is-unlisted': {
+      'sr-only': RichArgument
+      project: ValueArgument
+      'rules-link': RichArgument
+    }
+
+    'project.notice.is-archived': {
+      'sr-only': RichArgument
+      project: ValueArgument
+    }
+
+    'project.notice.is-abandoned': {
+      'sr-only': RichArgument
+      project: ValueArgument
+    }
+
+    'project.notice.is-modpack': {
+      'sr-only': RichArgument
+      project: ValueArgument
+      'docs-link': RichArgument
+      'atl-link': RichArgument
+      'mmc-link': RichArgument
+      'pl-link': RichArgument
+    }
+
+    'project.featured-versions.title': never
+
+    'project.featured-versions.action': never
+
+    'project.changelog.title': never
 
     'project.changelog.item.default': {
       version: ValueArgument
@@ -523,13 +543,11 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.edit.field.donation-links.link-platform.title': never
 
+    'project.gallery.title': never
+
     'project.gallery.action.add-image.default': never
 
     'project.gallery.action.add-image.non-empty': never
-
-    'project.gallery.meta.title': {
-      project: ValueArgument
-    }
 
     'project.gallery.meta.description': {
       images: NumberArgument
@@ -545,6 +563,8 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'project.gallery.item.field.featured.label': never
 
     'project.gallery.item.field.file.prompt': never
+
+    'project.settings.title': never
 
     'project.settings.error.no-multiple-owners': never
 
@@ -633,6 +653,34 @@ declare module '~/modules/i18n/templates/i18n.types' {
       projectType: /* clause */ 'other'
       ago: ValueArgument
     }
+
+    'project.status.title': never
+
+    'project.status.description': {
+      badge: RichArgument
+      status: /* clause */
+        | 'approved'
+        | /* clause */ 'rejected'
+        | /* clause */ 'draft'
+        | /* clause */ 'unlisted'
+        | /* clause */ 'archived'
+        | /* clause */ 'processing'
+        | /* clause */ 'other'
+    }
+
+    'project.status.moderator-message.title': never
+
+    'project.status.action.resubmit': never
+
+    'project.status.action.clear-mod-message': never
+
+    'project.status.explanation.rejected': never
+
+    'project.status.explanation.processing': {
+      'rules-link': RichArgument
+    }
+
+    'project.status.explanation.draft': never
 
     'project.validation-error.no-name': never
 
@@ -753,6 +801,11 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.version.metadata.release-channel.title': never
 
+    'project.version.stats.downloads': {
+      downloads: NumberArgument
+      counter: ValueArgument
+    }
+
     'project.version.edit.title': never
 
     'project.version.edit.add-dependency.title': never
@@ -807,13 +860,187 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.version.validation-error.no-loaders': never
 
+    'project.versions.title': never
+
     'project.versions.action.create': never
+
+    'project.versions.meta.title': {
+      project: ValueArgument
+    }
+
+    'project.versions.meta.description': {
+      versions: NumberArgument
+      project: ValueArgument
+      downloads: NumberArgument
+      lastUpdated: DateArgument
+    }
 
     'project.versions.column.version': never
 
     'project.versions.column.supports': never
 
     'project.versions.column.stats': never
+
+    'project.versions.row.action.download.tooltip': {
+      fileName: ValueArgument
+      fileSize: ValueArgument
+    }
+
+    'project.versions.row.action.download.title': {
+      version: ValueArgument
+    }
+
+    'project.versions.row.stats.published': {
+      strong: RichArgument
+      published: DateArgument
+    }
+
+    'footer.section.information.title': never
+
+    'footer.section.information.open-source': {
+      'gh-link': RichArgument
+    }
+
+    'footer.section.legal.title': never
+
+    'footer.section.legal.link.terms': never
+
+    'footer.section.legal.link.privacy': never
+
+    'footer.section.legal.link.rules': never
+
+    'footer.section.legal.link.license': never
+
+    'footer.section.resources.title': never
+
+    'footer.section.resources.link.blog': never
+
+    'footer.section.resources.link.docs': never
+
+    'footer.section.resources.link.status': never
+
+    'footer.section.resources.link.github': never
+
+    'footer.section.interact.title': never
+
+    'footer.section.interact.link.discord': never
+
+    'footer.section.interact.link.twitter': never
+
+    'footer.section.interact.link.mastodon': never
+
+    'footer.section.interact.link.crowdin': never
+
+    'footer.notice.legal-mojang': never
+
+    'generic.action.cancel': never
+
+    'generic.action.continue': never
+
+    'generic.action.delete': never
+
+    'generic.action.download': never
+
+    'generic.action.edit': never
+
+    'generic.action.report': never
+
+    'generic.action.save': never
+
+    'generic.action.save-changes': never
+
+    'generic.error.404.message': never
+
+    'generic.error.title': never
+
+    'generic.label.beta': never
+
+    'generic.meta.page-title': {
+      page: ValueArgument
+    }
+
+    'generic.meta.project-page-title': {
+      project: ValueArgument
+      page: ValueArgument
+    }
+
+    'generic.placeholder.select-one': never
+
+    'generic.placeholder.valid-url': never
+
+    'generic.title.settings': never
+
+    'header.action.switch-theme': never
+
+    'header.link.skip-to-content': never
+
+    'header.link.home': never
+
+    'header.navigation.aria-label': never
+
+    'header.profile-dropdown.action.log-out': never
+
+    'header.profile-dropdown.action.sign-in': never
+
+    'header.profile-dropdown.avatar.alt': never
+
+    'header.profile-dropdown.link.profile': never
+
+    'header.profile-dropdown.link.follows': never
+
+    'header.profile-dropdown.link.dashboard': never
+
+    'layout.action.change-theme': never
+
+    'layout.action.create-project': never
+
+    'legal.common.warning': {
+      'sr-only': RichArgument
+    }
+
+    'loader.bukkit': never
+
+    'loader.bungeecord': never
+
+    'loader.fabric': never
+
+    'loader.forge': never
+
+    'loader.liteloader': never
+
+    'loader.minecraft': never
+
+    'loader.modloader': never
+
+    'loader.paper': never
+
+    'loader.purpur': never
+
+    'loader.quilt': never
+
+    'loader.rift': never
+
+    'loader.spigot': never
+
+    'loader.sponge': never
+
+    'loader.velocity': never
+
+    'loader.waterfall': never
+
+    'markdown-editor.tab.source': never
+
+    'markdown-editor.tab.preview': never
+
+    'mobile-navigation.action.browse': never
+
+    'moderation.title': never
+
+    'notifications.title': never
+
+    'payout-provider.venmo': never
+
+    'payout-provider.paypal': never
 
     'project-type.mod-and-plugin.singular': never
 
@@ -857,6 +1084,20 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project-release-channel.alpha': never
 
+    'project-status.approved': never
+
+    'project-status.rejected': never
+
+    'project-status.draft': never
+
+    'project-status.unlisted': never
+
+    'project-status.archived': never
+
+    'project-status.processing': never
+
+    'project-status.unknown': never
+
     'report-type.spam': never
 
     'report-type.copyright': never
@@ -866,6 +1107,18 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'report-type.malicious': never
 
     'report-type.name-squatting': never
+
+    'side-requirement.required': {
+      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+    }
+
+    'side-requirement.optional': {
+      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+    }
+
+    'side-requirement.unsupported': {
+      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+    }
 
     'unit.size.bytes.short': {
       value: ValueArgument
@@ -917,6 +1170,8 @@ declare module '~/modules/i18n/templates/types' {
   interface LocaleData extends DechromifiedMeta {}
 
   interface LocaleImportedData {
+    'fees-explainer.html': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]
+
     'starter.md': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]
   }
 }

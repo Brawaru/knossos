@@ -6,7 +6,7 @@
         <NavStack>
           <NavStackItem link="" label="All"> </NavStackItem>
           <NavStackItem
-            v-for="type in notificationTypes"
+            v-for="type /* */ in notificationTypes"
             :key="type"
             :link="'?type=' + type"
             :label="NOTIFICATION_TYPES[type]"
