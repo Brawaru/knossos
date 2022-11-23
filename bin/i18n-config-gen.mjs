@@ -58,7 +58,10 @@ const memo = require('lodash/memoize')
  */
 const getNumberFormatDataResolver = memo(async () => {
   const numberFormatDir = toPOSIX(
-    require.resolve('@formatjs/intl-numberformat')
+    path.relative(
+      process.cwd(),
+      path.dirname(require.resolve('@formatjs/intl-numberformat'))
+    )
   )
 
   const localeDataFiles = await glob(`${numberFormatDir}/locale-data/*.js`, {
