@@ -8,7 +8,7 @@
           :src="previewImage ? previewImage : user.avatar_url"
           size="md"
           circle
-          :alt="user.username"
+          :alt="$t('user.avatar.alt', { username: user.username })"
         />
         <h1 class="username">{{ user.username }}</h1>
       </div>
@@ -24,7 +24,7 @@
               :show-icon="true"
               accept="image/png,image/jpeg,image/gif,image/webp"
               class="choose-image"
-              prompt="Upload avatar"
+              :prompt="$t('user.edit.field.avatar.prompt')"
               @change="showPreviewImage"
             />
             <button
@@ -33,7 +33,7 @@
               @click="isEditing = true"
             >
               <EditIcon />
-              Edit
+              {{ $t('user.action.edit') }}
             </button>
             <button
               v-else-if="$auth.user"
@@ -41,27 +41,31 @@
               @click="$refs.modal_report.show()"
             >
               <ReportIcon aria-hidden="true" />
-              Report
+              {{ $t('generic.action.report') }}
             </button>
             <a v-else class="iconified-button" :href="authUrl">
               <ReportIcon aria-hidden="true" />
-              Report
+              {{ $t('generic.action.report') }}
             </a>
           </div>
           <template v-if="isEditing">
             <div class="inputs universal-labels">
-              <label for="user-username"
-                ><span class="label__title">Username</span></label
-              >
+              <label for="user-username">
+                <span class="label__title">{{
+                  $t('user.edit.field.username.label')
+                }}</span>
+              </label>
               <input
                 id="user-username"
                 v-model="user.username"
                 maxlength="39"
                 type="text"
               />
-              <label for="user-bio"
-                ><span class="label__title">Bio</span></label
-              >
+              <label for="user-bio">
+                <span class="label__title">
+                  {{ $t('user.edit.field.bio.label') }}
+                </span>
+              </label>
               <div class="textarea-wrapper">
                 <textarea
                   id="user-bio"
@@ -80,13 +84,15 @@
                   icon = null
                 "
               >
-                <CrossIcon /> Cancel
+                <CrossIcon />
+                {{ $t('generic.action.cancel') }}
               </button>
               <button
                 class="iconified-button brand-button"
                 @click="saveChanges"
               >
-                <SaveIcon /> Save
+                <SaveIcon />
+                {{ $t('generic.action.save') }}
               </button>
             </div>
           </template>
@@ -105,15 +111,31 @@
             <div class="primary-stat">
               <DownloadIcon class="primary-stat__icon" aria-hidden="true" />
               <div class="primary-stat__text">
-                <span class="primary-stat__counter">{{ sumDownloads() }}</span>
-                downloads
+                <IntlFormatted
+                  message-id="user.stats.downloads"
+                  :values="{ downloads: sumDownloads() }"
+                >
+                  <template #~counter="{ values: { downloads } }">
+                    <span class="primary-stat__counter">{{
+                      String(downloads)
+                    }}</span>
+                  </template>
+                </IntlFormatted>
               </div>
             </div>
             <div class="primary-stat">
               <HeartIcon class="primary-stat__icon" aria-hidden="true" />
               <div class="primary-stat__text">
-                <span class="primary-stat__counter">{{ sumFollows() }}</span>
-                followers of projects
+                <IntlFormatted
+                  message-id="user.stats.project-followers"
+                  :values="{ followers: sumFollows() }"
+                >
+                  <template #~counter="{ values: { followers } }">
+                    <span class="primary-stat__counter">{{
+                      String(followers)
+                    }}</span>
+                  </template>
+                </IntlFormatted>
               </div>
             </div>
             <div class="stats-block__item secondary-stat">
@@ -124,14 +146,20 @@
                 "
                 class="secondary-stat__text date"
               >
-                Joined {{ $dayjs(user.created).fromNow() }}
+                {{
+                  $t('user.stats.joined', {
+                    ago: $fmt.timeDifference(user.created),
+                  })
+                }}
               </span>
             </div>
             <hr class="card-divider" />
             <div class="stats-block__item secondary-stat">
               <UserIcon class="secondary-stat__icon" aria-hidden="true" />
               <span class="secondary-stat__text">
-                User ID: <CopyCode :text="user.id" />
+                <IntlFormatted message-id="user.stats.user-id">
+                  <template #~id><CopyCode :text="user.id" /></template>
+                </IntlFormatted>
               </span>
             </div>
             <a
@@ -141,7 +169,7 @@
               class="sidebar__item github-button iconified-button"
             >
               <GitHubIcon aria-hidden="true" />
-              View GitHub profile
+              {{ $t('user.action.open-github') }}
             </a>
           </template>
         </article>
@@ -158,7 +186,7 @@
               },
               ...projectTypes.map((x) => {
                 return {
-                  label: x === 'resourcepack' ? 'Resource Packs' : x + 's',
+                  label: $t(`project-type.${x}.plural`),
                   href: x,
                 }
               }),
@@ -170,7 +198,7 @@
             @click="$refs.modal_creation.show()"
           >
             <PlusIcon />
-            Create a project
+            {{ $t('layout.action.create-project') }}
           </button>
         </nav>
         <div v-if="projects.length > 0">
@@ -209,20 +237,24 @@
               }/settings`"
             >
               <SettingsIcon />
-              Settings
+              {{ $t('generic.title.settings') }}
             </nuxt-link>
           </ProjectCard>
         </div>
         <div v-else class="error">
           <UpToDate class="icon" /><br />
           <span v-if="$auth.user && $auth.user.id === user.id" class="text">
-            You don't have any projects.<br />
-            Would you like to
-            <a class="link" @click.prevent="$refs.modal_creation.show()">
-              create one</a
-            >?
+            <IntlFormatted message-id="user.placeholder.current-user">
+              <template #create-link="{ children }">
+                <a class="link" @click.prevent="$refs.modal_creation.show()">
+                  <Fragment :of="children" />
+                </a>
+              </template>
+            </IntlFormatted>
           </span>
-          <span v-else class="text">This user has no projects!</span>
+          <span v-else class="text">
+            {{ $t('user.placeholder.default') }}
+          </span>
         </div>
       </div>
     </div>
@@ -351,7 +383,7 @@ export default {
     } catch {
       data.error({
         statusCode: 404,
-        message: 'User not found',
+        message: this.$t('user.not-found'),
       })
     }
   },
@@ -364,8 +396,13 @@ export default {
   },
   head() {
     const description = this.user.bio
-      ? `${this.user.bio} - Download ${this.user.username}'s projects on Modrinth`
-      : `Download ${this.user.username}'s projects on Modrinth`
+      ? this.$t('user.meta.description.default', {
+          bio: this.user.bio,
+          username: this.user.username,
+        })
+      : this.$t('user.meta.description.without-bio', {
+          username: this.user.username,
+        })
 
     return {
       title: this.user.username + ' - Modrinth',
@@ -393,7 +430,7 @@ export default {
         {
           hid: 'description',
           name: 'description',
-          content: `${this.user.bio} - Download ${this.user.username}'s projects on Modrinth`,
+          content: description,
         },
         {
           hid: 'og:image',
@@ -426,7 +463,7 @@ export default {
         sum += projects.downloads
       }
 
-      return this.$formatNumber(sum)
+      return this.$fmt.compactNumber(sum)
     },
     sumFollows() {
       let sum = 0
@@ -435,7 +472,7 @@ export default {
         sum += projects.followers
       }
 
-      return this.$formatNumber(sum)
+      return this.$fmt.compactNumber(sum)
     },
     showPreviewImage(files) {
       const reader = new FileReader()
@@ -479,7 +516,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })
@@ -602,5 +639,9 @@ export default {
 
 .textarea-wrapper {
   height: 10rem;
+}
+
+.error .text {
+  white-space: pre-wrap;
 }
 </style>

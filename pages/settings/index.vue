@@ -1,23 +1,24 @@
 <template>
   <div>
     <section class="universal-card">
-      <h2>Themes</h2>
+      <h2>
+        {{ $t('settings.display.themes.title') }}
+      </h2>
       <div class="adjacent-input">
         <label for="theme-selector">
-          <span class="label__title">Color theme</span>
-          <span class="label__description"
-            >Change the global site color theme.</span
-          >
+          <span class="label__title">
+            {{ $t('settings.display.themes.color-theme.title') }}
+          </span>
+          <span class="label__description">
+            {{ $t('settings.display.themes.color-theme.title') }}
+          </span>
         </label>
         <Multiselect
           id="theme-selector"
           v-model="$colorMode.preference"
           :options="['system', 'light', 'dark', 'oled']"
           :custom-label="
-            (value) =>
-              value === 'oled'
-                ? 'OLED'
-                : value.charAt(0).toUpperCase() + value.slice(1)
+            (theme) => $t(`settings.display.themes.color-theme.value.${theme}`)
           "
           :searchable="false"
           :close-on-select="true"
@@ -28,11 +29,12 @@
 
       <div class="adjacent-input small">
         <label for="search-layout-toggle">
-          <span class="label__title">Search sidebar on the right</span>
-          <span class="label__description"
-            >Enabling this will put the search page's filters sidebar on the
-            right side.</span
-          >
+          <span class="label__title">
+            {{ $t('settings.display.themes.flip-search-sidebar.title') }}
+          </span>
+          <span class="label__description">
+            {{ $t('settings.display.themes.flip-search-sidebar.title') }}
+          </span>
         </label>
         <input
           id="search-layout-toggle"
@@ -44,11 +46,12 @@
       </div>
       <div class="adjacent-input small">
         <label for="project-layout-toggle">
-          <span class="label__title">Project sidebar on the right</span>
-          <span class="label__description"
-            >Enabling this will put the project pages' info sidebars on the
-            right side.</span
-          >
+          <span class="label__title">
+            {{ $t('settings.display.themes.flip-project-sidebar.title') }}
+          </span>
+          <span class="label__description">
+            {{ $t('settings.display.themes.flip-project-sidebar.title') }}
+          </span>
         </label>
         <input
           id="project-layout-toggle"
@@ -60,14 +63,17 @@
       </div>
     </section>
     <section class="universal-card">
-      <h2>Feature flags</h2>
+      <h2>
+        {{ $t('settings.display.feature-flags.title') }}
+      </h2>
       <div class="adjacent-input small">
         <label for="advanced-rendering">
-          <span class="label__title">Advanced rendering</span>
-          <span class="label__description"
-            >Enables advanced rendering such as blur effects that may cause
-            performance issues without hardware-accelerated rendering.</span
-          >
+          <span class="label__title">
+            {{ $t('settings.display.feature-flags.hwa-effects.title') }}
+          </span>
+          <span class="label__description">
+            {{ $t('settings.display.feature-flags.hwa-effects.description') }}
+          </span>
         </label>
         <input
           id="advanced-rendering"
@@ -79,10 +85,14 @@
       </div>
       <div class="adjacent-input small">
         <label for="modpacks-alpha-notice">
-          <span class="label__title">Modpacks alpha notice</span>
-          <span class="label__description"
-            >Shows a banner stating that modpacks are in alpha.</span
-          >
+          <span class="label__title">
+            {{ $t('settings.display.feature-flags.modpack-notice.title') }}
+          </span>
+          <span class="label__description">
+            {{
+              $t('settings.display.feature-flags.modpack-notice.description')
+            }}
+          </span>
         </label>
         <input
           id="modpacks-alpha-notice"
@@ -94,12 +104,13 @@
       </div>
       <div class="adjacent-input small">
         <label for="external-links-new-tab">
-          <span class="label__title">Open external links in new tab</span>
+          <span class="label__title">
+            {{ $t('settings.display.feature-flags.external-links.title') }}
+          </span>
           <span class="label__description">
-            Make links which go outside of Modrinth open in a new tab. No matter
-            this setting, links on the same domain and in Markdown descriptions
-            will open in the same tab, and links on ads and edit pages will open
-            in a new tab.
+            {{
+              $t('settings.display.feature-flags.external-links.description')
+            }}
           </span>
         </label>
         <input
@@ -145,8 +156,12 @@ export default {
       this.$store.state.cosmetics.externalLinksNewTab ??
       this.externalLinksNewTab
   },
-  head: {
-    title: 'Display settings - Modrinth',
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('settings.display.title'),
+      }),
+    }
   },
   methods: {
     async saveCosmeticSettings() {

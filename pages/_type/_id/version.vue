@@ -25,11 +25,12 @@
       <ModalConfirm
         ref="modal_confirm"
         :title="$t('project.version.deletion-modal.title')"
-        :description="$t('project.version.deletion-modal.description')"
         :has-to-type="false"
         :proceed-label="$t('project.version.deletion-modal.action')"
         @proceed="deleteVersion()"
-      />
+      >
+        {{ $t('project.version.deletion-modal.description') }}
+      </ModalConfirm>
       <ModalReport
         ref="modal_version_report"
         :item-id="version.id"

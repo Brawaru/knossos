@@ -1,29 +1,34 @@
 <template>
   <div>
     <section v-if="enrolled" class="universal-card">
-      <h2>Revenue and metrics</h2>
-      <p>View your revenue and metrics in the creator dashboard:</p>
+      <h2>
+        {{ $t('settings.monetization.revenue.title') }}
+      </h2>
+      <p>
+        {{ $t('settings.monetization.revenue.description') }}
+      </p>
       <NuxtLink class="iconified-button" to="/dashboard/revenue">
-        <ChartIcon /> Visit creator dashboard
+        <ChartIcon /> {{ $t('settings.monetization.revenue.action') }}
       </NuxtLink>
     </section>
     <section class="universal-card">
-      <h2 class="title">Enrollment</h2>
+      <h2 class="title">
+        {{ $t('settings.monetization.enrollment.title') }}
+      </h2>
       <template v-if="!enrolled && !$auth.user.email">
         <p v-if="!enrolled">
-          You are not currently enrolled in Modrinth's Creator Monetization
-          Program. In order to enroll, you must first add a valid email address
-          to your account.
+          {{
+            $t('settings.monetization.enrollment.description.must-have-email')
+          }}
         </p>
         <NuxtLink class="iconified-button" to="/settings/account">
-          <SettingsIcon /> Visit account settings
+          <SettingsIcon />
+          {{ $t('settings.monetization.enrollment.action.account-settings') }}
         </NuxtLink>
       </template>
       <template v-else-if="editing || !enrolled">
         <p v-if="!enrolled">
-          You are not currently enrolled in Modrinth's Creator Monetization
-          Program. Setup a method of receiving payments below to enable
-          monetization.
+          {{ $t('settings.monetization.enrollment.description.not-enrolled') }}
         </p>
         <div class="enroll">
           <Chips
@@ -35,36 +40,58 @@
           />
 
           <p>
-            Enter the information for the
-            {{ $formatWallet(selectedWallet) }} account you would like to
-            receive your revenue from the Creator Monetization Program:
+            {{
+              $t('settings.monetization.enrollment.form.description', {
+                provider: $t(`payout-provider.${selectedWallet}`),
+              })
+            }}
           </p>
           <div class="input-group">
             <Multiselect
               v-model="accountType"
               :options="getAccountTypes()"
-              :custom-label="(value) => formatAccountType(value)"
+              :custom-label="
+                (type) =>
+                  $t(
+                    'settings.monetization.enrollment.form.field.account-type.value',
+                    {
+                      type,
+                    }
+                  )
+              "
               :searchable="false"
               :close-on-select="true"
               :show-labels="false"
               :allow-empty="false"
             />
 
-            <label class="hidden" for="account-input"
-              >{{ $formatWallet(selectedWallet) }}
-              {{ formatAccountType(accountType).toLowerCase() }} input
-              field</label
-            >
+            <label class="hidden" for="account-input">
+              {{
+                $t(
+                  'settings.monetization.enrollment.form.field.account.label',
+                  {
+                    provider: $t(`payout-provider.${selectedWallet}`),
+                    accountType,
+                  }
+                )
+              }}
+            </label>
             <input
               id="account-input"
               v-model="account"
-              :placeholder="`Enter your ${$formatWallet(
-                selectedWallet
-              )} ${formatAccountType(accountType).toLowerCase()}...`"
+              :placeholder="
+                $t(
+                  'settings.monetization.enrollment.form.field.account.placeholder',
+                  {
+                    provider: $t(`payout-provider.${selectedWallet}`),
+                    accountType,
+                  }
+                )
+              "
               :type="accountType === 'email' ? 'email' : ''"
             />
             <span v-if="accountType === 'phone'">
-              Format: +18888888888 or +1-888-888-8888
+              {{ $t('settings.monetization.enrollment.form.tip.phone-format') }}
             </span>
           </div>
           <div class="input-group">
@@ -72,25 +99,31 @@
               class="iconified-button brand-button"
               @click="updatePayoutData(false)"
             >
-              <SaveIcon /> Save information
+              <SaveIcon />
+              {{ $t('settings.monetization.enrollment.form.action.save') }}
             </button>
             <button
               v-if="enrolled"
               class="iconified-button danger-button"
               @click="updatePayoutData(true)"
             >
-              <TrashIcon /> Remove enrollment
+              <TrashIcon />
+              {{ $t('settings.monetization.enrollment.form.action.remove') }}
             </button>
           </div>
         </div>
       </template>
       <template v-else>
         <p>
-          You are currently enrolled in the Creator Monetization Program with a
-          {{ $formatWallet(selectedWallet) }} account.
+          {{
+            $t('settings.monetization.enrollment.description.enrolled', {
+              provider: $t(`payout-provider.${selectedWallet}`),
+            })
+          }}
         </p>
         <button class="iconified-button brand-button" @click="editing = true">
-          <EditIcon /> Edit information
+          <EditIcon />
+          {{ $t('settings.monetization.enrollment.action.edit') }}
         </button>
       </template>
     </section>
@@ -198,7 +231,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })

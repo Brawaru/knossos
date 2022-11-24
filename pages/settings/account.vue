@@ -2,99 +2,97 @@
   <div>
     <ModalConfirm
       ref="modal_confirm"
-      title="Are you sure you want to delete your account?"
-      description="This will **immediately delete all of your user data and follows**. This will not delete your projects. Deleting your account cannot be reversed.<br><br>If you need help with your account, get support on the [Modrinth Discord](https://discord.gg/EUHuJHt)."
-      proceed-label="Delete this account"
+      :title="$t('settings.modal-delete-account.title')"
+      :proceed-label="$t('settings.modal-delete-account.action')"
       :confirmation-text="$auth.user.username"
       :has-to-type="true"
       @proceed="deleteAccount"
-    />
+    >
+      <IntlFormatted
+        message-id="settings.modal-delete-account.description"
+        :tags="['strong']"
+      >
+        <template #discord-link="{ children }">
+          <a href="https://discord.gg/EUHuJHt" :target="$external()">
+            <Fragment :of="children" />
+          </a>
+        </template>
+      </IntlFormatted>
+    </ModalConfirm>
 
-    <Modal ref="modal_revoke_token" header="Revoke your Modrinth token">
+    <Modal
+      ref="modal_revoke_token"
+      :header="$t('settings.modal-revoke-token.title')"
+    >
       <div class="modal-revoke-token markdown-body">
-        <p>
-          Revoking your Modrinth token can have unintended consequences. Please
-          be aware that the following could break:
-        </p>
-        <ul>
-          <li>Any application that uses your token to access the API.</li>
-          <li>
-            Gradle - if Minotaur is given a incorrect token, your Gradle builds
-            could fail.
-          </li>
-          <li>
-            GitHub - if you use a GitHub action that uses the Modrinth API, it
-            will cause errors.
-          </li>
-        </ul>
-        <p>If you are willing to continue, complete the following steps:</p>
-        <ol>
-          <li>
-            <a
-              href="https://github.com/settings/connections/applications/3acffb2e808d16d4b226"
-              target="_blank"
-            >
-              Head to the Modrinth Application page on GitHub.
-            </a>
-            Make sure to be logged into the GitHub account you used for
-            Modrinth!
-          </li>
-          <li>
-            Press the big red "Revoke Access" button next to the "Permissions"
-            header.
-          </li>
-        </ol>
-        <p>
-          Once you have completed those steps, press the continue button below.
-        </p>
-        <p>
-          <strong>
-            This will log you out of Modrinth, however, when you log back in,
-            your token will be regenerated.
-          </strong>
-        </p>
         <div class="button-group">
+          <IntlFormatted
+            :message="$i18n.data['revoke-token.html']"
+            :tags="['p', 'ul', 'li', 'strong']"
+          >
+            <template #revoke-link="{ children }">
+              <a
+                href="https://github.com/settings/connections/applications/3acffb2e808d16d4b226"
+                target="_blank"
+              >
+                <Fragment :of="children" />
+              </a>
+            </template>
+          </IntlFormatted>
           <button
             class="iconified-button"
             @click="$refs.modal_revoke_token.hide()"
           >
             <CrossIcon />
-            Cancel
+            {{ $t('generic.action.cancel') }}
           </button>
           <button class="iconified-button brand-button" @click="logout">
             <RightArrowIcon />
-            Log out
+            {{ $t('settings.modal-revoke-token.action') }}
           </button>
         </div>
       </div>
     </Modal>
 
     <section class="universal-card">
-      <h2>User profile</h2>
-      <p>Visit your user profile to edit your profile information.</p>
+      <h2>
+        {{ $t('settings.account.user-profile.title') }}
+      </h2>
+      <p>{{ $t('settings.account.account-deletion.description') }}</p>
       <NuxtLink class="iconified-button" :to="`/user/${$auth.user.username}`">
-        <UserIcon /> Visit your profile
+        <UserIcon /> {{ $t('settings.account.account-deletion.action') }}
       </NuxtLink>
     </section>
 
     <section class="universal-card">
-      <h2>Account information</h2>
-      <p>Your account information is not displayed publicly.</p>
+      <h2>
+        {{ $t('settings.account.account-information.title') }}
+      </h2>
+      <p>
+        {{ $t('settings.account.account-information.description') }}
+      </p>
       <ul class="known-errors">
         <li v-if="hasMonetizationEnabled() && !email">
-          You must have an email address set since you are enrolled in the
-          Creator Monetization Program.
+          {{
+            $t(
+              'settings.account.account-information.validation-error.email-required-for-monetization'
+            )
+          }}
         </li>
       </ul>
-      <label for="email-input"
-        ><span class="label__title">Email address</span>
+      <label for="email-input">
+        <span class="label__title">
+          {{ $t('settings.account.account-information.field.email.name') }}
+        </span>
       </label>
       <input
         id="email-input"
         v-model="email"
         maxlength="2048"
         type="email"
-        :placeholder="`Enter your email address...`"
+        :placeholder="
+          $t('settings.account.account-information.field.email.placeholder')
+        "
       />
       <div class="button-group">
         <button
@@ -104,30 +102,28 @@
           @click="saveChanges()"
         >
           <SaveIcon />
-          Save changes
+          {{ $t('generic.action.save-changes') }}
         </button>
       </div>
     </section>
 
     <section class="universal-card">
-      <h2>Authorization token</h2>
+      <h2>
+        {{ $t('settings.account.authorization-token.title') }}
+      </h2>
       <p>
-        Your authorization token can be used with the Modrinth API, the Minotaur
-        Gradle plugin, and other applications that interact with Modrinth's API.
-        Be sure to keep this secret!
+        {{ $t('settings.account.authorization-token.description') }}
       </p>
       <div class="input-group">
-        <button
-          type="button"
-          class="iconified-button"
-          value="Copy to clipboard"
-          @click="copyToken"
-        >
+        <button type="button" class="iconified-button" @click="copyToken">
           <template v-if="copied">
             <CheckIcon />
-            Copied token to clipboard
+            {{ $t('settings.account.authorization-token.action.copy.copied') }}
           </template>
-          <template v-else><CopyIcon />Copy token to clipboard</template>
+          <template v-else>
+            <CopyIcon />
+            {{ $t('settings.account.authorization-token.action.copy.default') }}
+          </template>
         </button>
         <button
           type="button"
@@ -135,17 +131,17 @@
           @click="$refs.modal_revoke_token.show()"
         >
           <SlashIcon />
-          Revoke token
+          {{ $t('settings.account.authorization-token.action.revoke') }}
         </button>
       </div>
     </section>
 
     <section id="delete-account" class="universal-card">
-      <h2>Delete account</h2>
+      <h2>
+        {{ $t('settings.account.account-deletion.title') }}
+      </h2>
       <p>
-        Once you delete your account, there is no going back. Deleting your
-        account will remove all attached data, excluding projects, from our
-        servers.
+        {{ $t('settings.account.account-deletion.description') }}
       </p>
       <button
         type="button"
@@ -153,7 +149,7 @@
         @click="$refs.modal_confirm.show()"
       >
         <TrashIcon />
-        Delete account
+        {{ $t('settings.account.account-deletion.action') }}
       </button>
     </section>
   </div>
@@ -192,8 +188,12 @@ export default {
       showKnownErrors: false,
     }
   },
-  head: {
-    title: 'Account settings - Modrinth',
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('settings.account.title'),
+      }),
+    }
   },
   methods: {
     async copyToken() {
@@ -210,16 +210,13 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })
       }
 
       this.$cookies.set('auth-token-reset', true)
-      alert(
-        'Please note that logging back in with GitHub will create a new account.'
-      )
       window.location.href = '/'
 
       this.$nuxt.$loading.finish()
@@ -259,7 +256,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })

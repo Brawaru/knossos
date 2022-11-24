@@ -3,12 +3,13 @@
     <ModalConfirm
       ref="modal_confirm"
       :title="$t('project.settings.delete-modal.title')"
-      :description="$t('project.settings.delete-modal.description')"
       :has-to-type="true"
       :confirmation-text="project.title"
       :proceed-label="$t('project.settings.delete-modal.action')"
       @proceed="deleteProject"
-    />
+    >
+      {{ $t('project.settings.delete-modal.description') }}
+    </ModalConfirm>
     <div class="universal-card">
       <h2>{{ $t('project.settings.general.title') }}</h2>
       <div class="adjacent-input">

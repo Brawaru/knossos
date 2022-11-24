@@ -1,4 +1,48 @@
-# Source strings go here
+# This file contains all the source strings.
+#
+# When adding the strings please follow the structure of the file, that is:
+#
+#  - All root (top) tables are generaly sorted alphabetically.
+#
+#  - Underlying tables and keys can be in any order that makes it easier to
+#     follow within the correspending file. If is not bound to the file, then
+#     it makes sense to also sort it alphabetically to find keys quicker.
+#
+#  - Don't worry *too much* about your translation keys length, but also don't
+#     put the whole sentences in them. Like variable names, try to provide as
+#     much context as possible through them while being brief.
+#
+#  - Crowdin is working on adding context comments, these are comments that go
+#     before the key, so if you are going to leave comments, then either break
+#     the line before the key, or leave them right after the key, like:
+#
+#     something = "hello" # This comment won't be on Crowdin.
+#
+#     # Contents of this comment will be shown on Crowdin.
+#     something-else = "hello world"
+#
+#  - Please avoid re-using translation keys except where you can be absolutely
+#     sure they will stay the same no matter the context. It's better to
+#     duplicate a string rather than leaving translators asking for a split.
+#
+#     Translators have tools to easily fill in translations for duplicates, but
+#     they may lack tools and technical proficiency to make a pull request that
+#     splits one string into two or more different strings.
+#
+# Don't forget to run `npm run i18n:types` to update typings and check for
+# possible errors.
+#
+# If you are actively working on the code, running `npm run i18n:watch` will
+# run the type generator in watch mode, which will update the typings whenever
+# any change is made here, as well as check for possible errors on the fly.
+#
+# If you have any questions regarding this file, feel free to ask them in our
+# Discord server. We have a thread dedicated to i18n stuff:
+#
+# https://discord.com/channels/734077874708938864/1021200723209355325
+#
+# Vielen Dank, dass Sie Modrinth für Menschen auf der ganzen Welt zugänglich
+# machen!
 
 [ads]
 exaroton = """\
@@ -764,14 +808,152 @@ inappropriate = "Inappropriate content"
 malicious = "Malicious behaviour"
 name-squatting = "Name squatting"
 
+[settings]
+title = "Settings"
+
+[settings.modal-delete-account]
+title = "Are you sure you want to delete your account?"
+description = """\
+This will <strong>immediately delete all of your user data and \
+follows</strong>. This will not delete your projects. Deleting your account \
+cannot be reversed.
+
+If you need help with your account, get support on the <discord-link>\
+Modrinth Discord</discord-link>.
+
+Please note that logging back in with GitHub will create a new account."""
+action = "Delete this account"
+
+[settings.modal-revoke-token]
+title = "Revoke your Modrinth token"
+action = "Log out"
+
+[settings.account]
+title = "Account settings"
+
+[settings.account.user-profile]
+title = "User profile"
+description = "Visit your user profile to edit your profile information."
+action = "Visit your profile"
+
+[settings.account.account-information]
+title = "Account information"
+description = "Your account information is not displayed publicly."
+field.email.name = "Email address"
+field.email.placeholder = "Enter your email address..."
+
+[settings.account.account-information.validation-error]
+email-required-for-monetization = """\
+You must have an email address set since you are enrolled in the Creator \
+Monetization Program."""
+
+[settings.account.authorization-token]
+title = "Authorization token"
+description = """\
+Your authorization token can be used with the Modrinth API, the Minotaur \
+Gradle plugin, and other applications that interact with Modrinth's API. Be \
+sure to keep this secret!"""
+action.copy.default = "Copy token to clipboard"
+action.copy.copied = "Copied token to clipboard"
+action.revoke = "Revoke token"
+
+[settings.account.account-deletion]
+title = "Delete account"
+description = """\
+Once you delete your account, there is no going back. Deleting your account \
+will remove all attached data, excluding projects, from our servers."""
+action = "Delete account"
+
+[settings.follows]
+title = "Followed projects"
+empty = """\
+You don't have any followed projects.
+Why don't you <search-link>search</search-link> for new ones?"""
+
+[settings.display]
+title = "Display settings"
+
+[settings.display.themes]
+title = "Themes"
+color-theme.title = "Color theme"
+color-theme.description = "Change the global site color theme."
+flip-search-sidebar.title = "Search sidebar on the right"
+flip-search-sidebar.description = """\
+Enabling this will put the search page's filters sidebar on the right side."""
+flip-project-sidebar.title = "Project sidebar on the right"
+flip-project-sidebar.description = """\
+Enabling this will put the project pages' info sidebars on the right side."""
+
+[settings.display.themes.color-theme.value]
+system = "Sync with system"
+light = "Light"
+dark = "Dark"
+oled = "OLED"
+
+[settings.display.feature-flags]
+title = "Feature flags"
+hwa-effects.title = "Advanced rendering"
+hwa-effects.description = """\
+Enables advanced rendering such as blur effects that may cause performance \
+issues without hardware-accelerated rendering."""
+modpack-notice.title = "Modpacks alpha notice"
+modpack-notice.description = """\
+Shows a banner stating that modpacks are in alpha."""
+external-links.title = "Open external links in new tab"
+external-links.description = """\
+Make links which go outside of Modrinth open in a new tab. No matter this \
+setting, links on the same domain and in Markdown descriptions will open in \
+the same tab, and links on ads and edit pages will open in a new tab."""
+
+[settings.monetization]
+title = "Monetization settings"
+
+[settings.monetization.revenue]
+title = "Revenue and metrics"
+description = "View your revenue and metrics in the creator dashboard:"
+action = "Visit creator dashboard"
+
+[settings.monetization.enrollment]
+title = "Enrollment"
+action.account-settings = "Visit account settings"
+action.edit = "Edit information"
+
+[settings.monetization.enrollment.description]
+must-have-email = """\
+You are not currently enrolled in Modrinth's Creator Monetization Program. In \
+order to enroll, you must first add a valid email address to your account."""
+not-enrolled = """\
+You are not currently enrolled in Modrinth's Creator Monetization Program. \
+Setup a method of receiving payments below to enable monetization."""
+enrolled = """\
+You are currently enrolled in the Creator Monetization Program with a \
+{provider} account."""
+
+[settings.monetization.enrollment.form]
+description = """\
+Enter the information for the {provider} account you would like to receive \
+your revenue from the Creator Monetization Program:"""
+field.account-type.value = """\
+{type, select, email {E-mail address} phone {Phone number} \
+user_handle {Username} other {{type}}}"""
+field.account.label = """\
+{provider} {accountType, select, email {E-mail address} phone {Phone number} \
+user_handle {Username} other {{accountType}}} input field"""
+field.account.placeholder = """\
+Enter your {provider} {accountType, select, email {E-mail address} \
+phone {Phone number} user_handle {Username} other {{accountType}}}..."""
+tip.phone-format = "Format: +18888888888 or +1-888-888-8888"
+action.save = "Save information"
+action.remove = "Remove enrollment"
+
 [side-requirement]
-# ℹ 'side' selector is provided solely for convinience:
+# ℹ 'side' selector is provided solely for the convinience:
 #  If your translation does not change depending on the context, then move selector's value to the 'other' clause and remove 'server'/'client' clauses.
 required = "{side, select, client {Required} server {Required} other {}}"
-# ℹ 'side' selector is provided solely for convinience:
+# ℹ 'side' selector is provided solely for the convinience:
 #  If your translation does not change depending on the context, then move selector's value to the 'other' clause and remove 'server'/'client' clauses.
 optional = "{side, select, client {Optional} server {Optional} other {}}"
-# ℹ 'side' selector is provided solely for convinience:
+# ℹ 'side' selector is provided solely for the convinience:
 #  If your translation does not change depending on the context, then move selector's value to the 'other' clause and remove 'server'/'client' clauses.
 unsupported = """\
 {side, select, client {Unsupported} server {Unsupported} other {}}"""
@@ -788,6 +970,32 @@ mibibytes.long = "{value, plural, one {{value} Mibibyte} other {{value} Mibibyte
 
 gibibytes.short = "{value} GiB"
 gibibytes.long = "{value, plural, one {{value} Gibibyte} other {{value} Gibibytes}}"
+
+[user]
+avatar.alt = "{username}'s avatar"
+action.edit = "Edit"
+action.open-github = "View GitHub profile"
+placeholder.current-user = """\
+You don't have any projects.
+Would you like to <create-link>create one</create-link>?"""
+placeholder.default = "This user has no projects!"
+not-found = "User not found"
+meta.description.default = "{bio} - Download {username}'s projects on Modrinth."
+meta.description.without-bio = "Download {username}'s projects on Modrinth."
+
+[user.edit]
+field.avatar.prompt = "Upload avatar"
+field.username.label = "Username"
+field.bio.label = "Bio"
+
+[user.stats]
+downloads = """\
+{downloads, plural, one {{counter} download} other {{counter} downloads}}"""
+project-followers = """\
+{followers, plural, one {{counter} follower} other {{counter} followers}} of \
+projects"""
+joined = "Joined {ago}"
+user-id = "User ID: {id}"
 
 [test]
 test-string = "{something} {somethingElse, select, owo {OwO??} other {UwU!!}} {randomNumber, number} {randomCountOfPeople, plural, one {# person} other {# people}} <wrapper>ha</wrapper>"

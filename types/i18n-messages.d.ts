@@ -1108,6 +1108,157 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'report-type.name-squatting': never
 
+    'settings.title': never
+
+    'settings.modal-delete-account.title': never
+
+    'settings.modal-delete-account.description': {
+      strong: RichArgument
+      'discord-link': RichArgument
+    }
+
+    'settings.modal-delete-account.action': never
+
+    'settings.modal-revoke-token.title': never
+
+    'settings.modal-revoke-token.action': never
+
+    'settings.account.title': never
+
+    'settings.account.user-profile.title': never
+
+    'settings.account.user-profile.description': never
+
+    'settings.account.user-profile.action': never
+
+    'settings.account.account-information.title': never
+
+    'settings.account.account-information.description': never
+
+    'settings.account.account-information.field.email.name': never
+
+    'settings.account.account-information.field.email.placeholder': never
+
+    'settings.account.account-information.validation-error.email-required-for-monetization': never
+
+    'settings.account.authorization-token.title': never
+
+    'settings.account.authorization-token.description': never
+
+    'settings.account.authorization-token.action.copy.default': never
+
+    'settings.account.authorization-token.action.copy.copied': never
+
+    'settings.account.authorization-token.action.revoke': never
+
+    'settings.account.account-deletion.title': never
+
+    'settings.account.account-deletion.description': never
+
+    'settings.account.account-deletion.action': never
+
+    'settings.follows.title': never
+
+    'settings.follows.empty': {
+      'search-link': RichArgument
+    }
+
+    'settings.display.title': never
+
+    'settings.display.themes.title': never
+
+    'settings.display.themes.color-theme.title': never
+
+    'settings.display.themes.color-theme.description': never
+
+    'settings.display.themes.color-theme.value.system': never
+
+    'settings.display.themes.color-theme.value.light': never
+
+    'settings.display.themes.color-theme.value.dark': never
+
+    'settings.display.themes.color-theme.value.oled': never
+
+    'settings.display.themes.flip-search-sidebar.title': never
+
+    'settings.display.themes.flip-search-sidebar.description': never
+
+    'settings.display.themes.flip-project-sidebar.title': never
+
+    'settings.display.themes.flip-project-sidebar.description': never
+
+    'settings.display.feature-flags.title': never
+
+    'settings.display.feature-flags.hwa-effects.title': never
+
+    'settings.display.feature-flags.hwa-effects.description': never
+
+    'settings.display.feature-flags.modpack-notice.title': never
+
+    'settings.display.feature-flags.modpack-notice.description': never
+
+    'settings.display.feature-flags.external-links.title': never
+
+    'settings.display.feature-flags.external-links.description': never
+
+    'settings.monetization.title': never
+
+    'settings.monetization.revenue.title': never
+
+    'settings.monetization.revenue.description': never
+
+    'settings.monetization.revenue.action': never
+
+    'settings.monetization.enrollment.title': never
+
+    'settings.monetization.enrollment.action.account-settings': never
+
+    'settings.monetization.enrollment.action.edit': never
+
+    'settings.monetization.enrollment.description.must-have-email': never
+
+    'settings.monetization.enrollment.description.not-enrolled': never
+
+    'settings.monetization.enrollment.description.enrolled': {
+      provider: ValueArgument
+    }
+
+    'settings.monetization.enrollment.form.description': {
+      provider: ValueArgument
+    }
+
+    'settings.monetization.enrollment.form.field.account-type.value': {
+      type: /* clause */
+        | 'email'
+        | /* clause */ 'phone'
+        | /* clause */ 'user_handle'
+        | /* clause */ 'other'
+    }
+
+    'settings.monetization.enrollment.form.field.account.label': {
+      provider: ValueArgument
+      accountType: /* clause */
+        | 'email'
+        | /* clause */ 'phone'
+        | /* clause */ 'user_handle'
+        | /* clause */ 'other'
+    }
+
+    'settings.monetization.enrollment.form.field.account.placeholder': {
+      provider: ValueArgument
+      accountType: /* clause */
+        | 'email'
+        | /* clause */ 'phone'
+        | /* clause */ 'user_handle'
+        | /* clause */ 'other'
+    }
+
+    'settings.monetization.enrollment.form.tip.phone-format': never
+
+    'settings.monetization.enrollment.form.action.save': never
+
+    'settings.monetization.enrollment.form.action.remove': never
+
     'side-requirement.required': {
       side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
     }
@@ -1152,6 +1303,55 @@ declare module '~/modules/i18n/templates/i18n.types' {
       value: NumberArgument
     }
 
+    'user.avatar.alt': {
+      username: ValueArgument
+    }
+
+    'user.action.edit': never
+
+    'user.action.open-github': never
+
+    'user.placeholder.current-user': {
+      'create-link': RichArgument
+    }
+
+    'user.placeholder.default': never
+
+    'user.not-found': never
+
+    'user.meta.description.default': {
+      bio: ValueArgument
+      username: ValueArgument
+    }
+
+    'user.meta.description.without-bio': {
+      username: ValueArgument
+    }
+
+    'user.edit.field.avatar.prompt': never
+
+    'user.edit.field.username.label': never
+
+    'user.edit.field.bio.label': never
+
+    'user.stats.downloads': {
+      downloads: NumberArgument
+      counter: ValueArgument
+    }
+
+    'user.stats.project-followers': {
+      followers: NumberArgument
+      counter: ValueArgument
+    }
+
+    'user.stats.joined': {
+      ago: ValueArgument
+    }
+
+    'user.stats.user-id': {
+      id: ValueArgument
+    }
+
     'test.test-string': {
       something: ValueArgument
       somethingElse: /* clause */ 'owo' | /* clause */ 'other'
@@ -1171,6 +1371,8 @@ declare module '~/modules/i18n/templates/types' {
 
   interface LocaleImportedData {
     'fees-explainer.html': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]
+
+    'revoke-token.html': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]
 
     'starter.md': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]
   }
