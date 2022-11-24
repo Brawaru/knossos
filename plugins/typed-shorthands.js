@@ -140,7 +140,9 @@ function computeProjectTypeDisplay(side, type) {
 
   let id = /** @type {const} */ (`project-type-display.${type}`)
 
-  return this.$t(id, { side })
+  const properSide = side !== 'client' && side !== 'server' ? 'other' : side
+
+  return this.$t(id, { side: properSide })
 }
 
 /**
