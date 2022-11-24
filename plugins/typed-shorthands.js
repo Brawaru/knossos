@@ -276,12 +276,25 @@ function formatFileSize(bytes, options = defaultFileSizeOptions) {
     'gibibytes',
   ])
 
-  const i = Math.floor(Math.log(bytes) / Math.log(kibibyte))
+  let i = Math.floor(Math.log(bytes) / Math.log(kibibyte))
 
   let sel = sizes[i]
-  if (sel == null) sel = 'bytes'
 
-  return this.$t(`unit.size.${sel}.${options.unitDisplay ?? 'short'}`, {
+  if (sel == null) {
+    i = 0
+    sel = 'bytes'
+  }
+
+  /** @type {'short' | 'long'} */
+  let unitDisplay
+
+  if (sel === 'bytes') {
+    unitDisplay = bytesDisplay(options)
+  } else {
+    unitDisplay = options?.unitDisplay ?? 'short'
+  }
+
+  return this.$t(`unit.size.${sel}.${unitDisplay}`, {
     value: this.$fmt.compactNumber(
       bytes / Math.pow(kibibyte, i),
       numberFormatOptions(options)
