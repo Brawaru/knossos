@@ -243,6 +243,8 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'dashboard.title': never
 
+    'dashboard.sidebar-title': never
+
     'dashboard.analytics.title': never
 
     'dashboard.overview.title': never
@@ -978,9 +980,90 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'header.profile-dropdown.link.dashboard': never
 
+    'landing.cover-image.alt': never
+
+    'landing.headline': never
+
+    'landing.introduction': {
+      'gh-link': RichArgument
+      'docs-link': RichArgument
+    }
+
+    'landing.field.search.label': never
+
+    'landing.field.search.placeholder': never
+
+    'landing.action.search': never
+
+    'landing.point.search.search-image.alt': never
+
+    'landing.point.search.deck': never
+
+    'landing.point.search.headline': never
+
+    'landing.point.search.text': never
+
+    'landing.point.features.deck': never
+
+    'landing.point.features.headline': never
+
+    'landing.point.features.text': never
+
+    'landing.point.features.feature.open-source': never
+
+    'landing.point.features.feature.search': never
+
+    'landing.point.features.feature.api': never
+
+    'landing.point.features.feature.dependency-view': never
+
+    'landing.point.features.feature.modpacks': never
+
+    'landing.point.features.feature.payouts': never
+
+    'landing.point.features.feature.analytics': never
+
+    'landing.point.features.feature.unknown': never
+
+    'landing.point.features.feature.project-types': never
+
+    'landing.point.features.feature.launcher': never
+
+    'landing.point.features.feature.own-auth': never
+
+    'landing.point.features.feature.comments': never
+
+    'landing.point.api.deck': never
+
+    'landing.point.api.headline': never
+
+    'landing.point.api.text': {
+      'docs-link': RichArgument
+    }
+
     'layout.action.change-theme': never
 
     'layout.action.create-project': never
+
+    'legal.title': never
+
+    'legal.privacy.title.long': never
+
+    'legal.privacy.title.short': never
+
+    'legal.privacy.meta.description': never
+
+    'legal.rules.title.long': never
+
+    'legal.rules.title.short': never
+
+    'legal.rules.meta.description': never
+
+    'legal.terms.title.long': never
+
+    'legal.terms.title.short': never
+
+    'legal.terms.meta.description': never
 
     'legal.common.warning': {
       'sr-only': RichArgument

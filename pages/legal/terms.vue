@@ -150,31 +150,36 @@
 <script>
 export default {
   auth: false,
-  head: {
-    title: 'Terms - Modrinth',
-    meta: [
-      {
-        hid: 'description',
-        name: 'description',
-        content:
-          'The Terms and Conditions of Modrinth, an open source modding platform focused on Minecraft.',
-      },
-      {
-        hid: 'apple-mobile-web-app-title',
-        name: 'apple-mobile-web-app-title',
-        content: 'Terms and Conditions',
-      },
-      {
-        hid: 'og:title',
-        name: 'og:title',
-        content: 'Terms and Conditions',
-      },
-      {
-        hid: 'og:url',
-        name: 'og:url',
-        content: `https://modrinth.com/legal/terms`,
-      },
-    ],
+  head() {
+    const title = this.$t('legal.terms.title.long')
+
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('legal.terms.title.short'),
+      }),
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('legal.terms.meta.description'),
+        },
+        {
+          hid: 'apple-mobile-web-app-title',
+          name: 'apple-mobile-web-app-title',
+          content: title,
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'og:url',
+          name: 'og:url',
+          content: `https://modrinth.com/legal/terms`,
+        },
+      ],
+    }
   },
 }
 </script>

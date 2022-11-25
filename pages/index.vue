@@ -5,38 +5,44 @@
         class="cover-image"
         src="~/assets/images/landing.svg"
         width="100%"
-        alt="cover-image"
+        :alt="$t('landing.cover-image.alt')"
       />
       <div class="text">
         <ModrinthLogo aria-hidden="true" class="modrinth-logo" />
-        <h1>Discover, Play, and Create Minecraft content</h1>
+        <h1>
+          {{ $t('landing.headline') }}
+        </h1>
         <h3>
-          Find enjoyable, quality content through our
-          <a href="https://github.com/modrinth" :target="$external()">
-            open-source
-          </a>
-          modding platform built for the community. Create stuff, get paid, and
-          deploy your project with our
-          <a href="https://docs.modrinth.com" :target="$external()"
-            >fully documented</a
-          >
-          API!
+          <IntlFormatted message-id="landing.introduction">
+            <template #gh-link="{ children }">
+              <a href="https://github.com/modrinth" :target="$external()">
+                <Fragment :of="children" />
+              </a>
+            </template>
+            <template #docs-link="{ children }">
+              <a href="https://docs.modrinth.com" :target="$external()">
+                <Fragment :of="children" />
+              </a>
+            </template>
+          </IntlFormatted>
         </h3>
         <form action="/mods">
           <div class="iconified-input">
-            <label class="hidden" for="q">Search Mods</label>
+            <label class="hidden" for="q">
+              {{ $t('landing.field.search.label') }}
+            </label>
             <SearchIcon />
             <input
               id="q"
               type="search"
               name="q"
-              placeholder="Search mods..."
+              :placeholder="$t('landing.field.search.label')"
               autocomplete="off"
             />
           </div>
           <button class="iconified-button brand-button" type="submit">
             <RightArrowIcon />
-            Search
+            {{ $t('landing.action.search') }}
           </button>
         </form>
       </div>
@@ -47,101 +53,123 @@
           <img
             v-if="$colorMode.value === 'light'"
             src="https://cdn.modrinth.com/homepage/search-light.webp"
-            alt="Screenshot of Modrinth's 'search mods' page"
+            :alt="$t('landing.point.search.search-image.alt')"
           />
           <img
             v-else-if="$colorMode.value === 'oled'"
             src="https://cdn.modrinth.com/homepage/search-oled.webp"
-            alt="Screenshot of Modrinth's 'search mods' page"
+            :alt="$t('landing.point.search.search-image.alt')"
           />
           <img
             v-else
             src="https://cdn.modrinth.com/homepage/search-dark.webp"
-            alt="Screenshot of Modrinth's 'search mods' page"
+            :alt="$t('landing.point.search.search-image.alt')"
           />
         </div>
         <div class="text-container">
-          <h3 class="subheader">Fast and powerful search</h3>
-          <h1>Find what you want, quickly and easily</h1>
+          <h3 class="subheader">
+            {{ $t('landing.point.search.deck') }}
+          </h3>
+          <h1>{{ $t('landing.point.search.headline') }}</h1>
           <p>
-            We are invested in making it extremely simple to find what you want
-            to play. Our search is adaptable, customizable, and easy to use!
-            Whether you're a power user or someone who just discovered the world
-            of Minecraft modding, we've got you covered.
+            {{ $t('landing.point.search.text') }}
           </p>
         </div>
       </div>
       <div class="point left">
         <div class="text-container">
           <div>
-            <h3 class="subheader">Packed with features</h3>
-            <h1>Constantly evolving and improving</h1>
+            <h3 class="subheader">
+              {{ $t('landing.point.features.deck') }}
+            </h3>
+            <h1>
+              {{ $t('landing.point.features.headline') }}
+            </h1>
             <p>
-              We are always adding new features and working towards making
-              Modrinth have the best possible user experience. Right now, we're
-              working on giving creators more analytics, adding new types of
-              projects, our launcher, and much more! If you have any more
-              feature ideas, feel free to join our
-              <a href="https://discord.gg/EUHuJHt" :target="$external()">
-                Discord</a
-              >!
+              <IntlFormatted message-id="landing.point.features.te">
+                <template #discord-link="{ children }">
+                  <a href="https://discord.gg/EUHuJHt" :target="$external()">
+                    <Fragment :of="children" />
+                  </a>
+                </template>
+              </IntlFormatted>
             </p>
             <div class="features">
               <div class="feature completed">
                 <CheckIcon />
                 <p>
                   <a href="https://github.com/modrinth" :target="$external()">
-                    100% open source
+                    {{ $t('landing.point.features.feature.open-source') }}
                   </a>
                 </p>
               </div>
               <div class="feature completed">
                 <CheckIcon />
-                <p>Real-time search</p>
+                <p>
+                  {{ $t('landing.point.features.feature.search') }}
+                </p>
               </div>
               <div class="feature completed">
                 <CheckIcon />
                 <p>
                   <a href="https://docs.modrinth.com" :target="$external()">
-                    Completely documented API
+                    {{ $t('landing.point.features.feature.api') }}
                   </a>
                 </p>
               </div>
               <div class="feature completed">
                 <CheckIcon />
-                <p>Dependency management</p>
+                <p>
+                  {{ $t('landing.point.features.feature.dependency-view') }}
+                </p>
               </div>
               <div class="feature completed">
                 <CheckIcon />
-                <p>Modpacks</p>
+                <p>
+                  {{ $t('landing.point.features.feature.modpacks') }}
+                </p>
               </div>
               <div class="feature completed">
                 <CheckIcon />
-                <p>Creator monetization</p>
+                <p>
+                  {{ $t('landing.point.features.feature.payouts') }}
+                </p>
               </div>
               <div class="feature in-progress">
                 <InProgressIcon />
-                <p>Creator analytics</p>
+                <p>
+                  {{ $t('landing.point.features.feature.analytics') }}
+                </p>
               </div>
               <div class="feature in-progress blurred">
                 <InProgressIcon />
-                <p>[Redacted]</p>
+                <p data-comment="Kudos for trying ;)">
+                  {{ $t('landing.point.features.feature.unknown') }}
+                </p>
               </div>
               <div class="feature in-progress">
                 <InProgressIcon />
-                <p>More types of projects</p>
+                <p>
+                  {{ $t('landing.point.features.feature.project-types') }}
+                </p>
               </div>
               <div class="feature in-progress">
                 <InProgressIcon />
-                <p>Game launcher</p>
+                <p>
+                  {{ $t('landing.point.features.feature.launcher') }}
+                </p>
               </div>
               <div class="feature in-progress">
                 <InProgressIcon />
-                <p>In-house authentication</p>
+                <p>
+                  {{ $t('landing.point.features.feature.own-auth') }}
+                </p>
               </div>
               <div class="feature in-progress">
                 <InProgressIcon />
-                <p>Project comments</p>
+                <p>
+                  {{ $t('landing.point.features.feature.comments') }}
+                </p>
               </div>
             </div>
           </div>
@@ -191,16 +219,18 @@
           </div>
         </div>
         <div class="text-container">
-          <h3 class="subheader">Simple to integrate</h3>
-          <h1>An open-source API for everyone to use</h1>
+          <h3 class="subheader">
+            {{ $t('landing.point.api.deck') }}
+          </h3>
+          <h1>{{ $t('landing.point.api.headline') }}</h1>
           <p>
-            We have created an open source modding platform for the community.
-            We're committed to open source so the community can trust us as
-            their modding platform. Our API is
-            <a href="https://docs.modrinth.com" :target="$external()"
-              >fully documented</a
-            >
-            so anyone can use it. We will never add restrictions on our API!
+            <IntlFormatted message-id="landing.point.api.text">
+              <template #docs-link="{ children }">
+                <a href="https://docs.modrinth.com" :target="$external()">
+                  <Fragment :of="children" />
+                </a>
+              </template>
+            </IntlFormatted>
           </p>
         </div>
       </div>

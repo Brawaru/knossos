@@ -2,15 +2,24 @@
   <div class="normal-page">
     <div class="normal-page__sidebar">
       <aside class="universal-card">
-        <h1>Legal</h1>
+        <h1>{{ $t('legal.title') }}</h1>
         <NavStack>
-          <NavStackItem link="/legal/terms" label="Terms and Conditions">
+          <NavStackItem
+            link="/legal/terms"
+            :label="$t('legal.terms.title.long')"
+          >
             <TermsIcon />
           </NavStackItem>
-          <NavStackItem link="/legal/privacy" label="Privacy Policy">
+          <NavStackItem
+            link="/legal/privacy"
+            :label="$t('legal.privacy.title.long')"
+          >
             <PrivacyIcon />
           </NavStackItem>
-          <NavStackItem link="/legal/rules" label="Content Rules">
+          <NavStackItem
+            link="/legal/rules"
+            :label="$t('legal.rules.title.long')"
+          >
             <RulesIcon />
           </NavStackItem>
           <NavStackItem link="/legal/security" label="Security Notice">
@@ -42,7 +51,7 @@ import RulesIcon from '~/assets/images/sidebar/admin.svg?inline'
 import ShieldIcon from '~/assets/images/utils/shield.svg?inline'
 
 export default {
-  name: 'Settings',
+  name: 'Legal',
   components: {
     NavStack,
     NavStackItem,

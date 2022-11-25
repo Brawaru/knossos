@@ -201,6 +201,7 @@ clear = "Clear filters"
 
 [dashboard]
 title = "Creator dashboard"
+sidebar-title = "Dashboard"
 
 [dashboard.analytics]
 title = "Analytics"
@@ -351,9 +352,84 @@ link.profile = "Visit your profile"
 link.follows = "Following"
 link.dashboard = "Dashboard"
 
+[landing]
+cover-image.alt = "Cover image"
+headline = "Discover, Play, and Create Minecraft content"
+introduction = """\
+Find enjoyable, quality content through our <gh-link>open-source</gh-link> \
+modding platform built for the community. Create stuff, get paid, and deploy \
+your project with our <docs-link>fully documented</docs-link> API!"""
+field.search.label = "Search Mods"
+field.search.placeholder = "Search mods..."
+action.search = "Search"
+
+[landing.point.search]
+search-image.alt = "Screenshot of Modrinth's 'search mods' page"
+deck = "Fast and powerful search"
+headline = "Find what you want, quickly and easily"
+text = """\
+We are invested in making it extremely simple to find what you want to play. \
+Our search is adaptable, customizable, and easy to use! Whether you're a power \
+user or someone who just discovered the world of Minecraft modding, we've got \
+you covered."""
+
+[landing.point.features]
+deck = "Packed with features"
+headline = "Constantly evolving and improving"
+text = """\
+We are always adding new features and working towards making Modrinth have the \
+best possible user experience. Right now, we're working on giving creators \
+more analytics, adding new types of projects, our launcher, and much more! If \
+you have any more feature ideas, feel free to join our \
+<disord-link>Discord</discord-link>!"""
+
+[landing.point.features.feature]
+open-source = "100% open source"
+search = "Real-time search"
+api = "Completely documented API"
+dependency-view = "Dependency management"
+modpacks = "Modpacks"
+payouts = "Creator monetization"
+analytics = "Creator analytics"
+unknown = "[Redacted]"
+project-types = "More types of projects"
+launcher = "Game launcher"
+own-auth = "In-house authentication"
+comments = "Project comments"
+
+[landing.point.api]
+deck = "Simple to integrate"
+headline = "An open-source API for everyone to use"
+text = """\
+We have created an open source modding platform for the community. We're \
+committed to open source so the community can trust us as their modding \
+platform. Our API is <docs-link>fully documented</docs-link> so anyone can use \
+it. We will never add restrictions on our API!"""
+
 [layout.action]
 change-theme = "Change theme"
 create-project = "Create a project"
+
+[legal]
+title = "Legal"
+
+[legal.privacy]
+title = { long = "Privacy Policy", short = "Privacy" }
+meta.description = """\
+The Privacy Policy of Modrinth, an open source modding platform focused on \
+Minecraft."""
+
+[legal.rules]
+title = { long = "Content Rules", short = "Rules" }
+meta.description = """\
+The Content Rules of Modrinth, an open source modding platform focused on \
+Minecraft."""
+
+[legal.terms]
+title = { long = "Terms and Conditions", short = "Terms" }
+meta.description = """\
+The Terms and Conditions of Modrinth, an open source modding platform focused \
+on Minecraft."""
 
 [legal.common]
 warning = """\

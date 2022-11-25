@@ -195,31 +195,36 @@
 <script>
 export default {
   auth: false,
-  head: {
-    title: 'Privacy - Modrinth',
-    meta: [
-      {
-        hid: 'description',
-        name: 'description',
-        content:
-          'The Privacy Policy of Modrinth, an open source modding platform focused on Minecraft.',
-      },
-      {
-        hid: 'apple-mobile-web-app-title',
-        name: 'apple-mobile-web-app-title',
-        content: 'Privacy Policy',
-      },
-      {
-        hid: 'og:title',
-        name: 'og:title',
-        content: 'Privacy Policy',
-      },
-      {
-        hid: 'og:url',
-        name: 'og:url',
-        content: `https://modrinth.com/legal/privacy`,
-      },
-    ],
+  head() {
+    const title = this.$t('legal.privacy.title.long')
+
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('legal.privacy.title.short'),
+      }),
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('legal.privacy.meta.description'),
+        },
+        {
+          hid: 'apple-mobile-web-app-title',
+          name: 'apple-mobile-web-app-title',
+          content: title,
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'og:url',
+          name: 'og:url',
+          content: `https://modrinth.com/legal/privacy`,
+        },
+      ],
+    }
   },
 }
 </script>

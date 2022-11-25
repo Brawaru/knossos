@@ -2,9 +2,17 @@
   <div class="normal-page">
     <div class="normal-page__sidebar">
       <aside class="universal-card">
-        <h1>Dashboard<span class="beta-badge">BETA</span></h1>
+        <h1>
+          {{ $t('dashboard.sidebar-title') }}
+          <span class="beta-badge">
+            {{ $t('generic.label.beta') }}
+          </span>
+        </h1>
         <NavStack>
-          <NavStackItem link="/dashboard" label="Overview">
+          <NavStackItem
+            link="/dashboard"
+            :label="$t('dashboard.overview.title')"
+          >
             <DashboardIcon />
           </NavStackItem>
           <!--          <NavStackItem link="/dashboard/projects" label="Projects">-->
@@ -16,7 +24,7 @@
           <NavStackItem
             v-if="hasMonetization()"
             link="/dashboard/revenue"
-            label="Revenue"
+            :label="$t('dashboard.revenue.title')"
           >
             <CurrencyIcon />
           </NavStackItem>
