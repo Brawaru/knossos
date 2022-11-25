@@ -52,123 +52,212 @@ let parser = yargs(hideBin(process.argv))
 
 parser = parser.wrap(parser.terminalWidth())
 
-const argumentType = /** @type {const} */ ({
-  any: 'AnyArgument',
-  value: 'ValueArgument',
-  rich: 'RichArgument',
-  literal: 'LiteralArgument',
-  date: 'DateArgument',
-  number: 'NumberArgument',
-  string: 'StringArgument',
-})
+class ArgumentType {
+  /** @param {string | null} exportName Name of the export from types file. */
+  constructor(exportName) {
+    /**
+     * @private
+     * @type {string | null}
+     */
+    this._exportName = exportName
+  }
 
-/** @typedef {string & { __literal: true }} LiteralArgumentType */
+  /** Name of the export from types file. */
+  get exportName() {
+    return this._exportName
+  }
 
-const _literalArgumentTypePrefix = '/* clause */'
+  toString() {
+    return this._exportName
+  }
+}
 
-/**
- * @param {string} value Value that will be used as custom type
- * @returns {LiteralArgumentType}
- */
-function literalArgumentType(value) {
-  const numericRepresentation = Number(value)
+class SimpleArgumentType extends ArgumentType {
+  /** @param {string} type Type of this element when exporting to TypeScript. */
+  constructor(type) {
+    super(type)
+  }
+}
 
-  if (!isNaN(numericRepresentation)) {
-    return /** @type {LiteralArgumentType} */ (
-      `${_literalArgumentTypePrefix} (${JSON.stringify(
-        value
-      )} | ${numericRepresentation})`
-    )
-  } else {
-    return /** @type {LiteralArgumentType} */ (
-      `${_literalArgumentTypePrefix} ${JSON.stringify(value)}`
-    )
+class AnyArgumentType extends SimpleArgumentType {
+  constructor() {
+    super('AnyArgument')
+  }
+}
+
+class ValueArgumentType extends SimpleArgumentType {
+  constructor() {
+    super('ValueArgument')
+  }
+}
+
+class RichArgumentType extends SimpleArgumentType {
+  constructor() {
+    super('RichArgument')
+  }
+}
+
+class SelectArgumentType extends ArgumentType {
+  constructor() {
+    super('SelectArgument')
+  }
+
+  /**
+   * All the choices that will be used to shape the type.
+   *
+   * @type {Set<string>}
+   */
+  choices = new Set()
+
+  /**
+   * Takes multiple instances of {@link SelectArgumentType} and combines them
+   * into a new instance.
+   *
+   * @param {...SelectArgumentType} args Select argument types to merge.
+   * @returns A new instance that contains all the choices of the other
+   *   instances.
+   */
+  static merged(...args) {
+    const merged = new SelectArgumentType()
+
+    for (const arg of args) {
+      for (const choice of arg.choices) {
+        merged.choices.add(choice)
+      }
+    }
+
+    return merged
+  }
+
+  toString() {
+    const keywordsUnion = Array.from(this.choices)
+      .map((choice) => JSON.stringify(choice))
+      .join(' | ')
+
+    return `${this.exportName}<${keywordsUnion}>`
   }
 }
 
 /**
- * Whether the provided argument type is of a literal (custom) type.
- *
- * @param {string} value Value to check.
- * @returns {value is LiteralArgumentType}
+ * @param {ArgumentType} arg1 First argument type.
+ * @param {ArgumentType} arg2 Second argument type.
  */
-function isLiteralArgumentType(value) {
-  return value.startsWith(_literalArgumentTypePrefix)
+function argumentTypesEqual(arg1, arg2) {
+  if (
+    arg1 instanceof SelectArgumentType &&
+    arg2 instanceof SelectArgumentType
+  ) {
+    if (arg1.choices.size !== arg2.choices.size) {
+      return false
+    }
+
+    for (const choice of arg1.choices) {
+      if (!arg2.choices.has(choice)) {
+        return false
+      }
+    }
+
+    return true
+  }
+
+  return arg1.exportName === arg2.exportName
 }
 
-/** @typedef {typeof argumentType[keyof argumentType]} ArgumentTypeValue */
+class DateArgumentType extends SimpleArgumentType {
+  constructor() {
+    super('DateArgument')
+  }
+}
+
+class NumberArgumentType extends SimpleArgumentType {
+  constructor() {
+    super('NumberArgument')
+  }
+}
+
+/** @typedef {Map<string, ArgumentType>} ArgumentsMap */
 
 /**
  * @param {string} messageId ID of the message (used for diagnostics).
  * @param {string} message Message itself.
- * @returns {Map<string, string>} Element names mapped to their TypeScript
- *   types.
+ * @returns {ArgumentsMap} Element names mapped to their TypeScript types.
  */
 function gatherElements(messageId, message) {
-  /** @type {Map<string, string>} */
+  /** @type {ArgumentsMap} */
   const m = new Map()
 
   /**
    * Checks whether the argument is already present in the
    *
    * @param {string} name Name of the argument.
-   * @param {string} type Type of the argument.
+   * @param {ArgumentType} newType Type of the argument.
    */
-  function addOrFixType(name, type) {
+  function addOrFixType(name, newType) {
     const existingType = m.get(name)
 
-    if (existingType == null || existingType === type) {
-      if (existingType == null) {
-        consola.log(`[${messageId}] Discovered argument "${name}"`)
-      }
+    if (existingType == null) {
+      consola.log(`[${messageId}] Discovered argument "${name}"`)
 
-      m.set(name, type)
+      m.set(name, newType)
 
+      return
+    } else if (argumentTypesEqual(existingType, newType)) {
       return
     }
 
-    if (existingType === argumentType.number && type === argumentType.value) {
-      return
-    } else if (
-      existingType === argumentType.value &&
-      type === argumentType.number
+    if (
+      existingType instanceof NumberArgumentType &&
+      newType instanceof ValueArgumentType
+    ) {
+      return // already satisfied
+    }
+
+    if (
+      existingType instanceof ValueArgumentType &&
+      newType instanceof NumberArgumentType
     ) {
       consola.info(
         `[${messageId}] Reducing type of argument "${name}" to number based on usage`
       )
 
-      m.set(name, type)
+      m.set(name, newType)
+
       return
-    } else if (
-      existingType === argumentType.string &&
-      isLiteralArgumentType(type)
+    }
+
+    if (
+      existingType instanceof ValueArgumentType &&
+      newType instanceof SelectArgumentType
     ) {
       console.info(
         `[${messageId}] Overtaking argument type of "${name}" with literal`
       )
 
-      m.set(name, type)
-      return
-    } else if (
-      isLiteralArgumentType(existingType) &&
-      type === argumentType.value
-    ) {
-      consola.info(
-        `[${messageId}] Argument "${name}" already satisfies literal`
-      )
-      return
-    } else if (
-      isLiteralArgumentType(existingType) &&
-      isLiteralArgumentType(type)
-    ) {
-      console.info(
-        `[${messageId}] Appending literal type of argument "${name}"`
-      )
-      m.set(name, `${existingType} | ${type}`)
+      m.set(name, newType)
+
       return
     }
 
-    m.set(name, argumentType.any)
+    if (
+      existingType instanceof SelectArgumentType &&
+      newType instanceof ValueArgumentType
+    ) {
+      return // already satisfied
+    }
+
+    if (
+      existingType instanceof SelectArgumentType &&
+      newType instanceof SelectArgumentType
+    ) {
+      consola.info(
+        `[${messageId}] Merging ${String(existingType)} with ${String(newType)}`
+      )
+      m.set(name, SelectArgumentType.merged(existingType, newType))
+      return
+    }
+
+    m.set(name, new AnyArgumentType())
+
     consola.warn(
       `[${messageId}] Cannot infer type of argument "${name}" based on usage, it's widened to accept any valid value`
     )
@@ -189,29 +278,31 @@ function gatherElements(messageId, message) {
       ) {
         continue
       } else if (messageParser.isArgumentElement(element)) {
-        addOrFixType(element.value, argumentType.value)
+        addOrFixType(element.value, new ValueArgumentType())
       } else if (
         messageParser.isDateElement(element) ||
         messageParser.isTimeElement(element)
       ) {
-        addOrFixType(element.value, argumentType.date)
+        addOrFixType(element.value, new DateArgumentType())
       } else if (messageParser.isNumberElement(element)) {
-        addOrFixType(element.value, argumentType.number)
+        addOrFixType(element.value, new NumberArgumentType())
       } else if (messageParser.isPluralElement(element)) {
-        addOrFixType(element.value, argumentType.number)
+        addOrFixType(element.value, new NumberArgumentType())
 
         for (const { value } of Object.values(element.options)) {
           processElements(value)
         }
       } else if (messageParser.isSelectElement(element)) {
-        addOrFixType(element.value, argumentType.string)
+        const argumentType = new SelectArgumentType()
 
         for (const [key, { value }] of Object.entries(element.options)) {
-          addOrFixType(element.value, literalArgumentType(key))
+          argumentType.choices.add(key)
           processElements(value)
         }
+
+        addOrFixType(element.value, argumentType)
       } else if (messageParser.isTagElement(element)) {
-        addOrFixType(element.value, argumentType.rich)
+        addOrFixType(element.value, new RichArgumentType())
 
         processElements(element.children)
       }
@@ -236,7 +327,7 @@ function gatherElements(messageId, message) {
  * @private
  * @typedef {object} Message
  * @property {string} id Unique message identifier.
- * @property {Map<string, string>} args Argument types for the string.
+ * @property {ArgumentsMap} args Argument types for the string.
  */
 
 /**
@@ -314,7 +405,7 @@ declare module '~/modules/i18n/templates/i18n.types' {
   interface CustomMessages {
     <% messages.forEach(function typeMessage(message) { %>
     <%= JSON.stringify(message.id) %>: <% if (message.args.size === 0) { print('never'); } else { %>{
-      <% message.args.forEach(function typeArgument(type, name) { %><%= JSON.stringify(name) %>: <%= type %>
+      <% message.args.forEach(function typeArgument(type, name) { %><%= JSON.stringify(name) %>: <%= type.toString() %>
     <% }) %>
     }<% } %>
     <% }); %>
@@ -420,9 +511,9 @@ async function contextForDirectoryState(localeDir, srcDir) {
 
   for (const { args } of messages) {
     for (const type of args.values()) {
-      if (isLiteralArgumentType(type)) continue
-
-      argumentTypeImports.add(type)
+      if (type.exportName != null) {
+        argumentTypeImports.add(type.exportName)
+      }
     }
   }
 

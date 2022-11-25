@@ -66,6 +66,14 @@ export type DateArgument = Date | string | number
 
 export type StringArgument = string
 
+/** @private */
+type _SelectKeywordAcceptable = string | number
+
+export type SelectArgument<
+  Values,
+  BaseType extends _SelectKeywordAcceptable = _SelectKeywordAcceptable
+> = Values | (BaseType & Record<never, never>)
+
 type MessageFormatter =
   import('@formatjs/intl').IntlFormatters<AcceptableType>['formatMessage']
 

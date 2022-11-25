@@ -6,6 +6,7 @@ import '~/modules/i18n/templates/i18n'
 import {
   RichArgument,
   ValueArgument,
+  SelectArgument,
   NumberArgument,
   DateArgument,
 } from '~/modules/i18n/templates/i18n.types'
@@ -137,12 +138,9 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'component.modal-creation.description': never
 
     'component.modal-creation.auto-description.warning': {
-      projectType: /* clause */
-        | 'mod'
-        | /* clause */ 'plugin'
-        | /* clause */ 'resourcepack'
-        | /* clause */ 'modpack'
-        | /* clause */ 'other'
+      projectType: SelectArgument<
+        'mod' | 'plugin' | 'resourcepack' | 'modpack' | 'other'
+      >
     }
 
     'component.modal-creation.fields.project-type.title': {
@@ -166,7 +164,7 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'component.modal-creation.fields.summary.description': never
 
     'component.modal-report.title': {
-      itemType: /* clause */ 'user' | /* clause */ 'other'
+      itemType: SelectArgument<'user' | 'other'>
     }
 
     'component.modal-report.description': {
@@ -185,10 +183,7 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'component.modal-report.fields.info.description': never
 
     'component.modal-transfer.title': {
-      wallet: /* clause */
-        | 'venmo'
-        | /* clause */ 'paypal'
-        | /* clause */ 'other'
+      wallet: SelectArgument<'venmo' | 'paypal' | 'other'>
     }
 
     'component.modal-transfer.description': {
@@ -203,19 +198,16 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'component.modal-transfer.fields.venmo-fee-consent.label': {
       fee: ValueArgument
-      wallet: /* clause */ 'venmo' | /* clause */ 'other'
+      wallet: SelectArgument<'venmo' | 'other'>
     }
 
     'component.modal-transfer.fields.regular-fee-consent.label': {
       fee: ValueArgument
-      wallet: /* clause */ 'paypal' | /* clause */ 'other'
+      wallet: SelectArgument<'paypal' | 'other'>
     }
 
     'component.modal-transfer.fields.account-confirm.label': {
-      wallet: /* clause */
-        | 'venmo'
-        | /* clause */ 'paypal'
-        | /* clause */ 'other'
+      wallet: SelectArgument<'venmo' | 'paypal' | 'other'>
       account: ValueArgument
     }
 
@@ -369,13 +361,14 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.meta.title': {
       project: ValueArgument
-      projectType: /* clause */
+      projectType: SelectArgument<
         | 'mod'
-        | /* clause */ 'mod_and_plugin'
-        | /* clause */ 'plugin'
-        | /* clause */ 'modpack'
-        | /* clause */ 'resourcepack'
-        | /* clause */ 'other'
+        | 'mod_and_plugin'
+        | 'plugin'
+        | 'modpack'
+        | 'resourcepack'
+        | 'other'
+      >
     }
 
     'project.technical-info.title': never
@@ -645,27 +638,28 @@ declare module '~/modules/i18n/templates/i18n.types' {
     }
 
     'project.stats.created': {
-      projectType: /* clause */ 'other'
       ago: ValueArgument
+      projectType: SelectArgument<'other'>
     }
 
     'project.stats.updated': {
-      projectType: /* clause */ 'other'
       ago: ValueArgument
+      projectType: SelectArgument<'other'>
     }
 
     'project.status.title': never
 
     'project.status.description': {
       badge: RichArgument
-      status: /* clause */
+      status: SelectArgument<
         | 'approved'
-        | /* clause */ 'rejected'
-        | /* clause */ 'draft'
-        | /* clause */ 'unlisted'
-        | /* clause */ 'archived'
-        | /* clause */ 'processing'
-        | /* clause */ 'other'
+        | 'rejected'
+        | 'draft'
+        | 'unlisted'
+        | 'archived'
+        | 'processing'
+        | 'other'
+      >
     }
 
     'project.status.moderator-message.title': never
@@ -754,21 +748,15 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.version.dependency.version-bound': {
       version: ValueArgument
-      type: /* clause */
-        | 'required'
-        | /* clause */ 'optional'
-        | /* clause */ 'incompatible'
-        | /* clause */ 'embedded'
-        | /* clause */ 'other'
+      type: SelectArgument<
+        'required' | 'optional' | 'incompatible' | 'embedded' | 'other'
+      >
     }
 
     'project.version.dependency.project-bound': {
-      type: /* clause */
-        | 'required'
-        | /* clause */ 'optional'
-        | /* clause */ 'incompatible'
-        | /* clause */ 'embedded'
-        | /* clause */ 'other'
+      type: SelectArgument<
+        'required' | 'optional' | 'incompatible' | 'embedded' | 'other'
+      >
     }
 
     'project.version.dependency.unknown-project': never
@@ -1063,19 +1051,19 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'project-type.resourcepack.plural': never
 
     'project-type-display.mod-and-plugin': {
-      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+      side: SelectArgument<'client' | 'server' | 'other'>
     }
 
     'project-type-display.mod': {
-      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+      side: SelectArgument<'client' | 'server' | 'other'>
     }
 
     'project-type-display.plugin': {
-      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+      side: SelectArgument<'client' | 'server' | 'other'>
     }
 
     'project-type-display.modpack': {
-      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+      side: SelectArgument<'client' | 'server' | 'other'>
     }
 
     'project-release-channel.release': never
@@ -1228,29 +1216,17 @@ declare module '~/modules/i18n/templates/i18n.types' {
     }
 
     'settings.monetization.enrollment.form.field.account-type.value': {
-      type: /* clause */
-        | 'email'
-        | /* clause */ 'phone'
-        | /* clause */ 'user_handle'
-        | /* clause */ 'other'
+      type: SelectArgument<'email' | 'phone' | 'user_handle' | 'other'>
     }
 
     'settings.monetization.enrollment.form.field.account.label': {
       provider: ValueArgument
-      accountType: /* clause */
-        | 'email'
-        | /* clause */ 'phone'
-        | /* clause */ 'user_handle'
-        | /* clause */ 'other'
+      accountType: SelectArgument<'email' | 'phone' | 'user_handle' | 'other'>
     }
 
     'settings.monetization.enrollment.form.field.account.placeholder': {
       provider: ValueArgument
-      accountType: /* clause */
-        | 'email'
-        | /* clause */ 'phone'
-        | /* clause */ 'user_handle'
-        | /* clause */ 'other'
+      accountType: SelectArgument<'email' | 'phone' | 'user_handle' | 'other'>
     }
 
     'settings.monetization.enrollment.form.tip.phone-format': never
@@ -1260,15 +1236,15 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'settings.monetization.enrollment.form.action.remove': never
 
     'side-requirement.required': {
-      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+      side: SelectArgument<'client' | 'server' | 'other'>
     }
 
     'side-requirement.optional': {
-      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+      side: SelectArgument<'client' | 'server' | 'other'>
     }
 
     'side-requirement.unsupported': {
-      side: /* clause */ 'client' | /* clause */ 'server' | /* clause */ 'other'
+      side: SelectArgument<'client' | 'server' | 'other'>
     }
 
     'unit.size.bytes.short': {
@@ -1354,7 +1330,7 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'test.test-string': {
       something: ValueArgument
-      somethingElse: /* clause */ 'owo' | /* clause */ 'other'
+      somethingElse: SelectArgument<'owo' | 'other'>
       randomNumber: NumberArgument
       randomCountOfPeople: NumberArgument
       wrapper: RichArgument
