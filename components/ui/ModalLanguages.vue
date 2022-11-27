@@ -5,7 +5,9 @@
     @close="close"
   >
     <template #default>
-      <div class="container">
+      <div
+        :class="{ container: true, 'advanced-rendering': advancedRendering }"
+      >
         <div class="contributions-notice">
           <IntlFormatted
             message-id="component.modal-languages.contribution-notice"
@@ -212,6 +214,10 @@ export default defineComponent({
      */
     isShowing() {
       return this.$store.getters['i18n/isLanguageModalShowing']
+    },
+    /** @returns {boolean} Whether the advanced rendering is enabled. */
+    advancedRendering() {
+      return this.$store.getters['cosmetics/advancedRendering']
     },
     /** @returns {boolean} */
     automatic() {
@@ -553,7 +559,7 @@ export default defineComponent({
 }
 
 .languages-grid-wrap {
-  &.blur-out {
+  .advanced-rendering &.blur-out {
     filter: blur(2px);
   }
 }

@@ -15,6 +15,12 @@ export const state = () => ({
   notUsingBlockers: false,
 })
 
+export const getters = {
+  advancedRendering(state) {
+    return state.advancedRendering
+  },
+}
+
 export const mutations = {
   SET_SEARCH_LAYOUT(state, searchLayout) {
     state.searchLayout = searchLayout
