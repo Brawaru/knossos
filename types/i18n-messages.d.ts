@@ -941,7 +941,7 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'footer.section.legal.link.rules': never
 
-    'footer.section.legal.link.license': never
+    'footer.section.legal.link.security': never
 
     'footer.section.resources.title': never
 
@@ -1118,6 +1118,10 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'legal.terms.title.short': never
 
     'legal.terms.meta.description': never
+
+    'legal.security.title': never
+
+    'legal.security.meta.description': never
 
     'legal.common.warning': {
       'sr-only': RichArgument

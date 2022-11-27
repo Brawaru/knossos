@@ -479,6 +479,12 @@ meta.description = """\
 The Terms and Conditions of Modrinth, an open source modding platform focused \
 on Minecraft."""
 
+[legal.security]
+title = "Security Notice"
+meta.description = """\
+The Security Notice of Modrinth, an open source modding platform focused on \
+Minecraft."""
+
 [legal.common]
 warning = """\
 <sr-only>Warning:</sr-only>

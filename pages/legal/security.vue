@@ -61,31 +61,33 @@
 <script>
 export default {
   auth: false,
-  head: {
-    title: 'Security Notice - Modrinth',
-    meta: [
-      {
-        hid: 'description',
-        name: 'description',
-        content:
-          'The Security Notice of Modrinth, an open source modding platform focused on Minecraft.',
-      },
-      {
-        hid: 'apple-mobile-web-app-title',
-        name: 'apple-mobile-web-app-title',
-        content: 'Security Notice',
-      },
-      {
-        hid: 'og:title',
-        name: 'og:title',
-        content: 'Security Notice',
-      },
-      {
-        hid: 'og:url',
-        name: 'og:url',
-        content: `https://modrinth.com/legal/security`,
-      },
-    ],
+  head() {
+    const title = this.$t('legal.security.title')
+    return {
+      title: this.$t('generic.meta.page-title', { page: title }),
+      meta: [
+        {
+          hid: 'description',
+          name: 'description',
+          content: this.$t('legal.security.meta.description'),
+        },
+        {
+          hid: 'apple-mobile-web-app-title',
+          name: 'apple-mobile-web-app-title',
+          content: title,
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: title,
+        },
+        {
+          hid: 'og:url',
+          name: 'og:url',
+          content: `https://modrinth.com/legal/security`,
+        },
+      ],
+    }
   },
 }
 </script>
