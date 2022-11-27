@@ -177,6 +177,30 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'component.modal-creation.fields.summary.description': never
 
+    'component.modal-languages.title': never
+
+    'component.modal-languages.contribution-notice': {
+      'crowdin-link': RichArgument
+    }
+
+    'component.modal-languages.filler.no-results': never
+
+    'component.modal-languages.action.enable-automatic': never
+
+    'component.modal-languages.field.search.placeholder': never
+
+    'component.modal-languages.auto-lockout.title': never
+
+    'component.modal-languages.auto-lockout.description': {
+      language: ValueArgument
+    }
+
+    'component.modal-languages.auto-lockout.action': never
+
+    'component.modal-languages.language.browser-preferred': never
+
+    'component.modal-languages.language.currently-used': never
+
     'component.modal-report.title': {
       itemType: SelectArgument<'user' | 'other'>
     }

@@ -353,6 +353,7 @@
       </section>
     </header>
     <main>
+      <ModalLanguages />
       <ModalCreation ref="modal_creation" />
       <notifications
         group="main"
@@ -500,6 +501,7 @@ import GitHubIcon from '~/assets/images/utils/github.svg?inline'
 import NavRow from '~/components/ui/NavRow'
 import ModalCreation from '~/components/ui/ModalCreation'
 import Avatar from '~/components/ui/Avatar'
+import ModalLanguages from '~/components/ui/ModalLanguages.vue'
 
 export default {
   components: {
@@ -521,6 +523,7 @@ export default {
     DropdownIcon,
     HeartIcon,
     ChartIcon,
+    ModalLanguages,
   },
   directives: {
     ClickOutside,

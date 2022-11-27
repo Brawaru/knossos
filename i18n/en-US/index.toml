@@ -150,6 +150,25 @@ url.title = "URL<required>*</required>"
 summary.title = "Summary<required>*</required>"
 summary.description = "This appears in search and on the sidebar of your project's page."
 
+[component.modal-languages]
+title = "Change language"
+contribution-notice = """Modrinth is translated by volunteers. \
+<crowdin-link>You can contribute!</crowdin-link>"""
+filler.no-results = "No results"
+action.enable-automatic = "Automatic"
+field.search.placeholder = "Search language..."
+
+[component.modal-languages.auto-lockout]
+title = "Using your browser's language"
+description = """\
+Modrinth is currently using {language}, the language that best matches your \
+browser settings."""
+action = "Use a different language"
+
+[component.modal-languages.language]
+browser-preferred = "Browser language"
+currently-used = "Currently used"
+
 [component.modal-report]
 title = "Report {itemType, select, user {user} other {project}}"
 description = """\
