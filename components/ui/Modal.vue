@@ -77,6 +77,8 @@ export default {
 }
 
 .modal-body {
+  display: flex;
+  flex-direction: column;
   position: fixed;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -84,7 +86,7 @@ export default {
   box-shadow: var(--shadow-raised), var(--shadow-inset);
   border-radius: var(--size-rounded-lg);
   max-height: calc(100% - 2 * var(--spacing-card-bg));
-  overflow-y: auto;
+  overflow: hidden;
   width: max-content;
 
   .header {
@@ -100,6 +102,7 @@ export default {
   }
 
   .content {
+    overflow-y: auto;
     background-color: var(--color-raised-bg);
   }
 
