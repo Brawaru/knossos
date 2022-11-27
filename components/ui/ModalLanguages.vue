@@ -1,5 +1,9 @@
 <template>
-  <Modal :header="$t('component.modal-languages.title')" ref="modalRef">
+  <Modal
+    :header="$t('component.modal-languages.title')"
+    ref="modalRef"
+    @close="close"
+  >
     <template #default>
       <div class="container">
         <div class="contributions-notice">
