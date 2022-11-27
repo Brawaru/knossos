@@ -58,9 +58,9 @@
       <h2>
         {{ $t('settings.account.user-profile.title') }}
       </h2>
-      <p>{{ $t('settings.account.account-deletion.description') }}</p>
+      <p>{{ $t('settings.account.user-profile.description') }}</p>
       <NuxtLink class="iconified-button" :to="`/user/${$auth.user.username}`">
-        <UserIcon /> {{ $t('settings.account.account-deletion.action') }}
+        <UserIcon /> {{ $t('settings.account.user-profile.action') }}
       </NuxtLink>
     </section>
 
