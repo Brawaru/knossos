@@ -99,6 +99,10 @@ export class CompactNumber {
     return this._formatted
   }
 
+  toString() {
+    return this[Symbol.toStringTag]()
+  }
+
   /**
    * @private
    * @type {number | undefined}
