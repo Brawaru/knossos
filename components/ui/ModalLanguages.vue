@@ -155,7 +155,7 @@
 
 <script>
 // @ts-check
-import Vue, { defineComponent, ref } from 'vue'
+import { defineComponent, ref, nextTick } from 'vue'
 import Fuse from 'fuse.js/dist/fuse.basic'
 import Modal from './Modal.vue'
 import GlobeIcon from '~/assets/images/utils/globe.svg?inline'
@@ -421,7 +421,7 @@ export default defineComponent({
       if (isShowing && !wasShowing) {
         this.reset()
 
-        Vue.nextTick(() => {
+        nextTick(() => {
           const el = /** @type {HTMLDivElement[]} */ (
             this.$refs.highlightedLanguageEl
           )[0]
