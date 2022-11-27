@@ -455,6 +455,7 @@ it. We will never add restrictions on our API!"""
 
 [layout.action]
 change-theme = "Change theme"
+change-language = "Change language"
 create-project = "Create a project"
 
 [legal]

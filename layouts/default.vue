@@ -47,6 +47,14 @@
           </section>
           <section class="column-grow user-outer" aria-label="Account links">
             <section class="user-controls">
+              <button
+                v-if="$auth.user == null"
+                :title="$t('layout.action.change-language')"
+                class="control-button button-transparent"
+                @click="showLanguagesModal"
+              >
+                <LanguagesIcon aria-hidden="true" />
+              </button>
               <nuxt-link
                 v-if="$auth.user"
                 to="/notifications"
@@ -335,6 +343,13 @@
               </span>
             </button>
             <button
+              class="iconified-button raised-button"
+              @click="showLanguagesModal"
+            >
+              <LanguagesIcon aria-hidden="true" class="icon" />
+              <span>{{ $t('layout.action.change-language') }}</span>
+            </button>
+            <button
               v-if="$auth.user"
               class="iconified-button danger-button"
               @click="logout"
@@ -464,6 +479,13 @@
           <SunIcon v-else aria-hidden="true" />
           {{ $t('layout.action.change-theme') }}
         </button>
+        <button
+          class="iconified-button raised-button"
+          @click="showLanguagesModal"
+        >
+          <LanguagesIcon aria-hidden="true" />
+          {{ $t('layout.action.change-language') }}
+        </button>
         <nuxt-link class="iconified-button raised-button" to="/settings">
           <SettingsIcon aria-hidden="true" />
           {{ $t('generic.title.settings') }}
@@ -491,6 +513,7 @@ import HomeIcon from '~/assets/images/sidebar/home.svg?inline'
 
 import MoonIcon from '~/assets/images/utils/moon.svg?inline'
 import SunIcon from '~/assets/images/utils/sun.svg?inline'
+import LanguagesIcon from '~/assets/images/utils/languages.svg?inline'
 import PlusIcon from '~/assets/images/utils/plus.svg?inline'
 import DropdownIcon from '~/assets/images/utils/dropdown.svg?inline'
 import LogOutIcon from '~/assets/images/utils/log-out.svg?inline'
@@ -524,6 +547,7 @@ export default {
     HeartIcon,
     ChartIcon,
     ModalLanguages,
+    LanguagesIcon,
   },
   directives: {
     ClickOutside,
@@ -632,6 +656,9 @@ export default {
     changeTheme() {
       this.$colorMode.preference =
         this.$colorMode.value === 'dark' ? 'light' : 'dark'
+    },
+    showLanguagesModal() {
+      this.$store.dispatch('i18n/toggleLanguageModal', true)
     },
   },
 }

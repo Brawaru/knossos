@@ -1095,6 +1095,8 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'layout.action.change-theme': never
 
+    'layout.action.change-language': never
+
     'layout.action.create-project': never
 
     'legal.title': never
