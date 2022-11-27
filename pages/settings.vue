@@ -2,22 +2,31 @@
   <div class="normal-page">
     <div class="normal-page__sidebar">
       <aside class="universal-card">
-        <h1>Settings</h1>
+        <h1>{{ $t('settings.title') }}</h1>
         <NavStack>
-          <NavStackItem link="/settings" label="Appearance">
+          <NavStackItem
+            link="/settings"
+            :label="$t('settings.display.title.short')"
+          >
             <PaintbrushIcon />
           </NavStackItem>
           <template v-if="$auth.user">
-            <h3>User settings</h3>
-            <NavStackItem link="/settings/account" label="Account">
+            <h3>{{ $t('settings.category.user-settings.title') }}</h3>
+            <NavStackItem
+              link="/settings/account"
+              :label="$t('settings.account.title.short')"
+            >
               <UserIcon />
             </NavStackItem>
-            <NavStackItem link="/settings/follows" label="Followed projects">
+            <NavStackItem
+              link="/settings/follows"
+              :label="$t('settings.follows.title.short')"
+            >
               <HeartIcon />
             </NavStackItem>
             <NavStackItem
               link="/settings/monetization"
-              label="Monetization"
+              :label="$t('settings.monetization.title.short')"
               beta
             >
               <CurrencyIcon />

@@ -57,14 +57,14 @@ export default {
   head() {
     return {
       title: this.$t('generic.meta.page-title', {
-        page: this.$t('settings.follows.title'),
+        page: this.$t('settings.follows.title.long'),
       }),
     }
   },
 }
 </script>
 <style lang="scss" scoped>
-.error.text {
+.error > .text {
   white-space: pre-wrap;
 }
 </style>

@@ -99,8 +99,23 @@ utility = "Utility"
 vanilla-like = "Vanilla-like"
 worldgen = "World Generation"
 
+[category-header]
+resolutions = "Resolutions"
+categories = "Categories"
+features = "Features"
+
 [component.advertisement]
 provider = "Ad by {provider}"
+
+[component.badge-report-type]
+text = """\
+Reported {reason, select,\
+ spam {{itemType, select, user {for} other {as}} spam}\
+ copyright {for copyright infringement}\
+ malicious {for malicious behaviour}\
+ name_squatting {for name squatting}\
+ other {for {reasonText}}\
+}"""
 
 [component.copy-code]
 title = "Copy code to clipboard"
@@ -261,6 +276,10 @@ optional = "Optional"
 incompatible = "Incompatible"
 embedded = "Embedded"
 
+[environment]
+client = "Client"
+server = "Server"
+
 [error-page]
 title = "An error occurred!"
 action.home = "Go home"
@@ -308,6 +327,10 @@ link.crowdin = "Crowdin"
 notice.legal-mojang = """\
 NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG."""
 
+[game-version-selector]
+include-snapshots = "Include snapshots" # TODO: dedupe!!
+# placeholder = "Choose versions..."
+
 [generic.action]
 cancel = "Cancel"
 continue = "Continue"
@@ -317,6 +340,7 @@ edit = "Edit"
 report = "Report"
 save = "Save"
 save-changes = "Save changes"
+confirm = "Confirm"
 
 [generic.error]
 title = "An error occurred"
@@ -334,6 +358,10 @@ project-page-title = "{project} - {page}"
 [generic.placeholder]
 select-one = "Select one"
 valid-url = "Enter a valid URL"
+choose-versions = "Choose versions..."
+
+[generic.filler]
+up-to-date = "You're up-to-date!"
 
 [generic.title]
 settings = "Settings"
@@ -381,7 +409,7 @@ We are always adding new features and working towards making Modrinth have the \
 best possible user experience. Right now, we're working on giving creators \
 more analytics, adding new types of projects, our launcher, and much more! If \
 you have any more feature ideas, feel free to join our \
-<disord-link>Discord</discord-link>!"""
+<discord-link>Discord</discord-link>!"""
 
 [landing.point.features.feature]
 open-source = "100% open source"
@@ -462,9 +490,50 @@ action.browse = "Browse"
 
 [moderation]
 title = "Moderation"
+placeholder = "You are up-to-date!"
+
+[moderation.form]
+description = """\
+Both of these fields are optional, but can be used to communicate problems \
+with a project's team members. The body supports markdown formatting!"""
+new-status = "New project status: {status}"
+
+[moderation.form.action]
+approve = "Approve"
+unlist = "Unlist"
+reject = "Reject"
+
+[moderation.form.field]
+message.placeholder = "Enter the message..."
+body.label = "Body"
+
+[moderation.report]
+title = """\
+<h3>{itemType, select,\
+ project {Project {item}}\
+ version {Version {item}}\
+ user {User {item}}\
+ other {{itemType} {item}}\
+}</h3> reported by {reporter}"""
+created.text = "Received {ago}"
+created.tooltip = "Received {received}"
+action.delete = "Delete report"
 
 [notifications]
 title = "Notifications"
+manage.title = "Manage"
+action.go-to-follows = "Followed projects"
+action.clear-all = "Clear all"
+
+[notifications.notification]
+received = "Received {ago}"
+action.dismiss = "Dismiss"
+action.accept = "Accept"
+action.deny = "Deny"
+
+[notifications.filter]
+team_invite = "Team invites"
+project_update = "Project updates"
 
 [payout-provider]
 venmo = "Venmo"
@@ -694,7 +763,7 @@ title = "Project status"
 description = """\
 Your project is currently: <badge>{status, select, approved {Approved} \
 rejected {Rejected} draft {In Drafts} unlisted {Unlisted} archived {Archived} \
-processing {Processing} other {Unknown}}</badge>"""
+processing {Being processed} other {Unknown}}</badge>"""
 moderator-message.title = "Message from the Modrinth moderators:"
 action.resubmit = "Resubmit for review"
 action.clear-mod-message = "Clear message"
@@ -884,8 +953,74 @@ inappropriate = "Inappropriate content"
 malicious = "Malicious behaviour"
 name-squatting = "Name squatting"
 
+[search]
+notice.modpacks-alpha = """\
+Modpack support is currently in alpha, and can only be created and installed \
+through third party tools. Our documentation includes instructions on \
+<doc-play-link>playing modpacks</doc-play-link> with \
+<atl-link>ATLauncher</atl-link>, <mmc-link>MultiMC</mmc-link>, and \
+<pl-link>Prism Launcher</pl-link>. Pack creators can reference our \
+documentation on <doc-create-link>creating modpacks</doc-create-link>. Join us \
+on <discord-link>Discord</discord-link> for support."""
+filler.loading = "Loading..."
+filler.empty = "No results found for your query!"
+meta.title = """\
+Search {searchType, select,\
+ mods {mods} plugins {plugins} resourcepacks {resource packs} \
+ modpacks {modpacks} other {{searchType}s}\
+}"""
+meta.description = """\
+Search and browse thousands of Minecraft {searchType, select,\
+ mods {mods} plugins {plugins} resourcepacks {resourcepacks}\
+ modpacks {modpacks} other {{searchType}s}\
+} on Modrinth with instant, accurate search results. Our filters help you \
+quickly find the best Minecraft {searchType, select,\
+ mods {mods} plugins {plugins} resourcepacks {resourcepacks}\
+ modpacks {modpacks} other {{searchType}s}\
+}.\n"""
+top-link.skip-to-results = "Skip to search results"
+
+[search.collapsible]
+show = "More"
+hide = "Less"
+
+[search.controls]
+action.toggle-filters = "Filters..."
+field.search.label = "Search"
+field.search.placeholder = """\
+Search {searchType, select,\
+ mods {mods}\
+ plugins {plugins}\
+ resourcepacks {resource packs}\
+ modpacks {modpacks}\
+ other {{projectType}s}\
+}..."""
+field.sort-by.label = "Sort by"
+field.sort-by.value.relevance = "Relevance"
+field.sort-by.value.downloads = "Download count"
+field.sort-by.value.follows = "Follow count"
+field.sort-by.value.newest = "Recently created"
+field.sort-by.value.updated = "Recently updated"
+field.per-page.label = "Show per page"
+
+[search.filters]
+aria-label = "Filters"
+action.clear = "Clear filters"
+categories.aria-label = "Category filters"
+loaders.aria-label = "Loader filters"
+loaders.title = "Loaders"
+loaders.show-all = "Show all loaders"
+platforms.aria-label = "Platform loader filters"
+platforms.title = "Proxies"
+environments.aria-label = "Environment filters"
+environments.title = "Environments"
+game-versions.title = "Minecraft versions"
+licenses.title = "Licenses"
+licenses.placeholder = "Choose licenses..."
+
 [settings]
 title = "Settings"
+category.user-settings.title = "User settings"
 
 [settings.modal-delete-account]
 title = "Are you sure you want to delete your account?"
@@ -905,7 +1040,7 @@ title = "Revoke your Modrinth token"
 action = "Log out"
 
 [settings.account]
-title = "Account settings"
+title = { long = "Account settings", short = "Account" }
 
 [settings.account.user-profile]
 title = "User profile"
@@ -941,13 +1076,13 @@ will remove all attached data, excluding projects, from our servers."""
 action = "Delete account"
 
 [settings.follows]
-title = "Followed projects"
+title = { long = "Followed projects", short = "Followed projects" }
 empty = """\
 You don't have any followed projects.
 Why don't you <search-link>search</search-link> for new ones?"""
 
 [settings.display]
-title = "Display settings"
+title = { long = "Display settings", short = "Appearance" }
 
 [settings.display.themes]
 title = "Themes"
@@ -982,7 +1117,7 @@ setting, links on the same domain and in Markdown descriptions will open in \
 the same tab, and links on ads and edit pages will open in a new tab."""
 
 [settings.monetization]
-title = "Monetization settings"
+title = { long = "Monetization settings", short = "Monetization" }
 
 [settings.monetization.revenue]
 title = "Revenue and metrics"
@@ -1072,6 +1207,11 @@ project-followers = """\
 projects"""
 joined = "Joined {ago}"
 user-id = "User ID: {id}"
+
+[user-role]
+admin = "Modrinth Team"
+moderator = "Moderator"
+creator = "Creator"
 
 [test]
 test-string = "{something} {somethingElse, select, owo {OwO??} other {UwU!!}} {randomNumber, number} {randomCountOfPeople, plural, one {# person} other {# people}} <wrapper>ha</wrapper>"

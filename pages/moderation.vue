@@ -3,25 +3,27 @@
     <Modal ref="modal" header="Moderation Form">
       <div v-if="currentProject !== null" class="moderation-modal">
         <p>
-          Both of these fields are optional, but can be used to communicate
-          problems with a project's team members. The body supports markdown
-          formatting!
+          {{ $t('moderation.form.description') }}
         </p>
         <div class="status">
-          <span>New project status: </span>
-          <Badge :type="currentProject.newStatus" />
+          <IntlFormatted message-id="moderation.form.new-status">
+            <template #~status>
+              <ProjectStatusBadge :status="currentProject.newStatus" />
+            </template>
+          </IntlFormatted>
         </div>
         <input
           v-model="currentProject.moderation_message"
           type="text"
-          placeholder="Enter the message..."
+          :placeholder="$t('moderation.form.field.message.placeholder')"
         />
-        <h3>Body</h3>
+        <h3>{{ $t('moderation.form.field.body.label') }}</h3>
         <div class="textarea-wrapper">
           <Chips
             v-model="bodyViewMode"
             class="separator"
             :items="['source', 'preview']"
+            :format-label="(x) => $t(`markdown-editor.tab.${x}`)"
           />
           <textarea
             v-if="bodyViewMode === 'source'"
@@ -48,7 +50,7 @@
           </button>
           <button class="iconified-button brand-button" @click="saveProject">
             <CheckIcon />
-            Confirm
+            {{ $t('generic.action.confirm') }}
           </button>
         </div>
       </div>
@@ -56,7 +58,7 @@
     <div class="normal-page">
       <div class="normal-page__sidebar">
         <aside class="universal-card">
-          <h1>Moderation</h1>
+          <h1>{{ $t('moderation.title') }}</h1>
           <NavStack>
             <NavStackItem link="" label="All">{{ '' }}</NavStackItem>
             <!-- prettier-ignore-attribute v-for -->
@@ -93,21 +95,21 @@
               @click="setProjectStatus(project, 'approved')"
             >
               <CheckIcon />
-              Approve
+              {{ $t('moderation.form.action.approve') }}
             </button>
             <button
               class="iconified-button"
               @click="setProjectStatus(project, 'unlisted')"
             >
               <UnlistIcon />
-              Unlist
+              {{ $t('moderation.form.action.unlist') }}
             </button>
             <button
               class="iconified-button"
               @click="setProjectStatus(project, 'rejected')"
             >
               <CrossIcon />
-              Reject
+              {{ $t('moderation.form.action.reject') }}
             </button>
           </ProjectCard>
         </div>
@@ -124,34 +126,49 @@
           >
             <div class="info">
               <div class="title">
-                <h3>
-                  {{ item.item_type }}
-                  <a :href="item.url">{{ item.item_id }}</a>
-                </h3>
-                reported by
-                <a :href="`/user/${item.reporter}`">{{ item.reporter }}</a>
+                <IntlFormatted
+                  message-id="moderation.report.title"
+                  :values="{
+                    itemType: item.item_type,
+                  }"
+                  :tags="['h3']"
+                >
+                  <template #~item>
+                    <a :href="item.url">{{ item.item_id }}</a>
+                  </template>
+                  <template #~reporter>
+                    <a :href="`/user/${item.reporter}`">{{ item.reporter }}</a>
+                  </template>
+                </IntlFormatted>
               </div>
               <div
                 v-highlightjs
                 class="markdown-body"
                 v-html="$xss($md.render(item.body))"
               />
-              <Badge :type="`Marked as ${item.report_type}`" color="orange" />
+              <ReportTypeBadge :type="item.report_type" />
             </div>
             <div class="actions">
               <button class="iconified-button" @click="deleteReport(index)">
-                <TrashIcon /> Delete report
+                <TrashIcon /> {{ $t('moderation.report.action.delete') }}
               </button>
               <span
                 v-tooltip="
-                  $dayjs(item.created).format(
-                    '[Created at] YYYY-MM-DD [at] HH:mm A'
-                  )
+                  $t('moderation.report.created.tooltip', {
+                    received: $fmt.date(item.created, {
+                      dateStyle: 'long',
+                      timeStyle: 'short',
+                    }),
+                  })
                 "
                 class="stat"
               >
                 <CalendarIcon />
-                Created {{ $dayjs(item.created).fromNow() }}
+                {{
+                  $t('moderation.report.created.text', {
+                    ago: $fmt.timeDifference(item.created),
+                  })
+                }}
               </span>
             </div>
           </div>
@@ -159,7 +176,9 @@
         <div v-if="reports.length === 0 && projects.length === 0" class="error">
           <Security class="icon"></Security>
           <br />
-          <span class="text">You are up-to-date!</span>
+          <span class="text">
+            {{ $t('generic.filler.up-to-date') }}
+          </span>
         </div>
       </div>
     </div>
@@ -170,7 +189,6 @@
 import Chips from '~/components/ui/Chips'
 import ProjectCard from '~/components/ui/ProjectCard'
 import Modal from '~/components/ui/Modal'
-import Badge from '~/components/ui/Badge'
 
 import CheckIcon from '~/assets/images/utils/check.svg?inline'
 import UnlistIcon from '~/assets/images/utils/eye-off.svg?inline'
@@ -180,6 +198,8 @@ import CalendarIcon from '~/assets/images/utils/calendar.svg?inline'
 import Security from '~/assets/images/illustrations/security.svg?inline'
 import NavStack from '~/components/ui/NavStack'
 import NavStackItem from '~/components/ui/NavStackItem'
+import ProjectStatusBadge from '~/components/ui/ProjectStatusBadge.vue'
+import ReportTypeBadge from '~/components/ui/ReportTypeBadge.vue'
 
 export default {
   name: 'Moderation',
@@ -192,10 +212,11 @@ export default {
     CrossIcon,
     UnlistIcon,
     Modal,
-    Badge,
     Security,
     TrashIcon,
     CalendarIcon,
+    ProjectStatusBadge,
+    ReportTypeBadge,
   },
   async asyncData(data) {
     const [projects, reports] = (
@@ -283,8 +304,12 @@ export default {
       currentProject: null,
     }
   },
-  head: {
-    title: 'Moderation - Modrinth',
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('moderation.title'),
+      }),
+    }
   },
   computed: {
     moderationTypes() {
@@ -337,7 +362,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })
@@ -358,7 +383,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })
@@ -379,6 +404,7 @@ export default {
     display: flex;
     align-items: center;
     margin-bottom: 0.5rem;
+    white-space: pre-wrap;
 
     span {
       margin-right: 0.5rem;

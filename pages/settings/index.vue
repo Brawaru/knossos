@@ -159,7 +159,7 @@ export default {
   head() {
     return {
       title: this.$t('generic.meta.page-title', {
-        page: this.$t('settings.display.title'),
+        page: this.$t('settings.display.title.long'),
       }),
     }
   },

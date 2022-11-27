@@ -2,22 +2,22 @@
   <div class="normal-page">
     <div class="normal-page__sidebar">
       <aside class="universal-card">
-        <h1>Notifications</h1>
+        <h1>{{ $t('notifications.title') }}</h1>
         <NavStack>
           <NavStackItem link="" label="All"> </NavStackItem>
           <NavStackItem
             v-for="type /* */ in notificationTypes"
             :key="type"
             :link="'?type=' + type"
-            :label="NOTIFICATION_TYPES[type]"
+            :label="$t(`notifications.filter.${type}`)"
           >
           </NavStackItem>
         </NavStack>
-        <h3>Manage</h3>
+        <h3>{{ $t('notifications.manage.title') }}</h3>
         <div class="input-group">
           <NuxtLink class="iconified-button" to="/settings/follows">
             <SettingsIcon />
-            Followed projects
+            {{ $t('settings.follows.title.short') }}
           </NuxtLink>
           <button
             v-if="$user.notifications.length > 0"
@@ -25,7 +25,7 @@
             @click="clearNotifications"
           >
             <ClearIcon />
-            Clear all
+            {{ $t('notifications.action.clear-all') }}
           </button>
         </div>
       </aside>
@@ -49,15 +49,20 @@
               <p>{{ notification.text }}</p>
               <span
                 v-tooltip="
-                  $dayjs(notification.created).format(
-                    'MMMM D, YYYY [at] h:mm:ss A'
-                  )
+                  $fmt.date(new Date(notification.created), {
+                    dateStyle: 'long',
+                    timeStyle: 'short',
+                  })
                 "
                 class="date"
               >
                 <CalendarIcon />
-                Received {{ $dayjs(notification.created).fromNow() }}</span
-              >
+                {{
+                  $t('notifications.notification.received', {
+                    ago: $fmt.timeDifference(notification.created),
+                  })
+                }}
+              </span>
             </div>
           </div>
           <div class="input-group">
@@ -72,21 +77,23 @@
                 performAction(notification, notificationIndex, actionIndex)
               "
             >
-              {{ action.title }}
+              {{ getActionTranslation(action) }}
             </button>
             <button
               v-if="notification.actions.length === 0"
               class="iconified-button"
               @click="performAction(notification, notificationIndex, null)"
             >
-              Dismiss
+              {{ $t('notifications.notification.action.dismiss') }}
             </button>
           </div>
         </div>
         <div v-if="$user.notifications.length === 0" class="error">
           <UpToDate class="icon"></UpToDate>
           <br />
-          <span class="text">You are up-to-date!</span>
+          <span class="text">
+            {{ $t('generic.filler.up-to-date') }}
+          </span>
         </div>
       </div>
     </div>
@@ -121,8 +128,12 @@ export default {
 
     await this.$store.dispatch('user/fetchNotifications')
   },
-  head: {
-    title: 'Notifications - Modrinth',
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('notifications.title'),
+      }),
+    }
   },
   computed: {
     notificationTypes() {
@@ -151,7 +162,7 @@ export default {
       } catch (err) {
         this.$notify({
           group: 'main',
-          title: 'An error occurred',
+          title: this.$t('generic.error.title'),
           text: err.response.data.description,
           type: 'error',
         })
@@ -187,6 +198,26 @@ export default {
         })
       }
       this.$nuxt.$loading.finish()
+    },
+    /**
+     * Tries to match the action title with existing notification action, and if
+     * successful, returns translation, otherwise returns the original title.
+     *
+     * @param {{ title: string }} action Action.
+     * @returns Translation for the action title or the original title.
+     */
+    getActionTranslation(action) {
+      const normalizedId = action.title
+        .replace(/[^a-z]/gi, (match) => (match === ' ' ? '-' : ''))
+        .toLowerCase()
+
+      const translationId = `notifications.notification.action.${normalizedId}`
+
+      if (translationId in this.$i18n.intl.messages) {
+        return this.$t(translationId)
+      }
+
+      return action.title
     },
   },
 }

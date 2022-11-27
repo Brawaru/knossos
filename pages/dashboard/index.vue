@@ -8,7 +8,7 @@
             {{ $t('dashboard.overview.metric.downloads.title') }}
           </div>
           <div class="value">
-            {{ formatAmount(totalDownloads) }}
+            {{ $fmt.compactNumber(totalDownloads) }}
           </div>
           <span>
             {{
@@ -51,11 +51,11 @@
           <div class="label">
             {{ $t('dashboard.overview.metric.revenue.title') }}
           </div>
-          <div class="value">{{ formatAmount(payouts.all_time) }}</div>
+          <div class="value">{{ $formatMoney(payouts.all_time) }}</div>
           <span>
             {{
               $t('dashboard.overview.metric.revenue.label', {
-                amount: formatAmount(payouts.last_month),
+                amount: $formatMoney(payouts.last_month),
               })
             }}
           </span>
@@ -71,7 +71,7 @@
             {{ $t('dashboard.overview.metric.balance.title') }}
           </div>
           <div class="value">
-            {{ formatAmount(userBalance) }}
+            {{ $formatMoney(userBalance) }}
           </div>
           <NuxtLink
             v-if="userBalance >= minWithdraw"
@@ -87,7 +87,7 @@
           <span v-else>
             {{
               $t('dashboard.overview.metric.balance.label', {
-                minimumAmount: formatAmount(minWithdraw),
+                minimumAmount: $formatMoney(minWithdraw),
               })
             }}
           </span>
@@ -131,6 +131,13 @@ export default {
     }
   },
   fetch() {},
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('dashboard.title'),
+      }),
+    }
+  },
   computed: {
     /** @returns {number} */
     totalDownloads() {
@@ -148,27 +155,6 @@ export default {
     userBalance() {
       return this.$auth.user.payout_data.balance
     },
-  },
-  methods: {
-    /**
-     * @param {number} amount
-     * @returns {string}
-     */
-    formatAmount(amount) {
-      return String(
-        this.$fmt.compactNumber(amount, {
-          currency: 'USD',
-          maximumFractionDigits: 2,
-        })
-      )
-    },
-  },
-  head() {
-    return {
-      title: this.$t('generic.meta.page-title', {
-        page: this.$t('dashboard.title'),
-      }),
-    }
   },
   methods: {},
 }

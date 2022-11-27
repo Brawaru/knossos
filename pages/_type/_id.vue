@@ -85,7 +85,12 @@
           </div>
           <div class="dates">
             <div
-              v-tooltip="$fmt.date(project.published, { dateStyle: 'long' })"
+              v-tooltip="
+                $fmt.date(project.published, {
+                  dateStyle: 'long',
+                  timeStyle: 'short',
+                })
+              "
               class="date"
             >
               <CalendarIcon aria-hidden="true" />
@@ -98,7 +103,10 @@
             </div>
             <div
               v-tooltip="
-                $dayjs(project.updated).format('MMMM D, YYYY [at] h:mm:ss A')
+                $fmt.date(project.updated, {
+                  dateStyle: 'long',
+                  timeStyle: 'short',
+                })
               "
               class="date"
             >
@@ -152,11 +160,11 @@
         </div>
         <div
           v-if="
-            /* currentMember &&
+            currentMember &&
             (project.status !== 'approved' ||
               (project.moderator_message &&
                 (project.moderator_message.message ||
-                  project.moderator_message.body))) */ true
+                  project.moderator_message.body)))
           "
           class="project-status card"
         >

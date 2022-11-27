@@ -164,8 +164,12 @@ export default {
       account: this.$auth.user.payout_data.payout_address ?? '',
     }
   },
-  head: {
-    title: 'Monetization settings - Modrinth',
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('settings.monetization.title.long'),
+      }),
+    }
   },
   methods: {
     getAccountTypes() {

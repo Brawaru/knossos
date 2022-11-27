@@ -98,11 +98,11 @@
           </template>
           <template v-else>
             <div class="sidebar__item">
-              <Badge
+              <UserRoleBadge
                 v-if="user.role === 'admin' || user.role === 'moderator'"
-                :type="user.role"
+                :role="user.role"
               />
-              <Badge v-else-if="projects.length > 0" type="creator" />
+              <UserRoleBadge v-else-if="projects.length > 0" role="creator" />
             </div>
             <span v-if="user.bio" class="sidebar__item bio">{{
               user.bio
@@ -142,7 +142,10 @@
               <SunriseIcon class="secondary-stat__icon" aria-hidden="true" />
               <span
                 v-tooltip="
-                  $dayjs(user.created).format('MMMM D, YYYY [at] h:mm:ss A')
+                  $fmt.date(user.created, {
+                    dateStyle: 'long',
+                    timeStyle: 'short',
+                  })
                 "
                 class="secondary-stat__text date"
               >
@@ -263,7 +266,6 @@
 
 <script>
 import ProjectCard from '~/components/ui/ProjectCard'
-import Badge from '~/components/ui/Badge'
 import Advertisement from '~/components/ads/Advertisement'
 
 import GitHubIcon from '~/assets/images/utils/github.svg?inline'
@@ -284,6 +286,7 @@ import ModalCreation from '~/components/ui/ModalCreation'
 import NavRow from '~/components/ui/NavRow'
 import CopyCode from '~/components/ui/CopyCode'
 import Avatar from '~/components/ui/Avatar'
+import UserRoleBadge from '~/components/ui/UserRoleBadge.vue'
 
 export default {
   auth: false,
@@ -299,7 +302,6 @@ export default {
     DownloadIcon,
     GitHubIcon,
     ReportIcon,
-    Badge,
     SettingsIcon,
     PlusIcon,
     UpToDate,
@@ -309,6 +311,7 @@ export default {
     HeartIcon,
     CrossIcon,
     SaveIcon,
+    UserRoleBadge,
   },
   async asyncData(data) {
     try {
@@ -383,7 +386,7 @@ export default {
     } catch {
       data.error({
         statusCode: 404,
-        message: this.$t('user.not-found'),
+        message: data.$t('user.not-found'),
       })
     }
   },
@@ -641,7 +644,7 @@ export default {
   height: 10rem;
 }
 
-.error .text {
+.error > .text {
   white-space: pre-wrap;
 }
 </style>

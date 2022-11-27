@@ -3,7 +3,12 @@
 
 import { defineComponent } from 'vue'
 import ClearBadge from './ClearBadge.vue'
-import ProjectStatusIcon from './ProjectStatusIcon.vue'
+import ListIcon from '~/assets/images/utils/list.svg?inline'
+import EyeOffIcon from '~/assets/images/utils/eye-off.svg?inline'
+import DraftIcon from '~/assets/images/utils/file-text.svg?inline'
+import CrossIcon from '~/assets/images/utils/x.svg?inline'
+import ArchiveIcon from '~/assets/images/utils/archive.svg?inline'
+import ProcessingIcon from '~/assets/images/utils/updated.svg?inline'
 
 /**
  * @typedef {| 'approved'
@@ -32,15 +37,17 @@ import ProjectStatusIcon from './ProjectStatusIcon.vue'
 export default defineComponent({
   components: {
     ClearBadge,
-    ProjectStatusIcon,
+    ListIcon,
+    EyeOffIcon,
+    DraftIcon,
+    CrossIcon,
+    ArchiveIcon,
+    ProcessingIcon,
   },
   props: /** @type {const} */ ({
     status: {
       type: /** @type {import('vue').PropType<Status>} */ (String),
       required: true,
-    },
-    text: {
-      type: String,
     },
   }),
   computed: {
@@ -60,24 +67,21 @@ export default defineComponent({
       }
     },
   },
-  methods: {
-    /** @returns {string} */
-    defaultDisplayText() {
-      // I hate typescript and javascript to be honest
-      return (
-        this.text ??
-        this.$t(/** @type {any} */ (`project-status.${this.status}`))
-      )
-    },
-  },
 })
 </script>
 
 <template>
   <ClearBadge :color="badgeColor">
-    <template>
-      <slot>{{ defaultDisplayText() }}</slot>
+    <template #default>
+      <slot>{{ $t(`project-status.${status}`) }}</slot>
     </template>
-    <template #icon><ProjectStatusIcon :status="status" /></template>
+    <template #icon>
+      <ListIcon v-if="status === 'approved'" />
+      <CrossIcon v-else-if="status === 'rejected'" />
+      <DraftIcon v-else-if="status === 'draft'" />
+      <EyeOffIcon v-else-if="status === 'unlisted'" />
+      <ArchiveIcon v-else-if="status === 'archived'" />
+      <ProcessingIcon v-else-if="status === 'processing'" />
+    </template>
   </ClearBadge>
 </template>

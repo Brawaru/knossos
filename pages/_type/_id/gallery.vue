@@ -168,8 +168,8 @@
           <div class="gallery-created">
             <CalendarIcon />
             {{
-              $fmt.date(new Date(item.created), {
-                dateStyle: 'medium',
+              $fmt.date(item.created, {
+                dateStyle: 'long',
               })
             }}
           </div>

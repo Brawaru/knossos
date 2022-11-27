@@ -42,7 +42,7 @@
                 "
                 class="sidebar-menu-heading"
               >
-                {{ $formatCategoryHeader(header) }}
+                {{ $t(`category-header.${header}`) }}
               </h3>
 
               <SearchFilter
@@ -58,7 +58,7 @@
                   })"
                 :key="category.name"
                 :active-filters="facets"
-                :display-name="$formatCategory(category.name)"
+                :display-name="$translateCategory(category.name)"
                 :facet-name="`categories:'${encodeURIComponent(
                   category.name
                 )}'`"
@@ -69,7 +69,7 @@
           </section>
           <section
             v-if="projectType.id !== 'resourcepack'"
-            aria-label="Loader filters"
+            :aria-label="$t('search.filters.loaders.aria-label')"
           >
             <h3
               v-if="
@@ -79,7 +79,7 @@
               "
               class="sidebar-menu-heading"
             >
-              Loaders
+              {{ $t('search.filters.loaders.title') }}
             </h3>
             <SearchFilter
               v-for="loader in $tag.loaders.filter((x) => {
@@ -104,7 +104,7 @@
               :key="loader.name"
               ref="loaderFilters"
               :active-filters="orFacets"
-              :display-name="$formatCategory(loader.name)"
+              :display-name="$translateLoader(loader.name)"
               :facet-name="`categories:'${encodeURIComponent(loader.name)}'`"
               :icon="loader.icon"
               @toggle="toggleOrFacet"
@@ -112,8 +112,10 @@
             <Checkbox
               v-if="projectType.id === 'mod'"
               v-model="showAllLoaders"
-              :label="showAllLoaders ? 'Less' : 'More'"
-              description="Show all loaders"
+              :label="
+                $t(`search.collapsible.${showAllLoaders ? 'hide' : 'show'}`)
+              "
+              :description="$t('search.filters.loaders.show-all')"
               style="margin-bottom: 0.5rem"
               :border="false"
               :collapsing-toggle-style="true"
@@ -121,7 +123,7 @@
           </section>
           <section
             v-if="projectType.id === 'plugin'"
-            aria-label="Platform loader filters"
+            :aria-label="$t('search.filters.platforms.aria-label')"
           >
             <h3
               v-if="
@@ -131,7 +133,7 @@
               "
               class="sidebar-menu-heading"
             >
-              Proxies
+              {{ $t('search.filters.platforms.title') }}
             </h3>
             <SearchFilter
               v-for="loader in $tag.loaders.filter((x) =>
@@ -140,7 +142,7 @@
               :key="loader.name"
               ref="platformFilters"
               :active-filters="orFacets"
-              :display-name="$formatCategory(loader.name)"
+              :display-name="$translateLoader(loader.name)"
               :facet-name="`categories:'${encodeURIComponent(loader.name)}'`"
               :icon="loader.icon"
               @toggle="toggleOrFacet"
@@ -148,12 +150,14 @@
           </section>
           <section
             v-if="!['resourcepack', 'plugin'].includes(projectType.id)"
-            aria-label="Environment filters"
+            :aria-label="$t('search.filters.environments.aria-label')"
           >
-            <h3 class="sidebar-menu-heading">Environments</h3>
+            <h3 class="sidebar-menu-heading">
+              {{ $t('search.filters.environments.title') }}
+            </h3>
             <SearchFilter
               :active-filters="selectedEnvironments"
-              display-name="Client"
+              :display-name="$t('environment.client')"
               facet-name="client"
               @toggle="toggleEnv"
             >
@@ -161,14 +165,16 @@
             </SearchFilter>
             <SearchFilter
               :active-filters="selectedEnvironments"
-              display-name="Server"
+              :display-name="$t('environment.server')"
               facet-name="server"
               @toggle="toggleEnv"
             >
               <ServerSide aria-hidden="true" />
             </SearchFilter>
           </section>
-          <h3 class="sidebar-menu-heading">Minecraft versions</h3>
+          <h3 class="sidebar-menu-heading">
+            {{ $t('project.version.game-versions.title') }}
+          </h3>
           <Checkbox
             v-model="showSnapshots"
             label="Include snapshots"
@@ -192,13 +198,15 @@
             :clear-search-on-select="false"
             :show-labels="false"
             :selectable="() => selectedVersions.length <= 6"
-            placeholder="Choose versions..."
+            :placeholder="$t('generic.placeholder.choose-versions')"
             @input="onSearchChange(1)"
           ></multiselect>
-          <h3 class="sidebar-menu-heading">Licenses</h3>
+          <h3 class="sidebar-menu-heading">
+            {{ $t('search.filters.licenses.title') }}
+          </h3>
           <Multiselect
             v-model="selectedLicenses"
-            placeholder="Choose licenses..."
+            :placeholder="$t('search.filters.licenses.placeholder')"
             :loading="$tag.licenses.length === 0"
             :options="$tag.licenses.map((x) => x.short.toUpperCase())"
             :multiple="true"
@@ -220,28 +228,25 @@
         class="card warning"
         aria-label="Warning"
       >
-        Modpack support is currently in alpha, and can only be created and
-        installed through third party tools. Our documentation includes
-        instructions on
-        <a
-          href="https://docs.modrinth.com/docs/modpacks/playing_modpacks/"
-          :target="$external()"
-          >playing modpacks</a
-        >
-        with
-        <a href="https://atlauncher.com/about" :target="$external()"
-          >ATLauncher</a
-        >, <a href="https://multimc.org/" :target="$external()">MultiMC</a>, and
-        <a href="https://prismlauncher.org" :target="$external()">
-          Prism Launcher</a
-        >. Pack creators can reference our documentation on
-        <a
-          href="https://docs.modrinth.com/docs/modpacks/creating_modpacks/"
-          :target="$external()"
-          >creating modpacks</a
-        >. Join us on
-        <a href="https://discord.gg/EUHuJHt" :target="$external()">Discord</a>
-        for support.
+        <IntlFormatted message-id="search.notice.modpacks-alpha">
+          <template
+            v-for="(link, id) in {
+              'doc-play':
+                'https://docs.modrinth.com/docs/modpacks/playing_modpacks/',
+              atl: 'https://atlauncher.com/about',
+              mmc: 'https://multimc.org/',
+              pl: 'https://prismlauncher.org',
+              'doc-create':
+                'https://docs.modrinth.com/docs/modpacks/creating_modpacks/',
+              discord: 'https://discord.gg/EUHuJHt',
+            }"
+            #[`${id}-link`]="{ children }"
+          >
+            <a :href="link" :target="$external()">
+              <Fragment :of="children" />
+            </a>
+          </template>
+        </IntlFormatted>
       </div>
       <Advertisement type="banner" small-screen="square" />
       <div class="card search-controls">
@@ -252,17 +257,23 @@
             @click="sidebarMenuOpen = !sidebarMenuOpen"
           >
             <FilterIcon aria-hidden="true" />
-            Filters...
+            {{ $t('search.controls.action.toggle-filters') }}
           </button>
           <div class="iconified-input">
-            <label class="hidden" for="search">Search</label>
+            <label class="hidden" for="search">
+              {{ $t('search.controls.field.search.label') }}
+            </label>
             <SearchIcon aria-hidden="true" />
             <input
               id="search"
               v-model="query"
               type="search"
               name="search"
-              :placeholder="`Search ${projectType.display}s...`"
+              :placeholder="
+                $t('search.controls.field.search.placeholder', {
+                  searchType: $route.name,
+                })
+              "
               autocomplete="off"
               @input="onSearchChange(1)"
             />
@@ -270,10 +281,12 @@
         </div>
         <div class="sort-controls">
           <div class="labeled-control">
-            <span class="labeled-control__label">Sort by</span>
+            <span class="labeled-control__label">
+              {{ $t('search.controls.field.sort-by.label') }}
+            </span>
             <Multiselect
               v-model="sortType"
-              placeholder="Select one"
+              :placeholder="$t('generic.placeholder.select-one')"
               class="search-controls__sorting labeled-control__control"
               track-by="display"
               label="display"
@@ -285,12 +298,14 @@
               @input="onSearchChange(1)"
             >
               <template slot="singleLabel" slot-scope="{ option }">{{
-                option.display
+                $t(`search.controls.field.sort-by.value.${option.name}`)
               }}</template>
             </Multiselect>
           </div>
           <div class="labeled-control">
-            <span class="labeled-control__label">Show per page</span>
+            <span class="labeled-control__label">
+              {{ $t('search.controls.field.per-page.label') }}
+            </span>
             <Multiselect
               v-model="maxResults"
               placeholder="Select one"
@@ -315,7 +330,9 @@
       <div class="search-results-container">
         <div v-if="isLoading" class="no-results">
           <LogoAnimated aria-hidden="true" />
-          <p>Loading...</p>
+          <p>
+            {{ $t('search.filler.loading') }}
+          </p>
         </div>
         <div v-else id="search-results" role="list" aria-label="Search results">
           <SearchResult
@@ -337,7 +354,7 @@
             :search="true"
           />
           <div v-if="results && results.length === 0" class="no-results">
-            <p>No results found for your query!</p>
+            <p>{{ $t('search.filler.empty') }}</p>
           </div>
         </div>
       </div>
@@ -478,31 +495,38 @@ export default {
     this.isLoading = false
   },
   head() {
-    const name = this.$route.name.substring(0, this.$route.name.length - 1)
+    const title = this.$t('search.meta.title', {
+      searchType: this.$route.name,
+    })
 
     return {
-      title: `Search ${this.$formatProjectType(name)}s - Modrinth`,
+      title: this.$t('generic.meta.page-title', {
+        page: title,
+      }),
       meta: [
         {
           hid: 'apple-mobile-web-app-title',
           name: 'apple-mobile-web-app-title',
-          content: `Search ${this.$formatProjectType(name)}s`,
+          content: title,
         },
         {
           hid: 'og:title',
           name: 'og:title',
-          content: `Search ${this.$formatProjectType(name)}s`,
+          content: title,
         },
         {
           hid: 'description',
           name: 'description',
-          content: `Search and browse thousands of Minecraft ${name}s on Modrinth with instant, accurate search results. Our filters help you quickly find the best Minecraft ${name}s.\n`,
+          content: this.$t('search.meta.description', {
+            searchType: this.$route.name,
+          }),
         },
       ],
     }
   },
   computed: {
     categoriesMap() {
+      // TODO: poll peeps to see if they want categories to be sorted in their langwages
       const categories = {}
 
       for (const category of this.$tag.categories) {
@@ -555,7 +579,7 @@ export default {
     // This is currently using the global event bus as I couldn't figure out how to use the local one
     this.$nuxt.$emit('registerSkipLink', {
       id: '#search-results',
-      text: 'Skip to Search Results',
+      text: this.$t('search.top-link.skip-to-results'),
     })
   },
   destroyed() {

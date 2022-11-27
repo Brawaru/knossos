@@ -113,8 +113,22 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'category.worldgen': never
 
+    'category-header.resolutions': never
+
+    'category-header.categories': never
+
+    'category-header.features': never
+
     'component.advertisement.provider': {
       provider: ValueArgument
+    }
+
+    'component.badge-report-type.text': {
+      itemType: SelectArgument<'user' | 'other'>
+      reasonText: ValueArgument
+      reason: SelectArgument<
+        'spam' | 'copyright' | 'malicious' | 'name_squatting' | 'other'
+      >
     }
 
     'component.copy-code.title': never
@@ -320,6 +334,10 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'dependency-type.incompatible': never
 
     'dependency-type.embedded': never
+
+    'environment.client': never
+
+    'environment.server': never
 
     'error-page.title': never
 
@@ -923,6 +941,8 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'footer.notice.legal-mojang': never
 
+    'game-version-selector.include-snapshots': never
+
     'generic.action.cancel': never
 
     'generic.action.continue': never
@@ -938,6 +958,8 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'generic.action.save': never
 
     'generic.action.save-changes': never
+
+    'generic.action.confirm': never
 
     'generic.error.404.message': never
 
@@ -957,6 +979,10 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'generic.placeholder.select-one': never
 
     'generic.placeholder.valid-url': never
+
+    'generic.placeholder.choose-versions': never
+
+    'generic.filler.up-to-date': never
 
     'generic.title.settings': never
 
@@ -1007,7 +1033,9 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'landing.point.features.headline': never
 
-    'landing.point.features.text': never
+    'landing.point.features.text': {
+      'discord-link': RichArgument
+    }
 
     'landing.point.features.feature.open-source': never
 
@@ -1107,7 +1135,62 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'moderation.title': never
 
+    'moderation.placeholder': never
+
+    'moderation.form.description': never
+
+    'moderation.form.new-status': {
+      status: ValueArgument
+    }
+
+    'moderation.form.action.approve': never
+
+    'moderation.form.action.unlist': never
+
+    'moderation.form.action.reject': never
+
+    'moderation.form.field.message.placeholder': never
+
+    'moderation.form.field.body.label': never
+
+    'moderation.report.title': {
+      h3: RichArgument
+      item: ValueArgument
+      itemType: SelectArgument<'project' | 'version' | 'user' | 'other'>
+      reporter: ValueArgument
+    }
+
+    'moderation.report.created.text': {
+      ago: ValueArgument
+    }
+
+    'moderation.report.created.tooltip': {
+      received: ValueArgument
+    }
+
+    'moderation.report.action.delete': never
+
     'notifications.title': never
+
+    'notifications.manage.title': never
+
+    'notifications.action.go-to-follows': never
+
+    'notifications.action.clear-all': never
+
+    'notifications.notification.received': {
+      ago: ValueArgument
+    }
+
+    'notifications.notification.action.dismiss': never
+
+    'notifications.notification.action.accept': never
+
+    'notifications.notification.action.deny': never
+
+    'notifications.filter.team_invite': never
+
+    'notifications.filter.project_update': never
 
     'payout-provider.venmo': never
 
@@ -1179,7 +1262,91 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'report-type.name-squatting': never
 
+    'search.notice.modpacks-alpha': {
+      'doc-play-link': RichArgument
+      'atl-link': RichArgument
+      'mmc-link': RichArgument
+      'pl-link': RichArgument
+      'doc-create-link': RichArgument
+      'discord-link': RichArgument
+    }
+
+    'search.filler.loading': never
+
+    'search.filler.empty': never
+
+    'search.meta.title': {
+      searchType: SelectArgument<
+        'mods' | 'plugins' | 'resourcepacks' | 'modpacks' | 'other'
+      >
+    }
+
+    'search.meta.description': {
+      searchType: SelectArgument<
+        'mods' | 'plugins' | 'resourcepacks' | 'modpacks' | 'other'
+      >
+    }
+
+    'search.top-link.skip-to-results': never
+
+    'search.collapsible.show': never
+
+    'search.collapsible.hide': never
+
+    'search.controls.action.toggle-filters': never
+
+    'search.controls.field.search.label': never
+
+    'search.controls.field.search.placeholder': {
+      projectType: ValueArgument
+      searchType: SelectArgument<
+        'mods' | 'plugins' | 'resourcepacks' | 'modpacks' | 'other'
+      >
+    }
+
+    'search.controls.field.sort-by.label': never
+
+    'search.controls.field.sort-by.value.relevance': never
+
+    'search.controls.field.sort-by.value.downloads': never
+
+    'search.controls.field.sort-by.value.follows': never
+
+    'search.controls.field.sort-by.value.newest': never
+
+    'search.controls.field.sort-by.value.updated': never
+
+    'search.controls.field.per-page.label': never
+
+    'search.filters.aria-label': never
+
+    'search.filters.action.clear': never
+
+    'search.filters.categories.aria-label': never
+
+    'search.filters.loaders.aria-label': never
+
+    'search.filters.loaders.title': never
+
+    'search.filters.loaders.show-all': never
+
+    'search.filters.platforms.aria-label': never
+
+    'search.filters.platforms.title': never
+
+    'search.filters.environments.aria-label': never
+
+    'search.filters.environments.title': never
+
+    'search.filters.game-versions.title': never
+
+    'search.filters.licenses.title': never
+
+    'search.filters.licenses.placeholder': never
+
     'settings.title': never
+
+    'settings.category.user-settings.title': never
 
     'settings.modal-delete-account.title': never
 
@@ -1194,7 +1361,9 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'settings.modal-revoke-token.action': never
 
-    'settings.account.title': never
+    'settings.account.title.long': never
+
+    'settings.account.title.short': never
 
     'settings.account.user-profile.title': never
 
@@ -1228,13 +1397,17 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'settings.account.account-deletion.action': never
 
-    'settings.follows.title': never
+    'settings.follows.title.long': never
+
+    'settings.follows.title.short': never
 
     'settings.follows.empty': {
       'search-link': RichArgument
     }
 
-    'settings.display.title': never
+    'settings.display.title.long': never
+
+    'settings.display.title.short': never
 
     'settings.display.themes.title': never
 
@@ -1272,7 +1445,9 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'settings.display.feature-flags.external-links.description': never
 
-    'settings.monetization.title': never
+    'settings.monetization.title.long': never
+
+    'settings.monetization.title.short': never
 
     'settings.monetization.revenue.title': never
 
@@ -1410,6 +1585,12 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'user.stats.user-id': {
       id: ValueArgument
     }
+
+    'user-role.admin': never
+
+    'user-role.moderator': never
+
+    'user-role.creator': never
 
     'test.test-string': {
       something: ValueArgument

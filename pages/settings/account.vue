@@ -28,7 +28,7 @@
         <div class="button-group">
           <IntlFormatted
             :message="$i18n.data['revoke-token.html']"
-            :tags="['p', 'ul', 'li', 'strong']"
+            :tags="['p', 'ul', 'li', 'ol', 'strong']"
           >
             <template #revoke-link="{ children }">
               <a
@@ -191,7 +191,7 @@ export default {
   head() {
     return {
       title: this.$t('generic.meta.page-title', {
-        page: this.$t('settings.account.title'),
+        page: this.$t('settings.account.title.long'),
       }),
     }
   },

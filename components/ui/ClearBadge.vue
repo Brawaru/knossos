@@ -13,7 +13,10 @@ import { defineComponent, computed } from 'vue'
 export default defineComponent({
   name: 'ClearBadge',
   props: {
-    color: /** @type {import('vue').PropType<BadgeColor>} */ (String),
+    color: {
+      type: /** @type {import('vue').PropType<BadgeColor>} */ (String),
+      default: null,
+    },
   },
   setup(props) {
     const className = computed(() => {
@@ -55,6 +58,7 @@ $badge-colors: (
   width: fit-content;
   --badge-color: var(--color-special-gray);
   color: var(--badge-color);
+  white-space: normal; // protection in case used inline
 
   .circle {
     width: 0.5rem;

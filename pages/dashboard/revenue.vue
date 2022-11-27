@@ -17,7 +17,7 @@
         <p>
           <IntlFormatted
             message-id="dashboard.revenue.withdraw.description"
-            :values="{ amount: formatAmount(userBalance) }"
+            :values="{ amount: $formatMoney(userBalance) }"
             :tags="['strong']"
           >
             <template #enroll-cta="{ children }">
@@ -49,8 +49,8 @@
           message-id="dashboard.revenue.withdraw.description.below-minimum"
           :tags="['strong']"
           :values="{
-            amount: formatAmount(userBalance),
-            minimumAmount: formatAmount(minWithdraw),
+            amount: $formatMoney(userBalance),
+            minimumAmount: $formatMoney(minWithdraw),
           }"
         />
       </p>
@@ -67,7 +67,7 @@
       <IntlFormatted
         :message="$i18n.data['fees-explainer.html']"
         :tags="['h2', 'h3', 'p', 'ul', 'li', 'strong']"
-        :values="{ minimumAmount: formatAmount(minWithdraw) }"
+        :values="{ minimumAmount: $formatMoney(minWithdraw) }"
       >
       </IntlFormatted>
     </section>
@@ -90,6 +90,13 @@ export default {
         this.$auth.user.payout_data.payout_address,
     }
   },
+  head() {
+    return {
+      title: this.$t('generic.meta.page-title', {
+        page: this.$t('dashboard.revenue.title'),
+      }),
+    }
+  },
   computed: {
     /** @returns {number} */
     userBalance() {
@@ -99,30 +106,6 @@ export default {
     payoutWallet() {
       return this.$auth.user.payout_data.payout_wallet
     },
-  },
-  methods: {
-    /**
-     * Formats an amount of money using Intl.
-     *
-     * @param {number} amount Amount to format.
-     * @returns {string} Number formatted as amount of money in USD currency,
-     *   displayed in compact notation, with maximum of 2 fraction digits.
-     */
-    formatAmount(amount) {
-      return String(
-        this.$fmt.compactNumber(amount, {
-          currency: 'USD',
-          maximumFractionDigits: 2,
-        })
-      )
-    },
-  },
-  head() {
-    return {
-      title: this.$t('generic.meta.page-title', {
-        page: this.$t('dashboard.revenue.title'),
-      }),
-    }
   },
   methods: {},
 }

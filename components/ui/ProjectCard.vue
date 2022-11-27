@@ -61,7 +61,7 @@
               v-tooltip="
                 $fmt.date(createdAt, {
                   dateStyle: 'long',
-                  timeStyle: 'medium',
+                  timeStyle: 'short',
                 })
               "
               class="date"
@@ -78,7 +78,7 @@
               v-tooltip="
                 $fmt.date(updatedAt, {
                   dateStyle: 'long',
-                  timeStyle: 'medium',
+                  timeStyle: 'short',
                 })
               "
               class="date"
@@ -103,8 +103,8 @@
             message-id="project.stats.downloads"
             :values="{ downloads: $fmt.compactNumber(downloads) }"
           >
-            <template #~counter="{ values: { downloads } }">
-              <strong>{{ String(downloads) }}</strong>
+            <template #~counter="{ values: { downloads: _downloads } }">
+              <strong>{{ String(_downloads) }}</strong>
             </template>
           </IntlFormatted>
         </p>
