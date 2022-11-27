@@ -113,6 +113,7 @@ export default {
   flex-direction: column;
 
   .markdown-body {
+    white-space: pre-wrap;
     margin-bottom: 1rem;
   }
 
