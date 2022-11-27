@@ -269,6 +269,7 @@ export default {
 <style lang="scss" scoped>
 .modal-revoke-token {
   padding: var(--spacing-card-bg);
+  width: 600px;
 
   .button-group {
     width: fit-content;

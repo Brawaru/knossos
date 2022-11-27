@@ -278,6 +278,7 @@ export default {
   padding: var(--spacing-card-bg);
   display: flex;
   flex-direction: column;
+  width: 600px;
 
   .markdown-body {
     margin-bottom: 0.5rem;
