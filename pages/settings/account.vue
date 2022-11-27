@@ -25,20 +25,20 @@
       :header="$t('settings.modal-revoke-token.title')"
     >
       <div class="modal-revoke-token markdown-body">
+        <IntlFormatted
+          :message="$i18n.data['revoke-token.html']"
+          :tags="['p', 'ul', 'li', 'ol', 'strong']"
+        >
+          <template #revoke-link="{ children }">
+            <a
+              href="https://github.com/settings/connections/applications/3acffb2e808d16d4b226"
+              target="_blank"
+            >
+              <Fragment :of="children" />
+            </a>
+          </template>
+        </IntlFormatted>
         <div class="button-group">
-          <IntlFormatted
-            :message="$i18n.data['revoke-token.html']"
-            :tags="['p', 'ul', 'li', 'ol', 'strong']"
-          >
-            <template #revoke-link="{ children }">
-              <a
-                href="https://github.com/settings/connections/applications/3acffb2e808d16d4b226"
-                target="_blank"
-              >
-                <Fragment :of="children" />
-              </a>
-            </template>
-          </IntlFormatted>
           <button
             class="iconified-button"
             @click="$refs.modal_revoke_token.hide()"
