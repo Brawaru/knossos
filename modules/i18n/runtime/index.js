@@ -1,6 +1,6 @@
 // @ts-check
 
-import { computed, getCurrentInstance } from 'vue'
+import { getCurrentInstance } from 'vue'
 
 export function useTranslations() {
   const instance = getCurrentInstance()
