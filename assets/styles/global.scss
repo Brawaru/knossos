@@ -78,6 +78,26 @@ html {
   --color-table-border: #dfe2e5;
   --color-table-alternate-row: #f6f8fa;
 
+  --color-grid-item-bg: #f2f2f2;
+  --color-grid-item-text: var(--color-text);
+  --color-grid-item-text-secondary: hsla(221, 39%, 11%, 0.8);
+  // color-text + 0.7 opacity
+
+  --color-grid-item-active-bg: var(--color-brand-highlight);
+  --color-grid-item-active-text: var(--color-grid-item-text);
+  --color-grid-item-active-text-secondary: var(
+    --color-grid-item-text-secondary
+  );
+  --color-grid-item-active-outline: var(--color-brand-green);
+
+  --color-overlay-bg: var(--color-raised-bg);
+  --color-overlay-title: #000000;
+  --color-overlay-description: #000000;
+
+  --color-inline-info-bg: #cce4ff;
+  --color-inline-info-text: var(--color-text);
+  --color-inline-info-link: #005fcc;
+
   --shadow-inset-lg: inset 0px -2px 2px hsla(221, 39%, 11%, 0.1);
   --shadow-inset: inset 0px -2px 2px hsla(221, 39%, 11%, 0.05);
   --shadow-inset-sm: inset 0px -1px 2px hsla(221, 39%, 11%, 0.15);
@@ -162,6 +182,25 @@ html {
   --color-table-border: #4f5864;
   --color-table-alternate-row: #262a30;
 
+  --color-grid-item-bg: hsla(0, 0%, 0%, 0.25);
+  --color-grid-item-text: var(--color-text);
+  --color-grid-item-text-secondary: hsl(211, 15%, 73%, 0.8);
+  // color-text + 0.7 opacity
+
+  --color-grid-item-active-bg: var(--color-brand-highlight);
+  --color-grid-item-active-outline: var(--color-brand-green);
+
+  // both seem to need increased contrast:
+  --color-grid-item-active-text: hsl(211, 15%, 86%);
+  --color-grid-item-active-text-secondary: hsl(211, 15%, 86%, 0.7);
+
+  --color-overlay-title: #ffffff;
+  --color-overlay-description: #dbdbdb;
+
+  --color-inline-info-bg: #2a4a6f;
+  --color-inline-info-text: var(--color-text-dark);
+  --color-inline-info-link: #b8d7f9;
+
   --shadow-inset-lg: inset 0px -2px 2px hsla(221, 39%, 11%, 0.1);
   --shadow-inset: inset 0px -2px 2px hsla(221, 39%, 11%, 0.05);
   --shadow-inset-sm: inset 0px -1px 1px hsla(221, 39%, 11%, 0.25);
@@ -182,6 +221,9 @@ html {
   --color-button-bg: #222329;
   --color-button-bg-hover: #2d2d32;
   --color-button-bg-active: #3c3c40;
+
+  // needs to be raised above totally dark bg:
+  --color-grid-item-bg: hsla(0, 0%, 100%, 0.07);
 }
 
 .midas-mode {

@@ -446,25 +446,15 @@ export default defineComponent({
 
 .contributions-notice {
   padding: var(--spacing-card-bg);
-  background: #cce4ff;
+  background: var(--color-inline-info-bg);
+  color: var(--color-inline-info-text);
   box-shadow: var(--shadow-raised), var(--shadow-inset);
   border-radius: var(--size-rounded-card);
   margin: var(--spacing-card-md);
   margin-top: var(--spacing-card-sm);
 
-  .dark-mode &,
-  .oled-mode & {
-    background: #2a4a6f;
-    color: var(--color-text-dark);
-  }
-
   a {
-    color: #005fcc;
-
-    .dark-mode &,
-    .oled-mode & {
-      color: #b8d7f9;
-    }
+    color: var(--color-inline-info-link);
 
     &:hover {
       text-decoration: underline;
@@ -495,15 +485,7 @@ export default defineComponent({
   bottom: 0;
   left: 0;
 
-  background: rgba(255, 255, 255, 0.8);
-
-  html.dark-mode & {
-    background: rgba(38, 41, 47, 0.9);
-  }
-
-  html.oled-mode & {
-    background: rgba(0, 0, 0, 0.7);
-  }
+  background: var(--color-overlay-bg);
 
   z-index: 2;
 
@@ -534,12 +516,7 @@ export default defineComponent({
 
   &-icon,
   &-title {
-    color: black;
-
-    html.dark-mode &,
-    html.oled-mode & {
-      color: white;
-    }
+    color: var(--color-overlay-title);
   }
 
   &-title,
@@ -550,11 +527,7 @@ export default defineComponent({
   &-description {
     white-space: pre-line;
     max-width: 400px;
-
-    html.dark-mode &,
-    html.oled-mode & {
-      color: #dbdbdb;
-    }
+    color: var(--color-overlay-description);
   }
 }
 
@@ -605,15 +578,7 @@ export default defineComponent({
       width: 100%;
     }
 
-    background: hsl(0deg 0% 95%);
-
-    html.dark-mode & {
-      background: rgba(0, 0, 0, 0.25);
-    }
-
-    html.oled-mode & {
-      background: rgba(255, 255, 255, 0.07);
-    }
+    background: var(--color-grid-item-bg);
 
     padding: 10px;
 
@@ -633,13 +598,15 @@ export default defineComponent({
     }
 
     &.active {
-      background: var(--color-brand-light);
-      border-color: var(--color-brand-active);
+      background: var(--color-grid-item-active-bg);
+      border-color: var(--color-grid-item-active-outline);
 
-      html.dark-mode &,
-      html.oled-mode & {
-        background: hsl(155deg 54% 20%);
-        border-color: hsl(153deg 89% 35%);
+      .language-label {
+        color: var(--color-grid-item-active-text);
+      }
+
+      .translated-name {
+        color: var(--color-grid-item-active-text-secondary);
       }
     }
 
@@ -688,15 +655,7 @@ export default defineComponent({
 
       .translated-name {
         font-size: var(--font-size-sm);
-        color: rgba(0, 0, 0, 0.7);
-
-        html.dark-mode & {
-          color: rgba(255, 255, 255, 0.5);
-        }
-
-        html.oled-mode & {
-          color: rgb(176, 186, 197, 0.5);
-        }
+        color: var(--color-grid-item-text-secondary);
       }
 
       .display-name,
