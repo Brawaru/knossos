@@ -18,6 +18,9 @@
       <div class="content">
         <slot></slot>
       </div>
+      <div v-if="$slots.footer != null" class="footer">
+        <slot name="footer"></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -103,6 +106,10 @@ export default {
 
   .content {
     overflow-y: auto;
+  }
+
+  .content,
+  .footer {
     background-color: var(--color-raised-bg);
   }
 
