@@ -86,7 +86,7 @@
               {{ $t('landing.point.features.headline') }}
             </h1>
             <p>
-              <IntlFormatted message-id="landing.point.features.te">
+              <IntlFormatted message-id="landing.point.features.text">
                 <template #discord-link="{ children }">
                   <a href="https://discord.gg/EUHuJHt" :target="$external()">
                     <Fragment :of="children" />
