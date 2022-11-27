@@ -18,7 +18,6 @@ export default (ctx, inject) => {
   })
   inject('formatNumber', formatNumber)
   inject('capitalizeString', capitalizeString)
-  inject('formatMoney', (number) => '$' + formatNumber(number.toFixed(2)))
   inject('formatVersion', (versionsArray) =>
     formatVersions(versionsArray, ctx.store)
   )

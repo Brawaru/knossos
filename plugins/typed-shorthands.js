@@ -235,7 +235,7 @@ function bytesDisplay(options) {
 function numberFormatOptions(options) {
   if (options == null) return {}
   const o = { ...options }
-  delete o['bytesUnitDisplay']
+  delete o.bytesUnitDisplay
   return o
 }
 
@@ -299,6 +299,34 @@ function formatFileSize(bytes, options = defaultFileSizeOptions) {
 }
 
 /**
+ * Formats for display provided amount of money according to the current locale
+ * and in compact notation.
+ *
+ * @param {number} amount Amount to format.
+ * @param {import('@formatjs/intl').FormatNumberOptions} overrides Overrides for
+ *   the default formatting settings.
+ * @returns {string} Formatted amount of money for display.
+ * @this {import('@nuxt/types').Context}
+ */
+function formatMoney(amount, overrides) {
+  return String(
+    this.$fmt.compactNumber(amount, {
+      style: 'currency',
+      currency: 'USD',
+      // NOTE: if we are ever going to display other currencies this must be
+      // changed to 'symbol', which will result in USD being displayed in some
+      // languages, but will avoid misunderstandings when working with, say,
+      // Australlian Dollar, since with 'symbol' it displays as A$ in English
+      // and AUD in other locales (mostly).
+      currencyDisplay: 'narrowSymbol',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+      ...overrides,
+    })
+  )
+}
+
+/**
  * @typedef {object} DefinedHelpers
  * @property {typeof computeProjectSide} $computeProjectSide
  * @property {typeof coerceProjectType} $coerceProjectType
@@ -307,6 +335,7 @@ function formatFileSize(bytes, options = defaultFileSizeOptions) {
  * @property {typeof translateLoader} $translateLoader
  * @property {typeof translateProjectType} $translateProjectType
  * @property {typeof formatFileSize} $formatFileSize
+ * @property {typeof formatMoney} $formatMoney
  */
 
 /** @type {import('@nuxt/types').Plugin} */
@@ -318,4 +347,5 @@ export default (ctx, inject) => {
   inject('translateLoader', translateLoader.bind(ctx))
   inject('translateProjectType', translateProjectType.bind(ctx))
   inject('formatFileSize', formatFileSize.bind(ctx))
+  inject('formatMoney', formatMoney.bind(ctx))
 }
