@@ -33,6 +33,7 @@ export default {
   components: {
     CrossIcon,
   },
+  emits: ['close'],
   props: {
     header: {
       type: String,
@@ -50,6 +51,7 @@ export default {
     },
     hide() {
       this.shown = false
+      this.$emit('close')
     },
   },
 }
