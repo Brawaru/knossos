@@ -64,6 +64,30 @@
     </section>
     <section class="universal-card">
       <h2>
+        {{ $t('settings.display.languages.title') }}
+      </h2>
+      <div class="adjacent-input small">
+        <label for="languages-button">
+          <span class="label__title">
+            {{ $t('settings.display.languages.language.title') }}
+          </span>
+          <span class="label__description">
+            {{ $t('settings.display.languages.language.description') }}
+          </span>
+        </label>
+        <button
+          id="languages-button"
+          type="button"
+          class="iconified-button"
+          @click="showLanguagesModal"
+        >
+          <LanguagesIcon />
+          {{ $t('layout.action.change-language') }}
+        </button>
+      </div>
+    </section>
+    <section class="universal-card">
+      <h2>
         {{ $t('settings.display.feature-flags.title') }}
       </h2>
       <div class="adjacent-input small">
@@ -127,10 +151,12 @@
 
 <script>
 import Multiselect from 'vue-multiselect'
+import LanguagesIcon from '~/assets/images/utils/languages.svg?inline'
 
 export default {
   components: {
     Multiselect,
+    LanguagesIcon,
   },
   auth: false,
   data() {
@@ -186,6 +212,9 @@ export default {
         default:
           this.$colorMode.preference = shift ? 'oled' : 'dark'
       }
+    },
+    showLanguagesModal() {
+      this.$store.dispatch('i18n/toggleLanguageModal', true)
     },
   },
 }

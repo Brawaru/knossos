@@ -1457,6 +1457,12 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'settings.display.themes.flip-project-sidebar.description': never
 
+    'settings.display.languages.title': never
+
+    'settings.display.languages.language.title': never
+
+    'settings.display.languages.language.description': never
+
     'settings.display.feature-flags.title': never
 
     'settings.display.feature-flags.hwa-effects.title': never
