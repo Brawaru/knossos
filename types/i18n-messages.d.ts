@@ -1545,6 +1545,10 @@ declare module '~/modules/i18n/templates/i18n.types' {
       side: SelectArgument<'client' | 'server' | 'other'>
     }
 
+    'side-requirement.unknown': {
+      side: SelectArgument<'client' | 'server' | 'other'>
+    }
+
     'unit.size.bytes.short': {
       value: ValueArgument
     }

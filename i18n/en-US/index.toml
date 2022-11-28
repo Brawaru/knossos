@@ -1206,6 +1206,10 @@ optional = "{side, select, client {Optional} server {Optional} other {}}"
 #  If your translation does not change depending on the context, then move selector's value to the 'other' clause and remove 'server'/'client' clauses.
 unsupported = """\
 {side, select, client {Unsupported} server {Unsupported} other {}}"""
+# ℹ 'side' selector is provided solely for the convinience:
+#  If your translation does not change depending on the context, then move selector's value to the 'other' clause and remove 'server'/'client' clauses.
+unknown = """\
+{side, select, client {Unsupported} server {Unsupported} other {}}"""
 
 [unit.size]
 bytes.short = "{value} B"
