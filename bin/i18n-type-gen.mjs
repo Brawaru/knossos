@@ -196,8 +196,6 @@ function gatherElements(messageId, message) {
     const existingType = m.get(name)
 
     if (existingType == null) {
-      consola.log(`[${messageId}] Discovered argument "${name}"`)
-
       m.set(name, newType)
 
       return
@@ -229,10 +227,6 @@ function gatherElements(messageId, message) {
       existingType instanceof ValueArgumentType &&
       newType instanceof SelectArgumentType
     ) {
-      console.info(
-        `[${messageId}] Overtaking argument type of "${name}" with literal`
-      )
-
       m.set(name, newType)
 
       return
@@ -312,10 +306,7 @@ function gatherElements(messageId, message) {
   try {
     processElements(messageParser.parse(message))
   } catch (err) {
-    consola.warn(
-      `Could not parse or process string with key "${messageId}". This string will not have type definitions.`,
-      err
-    )
+    consola.warn(`Could not process string with key "${messageId}":`, err)
 
     return new Map()
   }
@@ -600,9 +591,9 @@ async function runProgram() {
       if (!ready) return
 
       if (initial) {
-        console.info('Watching for new changes')
+        consola.log('Watching for new changes...')
       } else {
-        console.info('Changes detected, re-generating definitions file', path)
+        console.info('Changes detected, re-generating definitions file')
       }
 
       runOnce()
