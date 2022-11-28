@@ -1648,6 +1648,8 @@ declare module '~/modules/i18n/templates/types' {
   interface LocaleImportedData {
     'fees-explainer.html': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]
 
+    'languages.json': typeof import('~/i18n/en-US/languages.json')
+
     'revoke-token.html': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]
 
     'starter.md': import('@formatjs/icu-messageformat-parser').MessageFormatElement[]

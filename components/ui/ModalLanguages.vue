@@ -268,7 +268,8 @@ export default defineComponent({
             }).of(safeLocaleCode)
           } catch (err) {
             console.warn(
-              `Cannot compute display name for locale "${locale.code}"!`
+              `Cannot retrieve display name for locale "${locale.code}"`,
+              err
             )
           }
         }
@@ -281,19 +282,47 @@ export default defineComponent({
         /** @type {string | undefined} */
         let translatedName
 
-        try {
-          translatedName = this.$fmt.displayName(safeLocaleCode, {
-            type: 'language',
-            style: 'short',
-          })
-        } catch (err) {
-          console.warn(
-            `Cannot compute translated name for locale "${locale.code}"`
-          )
+        if (locale.code in this.$i18n.data['languages.json']) {
+          translatedName = /** @type {any} */ (
+            this.$i18n.data['languages.json']
+          )[locale.code]
+        }
+
+        if (translatedName == null) {
+          try {
+            translatedName = this.$fmt.displayName(safeLocaleCode, {
+              type: 'language',
+              style: 'short',
+            })
+          } catch (err) {
+            console.warn(
+              `Cannot retrieve translated name for locale "${locale.code}"`,
+              err
+            )
+          }
         }
 
         if (translatedName == null) {
           translatedName = locale.code
+        }
+
+        let englishName = /** @type {any} */ (
+          this.$i18n.defaultData['languages.json']
+        )[locale.code]
+
+        if (englishName == null) {
+          try {
+            englishName = englishDisplayNames.of(safeLocaleCode)
+          } catch (err) {
+            console.warn(
+              `Cannot retrieve English name for locale "${locale.code}"`,
+              err
+            )
+          }
+        }
+
+        if (englishName == null) {
+          englishName = locale.code
         }
 
         return /** @type {Language} */ ({
@@ -301,7 +330,7 @@ export default defineComponent({
           inputID: `language-${locale.code}`,
           displayName,
           translatedName,
-          englishName: englishDisplayNames.of(safeLocaleCode), // FIXME: we should pre-compute English name using English locale somehow
+          englishName,
         })
       })
     },

@@ -386,6 +386,17 @@ const messageElement = `import('@formatjs/icu-messageformat-parser').MessageForm
 const dataTypes = {
   '.md': messageElement,
   '.html': messageElement,
+  /**
+   * @param {string} resource Resource for which the function is called.
+   * @param {import('./i18n/localeDir.mjs').LocaleDirectory} localeDir Locale
+   *   directory.
+   * @param {string} [srcDir] Source directory where the file is located.
+   */
+  '.json'(resource, localeDir, srcDir) {
+    return `typeof import(${JSON.stringify(
+      finalizePath(path.join(localeDir.path, resource), srcDir)
+    )})`
+  },
 }
 
 const __oldsrc = `
@@ -496,7 +507,9 @@ async function contextForDirectoryState(localeDir, srcDir) {
     const ext = path.extname(resource)
 
     if (hasKey(dataTypes, ext)) {
-      type = dataTypes[ext]
+      const typer = dataTypes[ext]
+      type =
+        typeof typer === 'string' ? typer : typer(resource, localeDir, srcDir)
     } else {
       consola.warn(
         `Unknown file extension "${ext}", resource "${resource}" is mapped to "unknown" type`
