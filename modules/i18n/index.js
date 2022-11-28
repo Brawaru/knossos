@@ -51,7 +51,7 @@ import merge from 'lodash/merge'
  */
 
 /**
- * @typedef {object} Options
+ * @typedef {object} OptionsObject
  * @property {string} defaultLocale BCP47 code of the locale to use by default.
  * @property {string | null} [baseURL=null] Base URL (domain of the site).
  *   Default is `null`. If not set, head meta tags won't generate. Default is
@@ -60,7 +60,9 @@ import merge from 'lodash/merge'
  *   runtime.
  */
 
-/** @type {Options} */
+/** @typedef {OptionsObject | (() => OptionsObject | Promise<OptionsObject>)} Options */
+
+/** @type {OptionsObject} */
 const defaultOptions = {
   defaultLocale: 'en-US',
   baseURL: null,
@@ -91,13 +93,26 @@ async function* filesWithin(dirPath) {
   }
 }
 
+/**
+ * @template T
+ * @param {T | (() => T | Promise<T>)} value
+ * @returns {Promise<T>}
+ */
+async function retrieveValue(value) {
+  if (typeof value === 'function') {
+    return /** @type {() => T | Promise<T>} */ (value)()
+  }
+
+  return value
+}
+
 /** @type {import('@nuxt/types').Module<Options>} */
 export default async function (moduleOptions) {
   const options = merge(
     Object.create(null),
     defaultOptions,
-    this.options.i18n,
-    moduleOptions
+    await retrieveValue(this.options.i18n),
+    await retrieveValue(moduleOptions)
   )
 
   /** Options to be passed to tempate generator. */

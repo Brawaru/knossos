@@ -1,8 +1,10 @@
+// @ts-check
+
 import { promises as fs } from 'fs'
 import { sortRoutes } from '@nuxt/utils'
 import axios from 'axios'
-import i18nConfig from './i18n/config.json'
 import path from 'path'
+import i18n$generateConfig from './bin/i18n/autoConfiguration'
 
 const STAGING_API_URL = 'https://staging-api.modrinth.com/v2/'
 const STAGING_ARIADNE_URL = 'https://staging-ariadne.modrinth.com/v1/'
@@ -436,8 +438,14 @@ export default {
       },
     },
   },
-  /** @type {import('modules/i18n').Options} */
-  i18n: Object.assign(i18nConfig, { baseURL: getDomain() }),
+  i18n: i18n$generateConfig({
+    defaults: { baseURL: getDomain() },
+    defaultLocale: 'en-US',
+    localesDir: path.resolve('./i18n'),
+    srcDir: __dirname,
+    acceptedLocales: ['uk'],
+    logging: true,
+  }),
 }
 
 function getApiUrl() {
