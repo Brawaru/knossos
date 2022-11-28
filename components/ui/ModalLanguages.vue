@@ -1,7 +1,7 @@
 <template>
   <Modal
-    :header="$t('component.modal-languages.title')"
     ref="modalRef"
+    :header="$t('component.modal-languages.title')"
     @close="close"
   >
     <template #default>
@@ -46,9 +46,9 @@
             :class="{ 'blur-out': automatic }"
           >
             <input
+              v-model="searchQuery"
               type="search"
               name="search"
-              v-model="searchQuery"
               :placeholder="
                 $t('component.modal-languages.field.search.placeholder')
               "
@@ -57,22 +57,22 @@
             <div class="languages-grid" :class="{ empty }">
               <div
                 v-for="language in matchingLanguages"
-                class="language"
-                :class="{ active: selectedLanguage === language.code }"
                 :key="language.code"
                 :ref="
                   selectedLanguage === language.code
                     ? 'highlightedLanguageEl'
                     : undefined
                 "
+                class="language"
+                :class="{ active: selectedLanguage === language.code }"
               >
                 <input
-                  type="radio"
-                  name="language"
-                  :value="language.code"
                   :id="language.inputID"
                   :ref="language.inputID"
                   v-model="selectedLanguage"
+                  type="radio"
+                  name="language"
+                  :value="language.code"
                   class="sr-only"
                   :disabled="automatic"
                 />
@@ -132,8 +132,8 @@
         <div class="left">
           <button
             class="iconified-button"
-            @click="enableAutomatic"
             :disabled="automatic"
+            @click="enableAutomatic"
           >
             {{ $t('component.modal-languages.action.enable-automatic') }}
           </button>
@@ -142,8 +142,8 @@
           <button
             type="button"
             class="iconified-button brand-button"
-            @click="applyChanges"
             :disabled="!canBeSaved"
+            @click="applyChanges"
           >
             {{ $t('generic.action.save') }}
           </button>
@@ -197,15 +197,15 @@ export default defineComponent({
     GlobeIcon,
     Check,
   },
-  data() {
-    return initialState.call(this)
-  },
   setup() {
     const modalRef = ref(
       /** @type {null | InstanceType<import('./Modal.vue').default>} */ (null)
     )
 
     return { modalRef }
+  },
+  data() {
+    return initialState.call(this)
   },
   computed: {
     /**
@@ -383,6 +383,36 @@ export default defineComponent({
       return !this.automatic && this.$i18n.locale !== this.selectedLanguage
     },
   },
+  watch: {
+    isShowing(isShowing, wasShowing) {
+      if (this.modalRef == null) {
+        return
+      }
+
+      if (isShowing) {
+        this.modalRef.show()
+      } else {
+        this.modalRef.hide()
+      }
+
+      if (isShowing && !wasShowing) {
+        this.reset()
+
+        nextTick(() => {
+          const el = /** @type {HTMLDivElement[]} */ (
+            this.$refs.highlightedLanguageEl
+          )[0]
+
+          if (el != null) {
+            el.scrollIntoView({
+              behavior: 'auto',
+              block: 'center',
+            })
+          }
+        })
+      }
+    },
+  },
   methods: {
     applyChanges() {
       return this.$i18n.changeLocale(this.selectedLanguage)
@@ -433,36 +463,6 @@ export default defineComponent({
     /** Resets everything to default state. */
     reset() {
       Object.assign(this.$data, initialState.call(this))
-    },
-  },
-  watch: {
-    isShowing(isShowing, wasShowing) {
-      if (this.modalRef == null) {
-        return
-      }
-
-      if (isShowing) {
-        this.modalRef.show()
-      } else {
-        this.modalRef.hide()
-      }
-
-      if (isShowing && !wasShowing) {
-        this.reset()
-
-        nextTick(() => {
-          const el = /** @type {HTMLDivElement[]} */ (
-            this.$refs.highlightedLanguageEl
-          )[0]
-
-          if (el != null) {
-            el.scrollIntoView({
-              behavior: 'auto',
-              block: 'center',
-            })
-          }
-        })
-      }
     },
   },
 })
