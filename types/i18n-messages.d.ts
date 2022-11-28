@@ -1161,6 +1161,10 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'markdown-editor.tab.preview': never
 
+    'meta.description.long': never
+
+    'meta.description.short': never
+
     'mobile-navigation.action.browse': never
 
     'moderation.title': never

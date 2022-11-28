@@ -511,6 +511,13 @@ waterfall = "Waterfall"
 source = "Source"
 preview = "Preview"
 
+[meta]
+description.long = """\
+Download Minecraft mods, plugins, resource packs, and modpacks on Modrinth. \
+Discover and publish projects on Modrinth with a modern, easy to use interface \
+and API."""
+description.short = "An open source modding platform"
+
 [mobile-navigation]
 action.browse = "Browse"
 
@@ -1003,7 +1010,7 @@ Search and browse thousands of Minecraft {searchType, select,\
 quickly find the best Minecraft {searchType, select,\
  mods {mods} plugins {plugins} resourcepacks {resourcepacks}\
  modpacks {modpacks} other {{searchType}s}\
-}.\n"""
+}."""
 top-link.skip-to-results = "Skip to search results"
 
 [search.collapsible]

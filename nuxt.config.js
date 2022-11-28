@@ -1,5 +1,3 @@
-// @ts-check
-
 import { promises as fs } from 'fs'
 import { sortRoutes } from '@nuxt/utils'
 import axios from 'axios'
@@ -19,116 +17,122 @@ export default {
    ** Headers of the page
    ** See https://nuxtjs.org/api/configuration-head
    */
-  head: {
-    htmlAttrs: {
-      lang: 'en',
-    },
-    title: 'Modrinth',
-    meta: [
-      {
-        charset: 'utf-8',
+  head() {
+    const ctx = /** @type {import('vue').default} */ (this)
+
+    const head = ctx.$i18nHead()
+
+    return {
+      htmlAttrs: {
+        ...head.htmlAttrs,
       },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        hid: 'description',
-        name: 'description',
-        content:
-          'Download Minecraft mods, plugins, resource packs, and modpacks on Modrinth. Discover and publish projects on Modrinth with a modern, easy to use interface and API.',
-      },
-      {
-        hid: 'publisher',
-        name: 'publisher',
-        content: 'Rinth, Inc.',
-      },
-      {
-        hid: 'og:title',
-        name: 'og:title',
-        content: 'Modrinth',
-      },
-      {
-        hid: 'apple-mobile-web-app-title',
-        name: 'apple-mobile-web-app-title',
-        content: 'Modrinth',
-      },
-      {
-        hid: 'theme-color',
-        name: 'theme-color',
-        content: '#1bd96a',
-      },
-      {
-        hid: 'color-scheme',
-        name: 'color-scheme',
-        content: 'light dark',
-      },
-      {
-        hid: 'og:site_name',
-        name: 'og:site_name',
-        content: 'Modrinth',
-      },
-      {
-        hid: 'og:description',
-        name: 'og:description',
-        content: 'An open source modding platform',
-      },
-      {
-        hid: 'og:type',
-        name: 'og:type',
-        content: 'website',
-      },
-      {
-        hid: 'og:url',
-        name: 'og:url',
-        content: 'https://modrinth.com',
-      },
-      {
-        hid: 'og:image',
-        name: 'og:image',
-        content: 'https://cdn.modrinth.com/modrinth-new.png?',
-      },
-      {
-        hid: 'twitter:card',
-        name: 'twitter:card',
-        content: 'summary',
-      },
-      {
-        hid: 'twitter:site',
-        name: 'twitter:site',
-        content: '@modrinth',
-      },
-    ],
-    link: [
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon-light.ico',
-        media: '(prefers-color-scheme:no-preference)',
-      },
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon.ico',
-        media: '(prefers-color-scheme:dark)',
-      },
-      {
-        rel: 'icon',
-        type: 'image/x-icon',
-        href: '/favicon-light.ico',
-        media: '(prefers-color-scheme:light)',
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://cdn-raw.modrinth.com/fonts/inter/inter.css',
-      },
-      {
-        rel: 'search',
-        type: 'application/opensearchdescription+xml',
-        href: '/opensearch.xml',
-        title: 'Modrinth mods',
-      },
-    ],
+      title: 'Modrinth',
+      meta: [
+        {
+          charset: 'utf-8',
+        },
+        {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1',
+        },
+        {
+          hid: 'description',
+          name: 'description',
+          content: ctx.$t('meta.description.long'),
+        },
+        {
+          hid: 'publisher',
+          name: 'publisher',
+          content: 'Rinth, Inc.',
+        },
+        {
+          hid: 'og:title',
+          name: 'og:title',
+          content: 'Modrinth',
+        },
+        {
+          hid: 'apple-mobile-web-app-title',
+          name: 'apple-mobile-web-app-title',
+          content: 'Modrinth',
+        },
+        {
+          hid: 'theme-color',
+          name: 'theme-color',
+          content: '#1bd96a',
+        },
+        {
+          hid: 'color-scheme',
+          name: 'color-scheme',
+          content: 'light dark',
+        },
+        {
+          hid: 'og:site_name',
+          name: 'og:site_name',
+          content: 'Modrinth',
+        },
+        {
+          hid: 'og:description',
+          name: 'og:description',
+          content: ctx.$t('meta.description.short'),
+        },
+        {
+          hid: 'og:type',
+          name: 'og:type',
+          content: 'website',
+        },
+        {
+          hid: 'og:url',
+          name: 'og:url',
+          content: 'https://modrinth.com',
+        },
+        {
+          hid: 'og:image',
+          name: 'og:image',
+          content: 'https://cdn.modrinth.com/modrinth-new.png?',
+        },
+        {
+          hid: 'twitter:card',
+          name: 'twitter:card',
+          content: 'summary',
+        },
+        {
+          hid: 'twitter:site',
+          name: 'twitter:site',
+          content: '@modrinth',
+        },
+      ],
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon-light.ico',
+          media: '(prefers-color-scheme:no-preference)',
+        },
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon.ico',
+          media: '(prefers-color-scheme:dark)',
+        },
+        {
+          rel: 'icon',
+          type: 'image/x-icon',
+          href: '/favicon-light.ico',
+          media: '(prefers-color-scheme:light)',
+        },
+        {
+          rel: 'stylesheet',
+          href: 'https://cdn-raw.modrinth.com/fonts/inter/inter.css',
+        },
+        {
+          rel: 'search',
+          type: 'application/opensearchdescription+xml',
+          href: '/opensearch.xml',
+          title: 'Modrinth mods',
+        },
+        ...(head.link ?? []),
+      ],
+    }
   },
 
   vue: {
