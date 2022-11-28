@@ -138,7 +138,7 @@ export default {
       this.$refs.modal.hide()
     },
     getProjectType() {
-      return this.$tag.projectTypes.find((x) => this.projectType === x.display)
+      return this.$tag.projectTypes.find((x) => this.projectType.id === x.id)
     },
     getClientSide() {
       switch (this.getProjectType().id) {
