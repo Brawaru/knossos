@@ -8,7 +8,15 @@ import { IntlError, IntlErrorCode } from '@formatjs/intl'
  */
 
 /**
- * @param {import('@formatjs/intl').IntlShape} config Intl config.
+ * @typedef {object} Config
+ * @property {string} locale
+ * @property {import('@formatjs/intl').Formatters} formatters
+ * @property {import('@formatjs/intl').CustomFormats} formats
+ * @property {import('@formatjs/intl').OnErrorFn} onError
+ */
+
+/**
+ * @param {Config} config Intl config.
  * @param {Parameters<Formatter>[0]} message Message to format.
  * @param {Parameters<ReturnType<Formatter>['format']>[0]} [values] Values to
  *   format message with.
@@ -26,9 +34,16 @@ export function formatCustomMessage(config, message, values, opts) {
       opts
     ).format(values)
   } catch (err) {
-    let messageSlice = message.slice(0, 20)
-    if (message.length > 20) {
-      messageSlice += '...'
+    let messageSlice
+
+    if (typeof message === 'string') {
+      messageSlice = message.slice(0, 20)
+
+      if (message.length > 20) {
+        messageSlice += '...'
+      }
+    } else {
+      messageSlice = '<compiled message>'
     }
 
     config.onError(
