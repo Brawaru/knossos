@@ -313,8 +313,8 @@ export default defineComponent({
     fuse() {
       return new Fuse(this.languages, {
         keys: ['code', 'displayName', 'translatedName', 'englishName'],
-        threshold: 0.3,
-        distance: 5,
+        threshold: 0.4,
+        distance: 100,
       })
     },
     /**
