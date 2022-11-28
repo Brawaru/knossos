@@ -69,6 +69,9 @@ export interface ExtendedIntlController extends IntlController {
    */
   changeLocale(locale: string | 'auto', save: boolean = true): Promise<void>
 
-  /** Imported data for the locale, as defined in the config. */
-  data: LocaleImportedData
+  /** Imported data for the current locale. */
+  get data(): readonly LocaleImportedData
+
+  /** Imported data for the default locale. */
+  get defaultData(): readonly LocaleImportedData
 }

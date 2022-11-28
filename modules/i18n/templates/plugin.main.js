@@ -1,8 +1,8 @@
 // @ts-check
 
-import Vue from 'vue'
+import Vue, { computed, reactive } from 'vue'
 import { createInjector, createIntlPlugin } from './i18n'
-import { hasOwn } from './utils'
+import { hasOwn, parseAcceptLanguageHeader } from './utils'
 import { localesDefinitions, defaultLocale } from './options'
 import { match as matchLocale } from '@formatjs/intl-localematcher'
 
@@ -16,76 +16,61 @@ const cookieDefaults = {
   path: '/',
 }
 
+/**
+ * @param {string} locale Locale which messages need to be loaded and returned.
+ * @returns {Promise<import('./options').LocaleImport>} Locale messages.
+ * @throws If locale is not found in the import map or import fails.
+ */
+async function loadLocaleMessages(locale) {
+  if (!hasOwn(localesDefinitions, locale)) {
+    throw new Error(`Locale "${locale}" is not present in the definitions map`)
+  }
+
+  return localesDefinitions[locale].importFunction()
+}
+
+/** @typedef {Partial<import('./types').LocaleImportedData>} PartialImportData */
+
 /** @type {import('@nuxt/types').Plugin} */
 export default async function (context) {
   const { app } = context
 
-  /**
-   * @private
-   * @typedef {Record<string, any>} ImportData
-   */
+  const defaultLocaleImport = await loadLocaleMessages(defaultLocale)
 
-  /**
-   * @typedef {object} Settings
-   * @property {import('./types').LocaleDescriptor[]} availableLocales An array
-   *   of available locales.
-   * @property {boolean} isAuto Whether the current locale is driven by the
-   *   browser's preferences.
-   * @property {ImportData} importData Import data for the current locale.
-   * @property {ImportData} defaultImportData Import data for the default
-   *   locale.
-   * @property {string} browserLocale Current locale preferred by the browser.
-   */
-
-  // TODO: perhaps can move all methods to settings object
-
-  const settings = new Vue({
-    /** @returns {Settings} */
-    data() {
-      return {
-        availableLocales: [],
-        isAuto: false,
-        defaultImportData: Object.create(null),
-        importData: Object.create(null),
-        browserLocale: 'en-US',
-      }
-    },
-    computed: {
-      /** @returns {ImportData} */
-      mergedImportData() {
-        return Object.assign(
-          Object.create(null),
-          this.defaultImportData,
-          this.importData
-        )
-      },
-    },
+  const settings = reactive({
+    /** An array of all available locales. */
+    availableLocales: Object.entries(localesDefinitions).map(
+      ([code, definition]) => ({
+        code,
+        data: definition.data,
+      })
+    ),
+    /** Whether the current locale is driven by the browser's preferences. */
+    isAuto: false,
+    /**
+     * Import data for the current locale.
+     *
+     * @type {PartialImportData}
+     */
+    importData: Object.create(null),
+    /** Current locale preferred by the browser. */
+    browserLocale: defaultLocale,
   })
 
-  {
-    for (const code in localesDefinitions) {
-      settings.availableLocales.push({
-        code,
-        data: localesDefinitions[code].data,
-      })
-    }
-  }
+  const mergedImportData = computed(
+    /** @returns {import('./types').LocaleImportedData} */ () => {
+      const data = Object.create(null)
+      Object.assign(data, defaultLocaleImport.importedData)
 
-  /**
-   * @param {string} locale Locale which messages need to be loaded and
-   *   returned.
-   * @returns {Promise<import('./options').LocaleImport>} Locale messages.
-   * @throws If locale is not found in the import map or import fails.
-   */
-  async function loadLocaleMessages(locale) {
-    if (!hasOwn(localesDefinitions, locale)) {
-      throw new Error(
-        `Locale "${locale}" is not present in the definitions map`
-      )
-    }
+      for (const [key, value] of Object.entries(settings.importData)) {
+        if (value == null) continue
 
-    return localesDefinitions[locale].importFunction()
-  }
+        data[key] = value
+      }
+
+      return data
+    }
+  )
 
   /**
    * Retrieves preferred locale from the cookies.
@@ -120,10 +105,7 @@ export default async function (context) {
    *   missing or the function is called from the server context.
    */
   function getLocaleFromLocalStorage() {
-    if (process.client) {
-      return localStorage.getItem('locale') ?? null
-    }
-    return null
+    return process.client ? localStorage.getItem('locale') ?? null : null
   }
 
   /**
@@ -144,48 +126,6 @@ export default async function (context) {
         console.error('Failed to save locale to the localStorage', err)
       }
     }
-  }
-
-  /**
-   * Parses `Accept-Language` header value and returns locale sorted by their
-   * qualities.
-   *
-   * @param {string} header Accept-Language header value.
-   * @returns {[locale: string, quality: number][]} List of requested locales
-   *   with their qualities, sorted by their quality
-   */
-  function parseAcceptLanguageHeader(header) {
-    // given: en-GB;q=1,en-US;q=0.9;ru-RU
-
-    /** @type {[locale: string, quality: number][]} */
-    let locales = []
-
-    const values = header.split(',').map((it) => it.trim())
-
-    for (const value of values) {
-      const [locale, ...configurations] = value.split(';')
-
-      let quality = 1.0
-
-      for (const configuration of configurations) {
-        let [key, value] = configuration.split('=')
-        key = key.trim()
-        value = value?.trim() ?? null
-
-        if (value == null || value == '') continue
-
-        if (key === 'q') {
-          const floatValue = parseFloat(value)
-          if (!isNaN(floatValue)) {
-            quality = floatValue
-          }
-        }
-      }
-
-      locales.push([locale, quality])
-    }
-
-    return locales.sort((a, b) => b[1] - a[1])
   }
 
   /**
@@ -233,8 +173,7 @@ export default async function (context) {
    * @returns {DetectedLocale} Detected locale to use.
    */
   function detectLocale(restore = true) {
-    const { availableLocales } = settings
-    const availableLocaleCodes = availableLocales.map((it) => it.code)
+    const availableLocaleCodes = settings.availableLocales.map((it) => it.code)
 
     /** @type {null | string | (string | null)[]} */
     let hostLanguage = context.query?.hl ?? null
@@ -379,7 +318,13 @@ export default async function (context) {
       data: {
         configurable: true,
         get() {
-          return settings.mergedImportData
+          return mergedImportData.value
+        },
+      },
+      defaultData: {
+        configurable: true,
+        get() {
+          return defaultLocaleImport.importedData
         },
       },
     })
@@ -395,6 +340,7 @@ export default async function (context) {
 
   plugin.inject(createInjector(context))
   plugin.inject(createInjector(app))
+
   if (app.store != null) {
     plugin.inject(createInjector(app.store))
   }
@@ -418,15 +364,7 @@ export default async function (context) {
     })
   }
 
-  {
-    // Load default locale data.
-
-    const localeImport = await loadLocaleMessages(defaultLocale)
-
-    controller.addLocaleData(defaultLocale, localeImport.messages)
-
-    settings.defaultImportData = localeImport.importedData
-  }
+  controller.addLocaleData(defaultLocale, defaultLocaleImport.messages)
 
   {
     const { locale: detectedLocale, source: detectionSource } = detectLocale()

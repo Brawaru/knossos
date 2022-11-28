@@ -3,12 +3,11 @@
 // TODO(Brawaru): backport and refresh this module
 
 import { createIntl, createIntlCache } from '@formatjs/intl'
-import Vue from 'vue'
+import { computed, reactive } from 'vue'
 import { CompactNumber, formatCompactNumber } from './compactNumber'
 import { formatCustomMessage } from './customMessage'
 import { createIntlFormattedComponent } from './IntlFormatted'
 import { formatTimeDifference } from './timeDifferenceFormatter'
-import { hasOwn } from './utils'
 
 /**
  * @typedef {object} IntlFormatAliases
@@ -37,7 +36,7 @@ export class IntlController {
    * @param {string} defaultLocale Locale to use by default, it will be imported
    *   on import.
    */
-  constructor(defaultLocale = 'en-US') {
+  constructor(defaultLocale = 'en-US', defaultMessages = Object.create(null)) {
     /**
      * Intl cache used to avoid memory leakage and performance.
      *
@@ -45,201 +44,146 @@ export class IntlController {
      */
     this._intlCache = createIntlCache()
 
+    const state = reactive({
+      /** Locale to be used by default. */
+      defaultLocale,
+
+      /** Currently used locale. */
+      currentLocale: defaultLocale,
+
+      /** @type {Record<string, import('./i18n.types').MessagesMap>} */
+      localeMessages: Object.assign({
+        [defaultLocale]: defaultMessages,
+      }),
+    })
+
+    this._state = state
+
+    // Messages computation
+
+    const $defaultMessages = computed(
+      () => state.localeMessages[state.defaultLocale]
+    )
+
+    this._defaultMessages = $defaultMessages
+
+    const messages = computed(() => {
+      if (state.currentLocale === state.defaultLocale) {
+        return $defaultMessages.value
+      } else {
+        return Object.assign(
+          Object.create(null),
+          $defaultMessages.value,
+          state.localeMessages[state.currentLocale]
+        )
+      }
+    })
+
+    const intl = computed(() => {
+      return /** @type {IntlShape} */ (
+        createIntl(
+          {
+            defaultLocale: state.defaultLocale,
+            locale: state.currentLocale,
+            messages: messages.value,
+          },
+          this._intlCache
+        )
+      )
+    })
+
+    this._intl = intl
+
+    const formats = computed(
+      /** @returns {IntlFormatAliases} */
+      () => {
+        const $intl = intl.value
+        return {
+          date: $intl.formatDate.bind($intl),
+          dateTimeRange: $intl.formatDateTimeRange.bind($intl),
+          displayName: $intl.formatDisplayName.bind($intl),
+          list: $intl.formatList,
+          number: $intl.formatNumber.bind($intl),
+          plural: $intl.formatPlural.bind($intl),
+          relativeTime: $intl.formatRelativeTime.bind($intl),
+          time: $intl.formatTime.bind($intl),
+          compactNumber: formatCompactNumber.bind(
+            null,
+            $intl,
+            $intl.formatters.getNumberFormat
+          ),
+          timeDifference: formatTimeDifference.bind(
+            null,
+            $intl.formatRelativeTime
+          ),
+          customMessage: formatCustomMessage.bind(null, $intl),
+        }
+      }
+    )
+
+    this._formats = formats
+
+    const intlLocale = computed(() => {
+      return new Intl.Locale(intl.value.locale)
+    })
+
+    this._intlLocale = intlLocale
+
     /**
      * Default locale used by this controller.
      *
      * @private
      */
     this._defaultLocale = defaultLocale
-
-    /**
-     * All reactive properties.
-     *
-     * @private
-     */
-    this._vm = new Vue({
-      // TODO: switch to using composition api after upgrading to Vue 2.7
-      props: {},
-      data() {
-        return {
-          /**
-           * @type {Partial<
-           *   Record<string, import('./i18n.types').MessagesMap>
-           * >}
-           */
-          locales: Object.create(null),
-
-          /** @type {IntlShape | null} */
-          intl: null,
-
-          /** @type {IntlFormatAliases | null} */
-          formats: null,
-
-          /** @type {Intl.Locale | null} */
-          intlLocale: null,
-        }
-      },
-    })
-  }
-
-  /**
-   * Initialises or re-initialises Intl using provided locale and its messages.
-   *
-   * @private
-   * @param {string} locale Locale which Intl being initialised with.
-   * @throws On attempt to initialise (not re-initialise) Intl using non-default
-   *   locale.
-   */
-  _initIntl(locale) {
-    const locales = this._getLocales()
-
-    if (!hasOwn(locales, this._defaultLocale)) {
-      throw new Error(
-        `Missing data for the default locale ("${this._defaultLocale}")`
-      )
-    }
-
-    if (!hasOwn(locales, locale)) {
-      throw new Error(`Missing data for locale "${locale}"`)
-    }
-
-    const intl = createIntl(
-      {
-        defaultLocale: this._defaultLocale,
-        locale,
-        messages:
-          locale === this._defaultLocale
-            ? locales[locale]
-            : Object.assign(
-                Object.create(null),
-                locales[this._defaultLocale],
-                locales[locale]
-              ),
-      },
-      this._intlCache
-    )
-
-    this._setIntl(intl)
-
-    const currentFormats = this.formats
-
-    this._setFormats(
-      Object.assign(
-        currentFormats != null ? currentFormats : {},
-        /** @type {IntlFormatAliases} */ ({
-          date: intl.formatDate.bind(intl),
-          dateTimeRange: intl.formatDateTimeRange.bind(intl),
-          displayName: intl.formatDisplayName.bind(intl),
-          list: intl.formatList,
-          number: intl.formatNumber.bind(intl),
-          plural: intl.formatPlural.bind(intl),
-          relativeTime: intl.formatRelativeTime.bind(intl),
-          time: intl.formatTime.bind(intl),
-          compactNumber: formatCompactNumber.bind(
-            null,
-            intl,
-            intl.formatters.getNumberFormat
-          ),
-          timeDifference: formatTimeDifference.bind(
-            null,
-            intl.formatRelativeTime
-          ),
-          customMessage: formatCustomMessage.bind(null, intl),
-        })
-      )
-    )
-
-    this._setIntlLocale(new Intl.Locale(locale))
   }
 
   get defaultLocale() {
-    return this._defaultLocale
+    return this._state.defaultLocale
+  }
+
+  get defaultMessages() {
+    return this._defaultMessages.value
   }
 
   get locale() {
-    return this.intl.locale
-  }
-
-  /**
-   * @private
-   * @returns {Record<string, Record<string, string>>}
-   */
-  _getLocales() {
-    return this._vm.$data.locales
-  }
-
-  /**
-   * @private
-   * @param {Record<string, Record<string, string>>} value
-   */
-  _setLocales(value) {
-    this._vm.$data.locales = value
+    return this._intl.value.locale
   }
 
   /** @type {IntlShape} */
   get intl() {
-    return this._vm.$data.intl
-  }
-
-  /**
-   * Changes Intl value.
-   *
-   * @private
-   * @param {import('@formatjs/intl').IntlShape} value New value.
-   */
-  _setIntl(value) {
-    this._vm.$data.intl = value
+    return this._intl.value
   }
 
   /** @type {IntlFormatAliases} */
   get formats() {
-    return this._vm.$data.formats
-  }
-
-  /**
-   * Changes formatters.
-   *
-   * @private
-   * @param {IntlFormatAliases} value New formats.
-   */
-  _setFormats(value) {
-    this._vm.$data.formats = value
+    return this._formats.value
   }
 
   /** @type {Intl.Locale} */
   get intlLocale() {
-    return this._vm.$data.intlLocale
-  }
-
-  /**
-   * Changes current Intl Locale.
-   *
-   * @private
-   * @param {Intl.Locale} value New {@link Intl.Locale}.
-   */
-  _setIntlLocale(value) {
-    this._vm.$data.intlLocale = value
+    return this._intlLocale.value
   }
 
   /**
    * Loads locale data.
    *
    * @param {string} locale Locale which messages need to be added.
-   * @param {Record<string, string>} messages Locale messages.
+   * @param {import('./i18n.types').MessagesMap} messages Locale messages.
    */
   addLocaleData(locale, messages) {
-    this._getLocales()[locale] = messages
+    this._state.localeMessages[locale] = messages
   }
 
   /**
    * (Re-)initialises the controller with the provided locale and messages.
    *
    * @param {string} locale BCP47 locale code to best as used locale.
-   * @param {Record<string, string>} messages Messages for the provided locale.
+   * @param {import('./i18n.types').MessagesMap} messages Messages for the
+   *   provided locale.
    */
   initWith(locale, messages) {
     this.addLocaleData(locale, messages)
-    this._initIntl(locale)
+    this._state.currentLocale = locale
   }
 }
 

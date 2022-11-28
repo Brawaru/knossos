@@ -1,11 +1,8 @@
 import { LocaleData } from './types'
 
-/** Represents map of messages, keyed by their IDs, with translations as values. */
-export type Messages = Record<string, string>
-
 export interface LocaleImport {
-  messages: Messages
-  importedData: Record<string, any>
+  messages: import('./i18n.types').MessagesMap
+  importedData: import('./types').LocaleImportedData
 }
 
 /**
