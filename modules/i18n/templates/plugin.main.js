@@ -29,6 +29,27 @@ async function loadLocaleMessages(locale) {
   return localesDefinitions[locale].importFunction()
 }
 
+/**
+ * @param {string[]} requestedLocales
+ * @param {string[]} availableLocales
+ * @param {string} defaultLocale
+ * @param {import('@formatjs/intl-localematcher').Opts} [opts]
+ * @returns {string}
+ * @see {@link matchLocale} For the method details.
+ */
+function safeMatchLocale(
+  requestedLocales,
+  availableLocales,
+  defaultLocale,
+  opts
+) {
+  try {
+    return matchLocale(requestedLocales, availableLocales, defaultLocale, opts)
+  } catch (err) {
+    return defaultLocale
+  }
+}
+
 /** @typedef {Partial<import('./types').LocaleImportedData>} PartialImportData */
 
 /** @type {import('@nuxt/types').Plugin} */
@@ -192,7 +213,7 @@ export default async function (context) {
 
     if (hostLanguage != null) {
       return {
-        locale: matchLocale(
+        locale: safeMatchLocale(
           [/** @type {string} */ (hostLanguage)],
           availableLocaleCodes,
           defaultLocale
@@ -212,7 +233,7 @@ export default async function (context) {
       }
 
       if (restored != null) {
-        const availableRestoredLocale = matchLocale(
+        const availableRestoredLocale = safeMatchLocale(
           [restored],
           availableLocaleCodes,
           'en-x-placeholder'
@@ -227,7 +248,7 @@ export default async function (context) {
       }
     }
 
-    const navigatorLocale = matchLocale(
+    const navigatorLocale = safeMatchLocale(
       getNavigatorLocales(),
       availableLocaleCodes,
       'en-x-placeholder'
