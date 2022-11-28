@@ -60,6 +60,13 @@ function i18nHead() {
     }
   }
 
+  links.push({
+    rel: 'alternative',
+    href: new URL(currentURL).toString(),
+    hreflang: 'x-default',
+    hid: `i18n-hreflang-default`,
+  })
+
   head.link = links
 
   return head
