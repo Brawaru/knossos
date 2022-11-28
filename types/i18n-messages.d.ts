@@ -736,6 +736,8 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.validation-error.no-license': never
 
+    'project.validation-error.unknown-environments': never
+
     'project.version.status.featured': never
 
     'project.version.status.auto-featured': never

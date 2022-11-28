@@ -824,6 +824,7 @@ no-slug = "Your project cannot have an empty URL suffix."
 no-body = "Your project must have a body to submit for review."
 no-versions = "Your project must have at least one version to submit for review."
 no-license = "Your project must have a license."
+unknown-environments = "Your project must have the supported environments selected."
 
 [project.version]
 status.featured = "Featured"

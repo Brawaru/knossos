@@ -271,7 +271,7 @@
                   project.server_side === 'unknown'
                 "
               >
-                Your project must have the supported environments selected.
+                {{ $t('project.validation-error.unknown-environments') }}
               </li>
             </ul>
           </div>
