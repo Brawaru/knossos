@@ -605,7 +605,7 @@ is-abandoned = """\
 receive any further updates unless the author decides to return."""
 is-modpack = """\
 <sr-only>Warning:</sr-only>
-To install {project}, visit <docs-link>our documentation</docs-link> which \
+To install {project}, visit <doc-link>our documentation</doc-link> which \
 provides instructions on using <atl-link>ATLauncher</atl-link>, \
 <mmc-link>MultiMC</mmc-link> and <pl-link>Prism Launcher</pl-link>."""
 

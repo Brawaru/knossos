@@ -582,18 +582,23 @@
               <span class="sr-only"><Fragment :of="children" /></span>
             </template>
 
-            <template #atl-link="{ children }">
-              <a href="https://atlauncher.com/about" :target="$external()">
-                <Fragment :of="children" />
-              </a>
-            </template>
-            <template #mmc-link="{ children }">
-              <a href="https://multimc.org/" :target="$external()">
-                <Fragment :of="children" />
-              </a>
-            </template>
-            <template #pl-link="{ children }">
-              <a href="https://prismlauncher.org" :target="$external()">
+            <template
+              v-for="([href, external], name) in {
+                atl: ['https://atlauncher.com/about', true],
+                mmc: ['https://multimc.org/', true],
+                pl: ['https://prismlauncher.org', true],
+                doc: [
+                  'https://docs.modrinth.com/docs/modpacks/playing_modpacks/',
+                  false,
+                ],
+              }"
+              #[`${name}-link`]="{ children }"
+            >
+              <a
+                :key="name"
+                :href="href"
+                :target="external ? $external() : undefined"
+              >
                 <Fragment :of="children" />
               </a>
             </template>

@@ -444,7 +444,7 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'project.notice.is-modpack': {
       'sr-only': RichArgument
       project: ValueArgument
-      'docs-link': RichArgument
+      'doc-link': RichArgument
       'atl-link': RichArgument
       'mmc-link': RichArgument
       'pl-link': RichArgument
