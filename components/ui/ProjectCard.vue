@@ -143,7 +143,7 @@
         </div>
       </div>
       <div v-if="status" class="status">
-        <Badge :type="status" />
+        <ProjectStatusBadge :status="status" />
       </div>
       <div class="buttons">
         <slot />
@@ -154,7 +154,7 @@
 
 <script>
 import Categories from '~/components/ui/search/Categories'
-import Badge from '~/components/ui/Badge'
+import ProjectStatusBadge from '~/components/ui/ProjectStatusBadge.vue'
 
 import InfoIcon from '~/assets/images/utils/info.svg?inline'
 import IssuesIcon from '~/assets/images/utils/issues.svg?inline'
@@ -169,7 +169,7 @@ export default {
   components: {
     Avatar,
     Categories,
-    Badge,
+    ProjectStatusBadge,
     InfoIcon,
     IssuesIcon,
     CalendarIcon,

@@ -57,21 +57,7 @@
         </a>
         <span class="version__title">{{ version.name }}</span>
         <div class="version__metadata">
-          <VersionBadge
-            v-if="version.version_type === 'release'"
-            :type="$t('project-release-channel.release')"
-            color="green"
-          />
-          <VersionBadge
-            v-else-if="version.version_type === 'beta'"
-            :type="$t('project-release-channel.beta')"
-            color="orange"
-          />
-          <VersionBadge
-            v-else-if="version.version_type === 'alpha'"
-            :type="$t('project-release-channel.alpha')"
-            color="red"
-          />
+          <ReleaseChannelBadge :channel="version.version_type" />
           <span class="divider" />
           <span class="version_number">{{ version.version_number }}</span>
         </div>
@@ -111,14 +97,14 @@
 <script>
 import PlusIcon from '~/assets/images/utils/plus.svg?inline'
 import DownloadIcon from '~/assets/images/utils/download.svg?inline'
-import VersionBadge from '~/components/ui/Badge'
+import ReleaseChannelBadge from '~/components/ui/ReleaseChannelBadge.vue'
 import VersionFilterControl from '~/components/ui/VersionFilterControl'
 
 export default {
   components: {
     PlusIcon,
     DownloadIcon,
-    VersionBadge,
+    ReleaseChannelBadge,
     VersionFilterControl,
   },
   auth: false,

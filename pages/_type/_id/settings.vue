@@ -105,8 +105,12 @@
           </div>
         </div>
         <div class="side-buttons">
-          <Badge v-if="member.accepted" type="accepted" color="green" />
-          <Badge v-else type="pending" color="orange" />
+          <ClearBadge v-if="member.accepted" color="green">{{
+            $t('project.settings.member.status.pending')
+          }}</ClearBadge>
+          <ClearBadge v-else color="orange">{{
+            $t('project.settings.member.status.pending')
+          }}</ClearBadge>
           <button
             class="dropdown-icon"
             @click="
@@ -310,7 +314,7 @@
 <script>
 import ModalConfirm from '~/components/ui/ModalConfirm'
 import Checkbox from '~/components/ui/Checkbox'
-import Badge from '~/components/ui/Badge'
+import ClearBadge from '~/components/ui/ClearBadge.vue'
 
 import DropdownIcon from '~/assets/images/utils/dropdown.svg?inline'
 import PlusIcon from '~/assets/images/utils/plus.svg?inline'
@@ -326,7 +330,7 @@ export default {
     DropdownIcon,
     ModalConfirm,
     Checkbox,
-    Badge,
+    ClearBadge,
     PlusIcon,
     CheckIcon,
     EditIcon,

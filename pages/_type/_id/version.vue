@@ -245,24 +245,7 @@
                 :show-labels="false"
                 :allow-empty="false"
               />
-              <VersionBadge
-                v-else-if="version.version_type === 'release'"
-                class="value"
-                :type="$t('project-release-channel.release')"
-                color="green"
-              />
-              <VersionBadge
-                v-else-if="version.version_type === 'beta'"
-                class="value"
-                type="beta"
-                color="orange"
-              />
-              <VersionBadge
-                v-else-if="version.version_type === 'alpha'"
-                class="value"
-                type="alpha"
-                color="red"
-              />
+              <ReleaseChannelBadge :channel="version.version_type" />
             </div>
             <div v-if="project.project_type !== 'resourcepack'" class="data">
               <p class="title">
@@ -735,7 +718,7 @@ import ReportIcon from '~/assets/images/utils/report.svg?inline'
 import BackIcon from '~/assets/images/utils/left-arrow.svg?inline'
 import StarIcon from '~/assets/images/utils/star.svg?inline'
 import CheckIcon from '~/assets/images/utils/check.svg?inline'
-import VersionBadge from '~/components/ui/Badge'
+import ReleaseChannelBadge from '~/components/ui/ReleaseChannelBadge.vue'
 import Checkbox from '~/components/ui/Checkbox'
 import Chips from '~/components/ui/Chips'
 import ModalConfirm from '~/components/ui/ModalConfirm'
@@ -752,7 +735,7 @@ export default {
     FileInput,
     Chips,
     Checkbox,
-    VersionBadge,
+    ReleaseChannelBadge,
     DownloadIcon,
     TrashIcon,
     EditIcon,

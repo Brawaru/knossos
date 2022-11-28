@@ -645,6 +645,10 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.settings.member.action.make-owner': never
 
+    'project.settings.member.status.accepted': never
+
+    'project.settings.member.status.pending': never
+
     'project.settings.member.permission.upload-version': never
 
     'project.settings.member.permission.delete-version': never

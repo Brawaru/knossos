@@ -765,6 +765,8 @@ portion of this project's revenue goes to this member."""
 permissions.title = "Permissions"
 action.remove = "Remove member"
 action.make-owner = "Transfer ownership"
+status.accepted = "Accepted"
+status.pending = "Pending"
 
 [project.settings.member.permission]
 upload-version = "Upload version"
