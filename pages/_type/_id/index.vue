@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="bodyHtmlRef"
     v-highlightjs
     class="markdown-body card"
     v-html="$xss($md.render(project.body))"
@@ -7,6 +8,9 @@
 </template>
 
 <script>
+import { ref } from 'vue'
+import { match as localeMatch } from '@formatjs/intl-localematcher'
+
 export default {
   auth: false,
   props: {
@@ -15,6 +19,57 @@ export default {
       default() {
         return {}
       },
+    },
+  },
+  setup() {
+    /** @type {HTMLDivElement | null} */
+    const bodyHtmlRef = ref(null)
+
+    return { bodyHtmlRef }
+  },
+  watch: {
+    '$i18n.locale'() {
+      this.openCloseLanguageSpoilers()
+    },
+  },
+  mounted() {
+    this.openCloseLanguageSpoilers()
+  },
+  methods: {
+    openCloseLanguageSpoilers() {
+      if (this.bodyHtmlRef == null) {
+        return
+      }
+
+      /** @type {HTMLDetailsElement[]} */
+      const spoilers = Array.from(
+        this.bodyHtmlRef.querySelectorAll('details[data-language]')
+      )
+
+      const availableLocales = spoilers
+        .map((spoiler) => spoiler.dataset.language)
+        .filter((locale) => locale != null && locale !== '')
+
+      /** @type {string} */
+      let matchingLocale
+
+      try {
+        matchingLocale = localeMatch(
+          [this.$i18n.locale],
+          availableLocales,
+          this.$i18n.defaultLocale
+        )
+      } catch (err) {
+        console.warn('Failed to match locale against existing locales', {
+          availableLocales,
+          err,
+        })
+        matchingLocale = this.$i18n.defaultLocale
+      }
+
+      for (const spoiler of spoilers) {
+        spoiler.open = spoiler.dataset.language === matchingLocale
+      }
     },
   },
 }

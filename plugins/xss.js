@@ -1,8 +1,6 @@
 import xss from 'xss'
 
-/**
- * @type {import('xss').IFilterXSSOptions}
- */
+/** @type {import('xss').IFilterXSSOptions} */
 const options = {
   whiteList: {
     ...xss.whiteList,
@@ -17,6 +15,7 @@ const options = {
     input: ['checked', 'disabled', 'type'],
     iframe: ['width', 'height', 'allowfullscreen', 'frameborder'],
     img: [...xss.whiteList.img, 'style'],
+    details: ['open', 'data-language'],
   },
   css: {
     whiteList: {
