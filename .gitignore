@@ -95,3 +95,6 @@ sw.*
 
 # pnpm files
 pnpm-lock.yaml
+
+# Auto-generated messages types (annoying to rebase)
+types/i18n-messages.d.ts
