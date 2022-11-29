@@ -1641,14 +1641,6 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'user-role.moderator': never
 
     'user-role.creator': never
-
-    'test.test-string': {
-      something: ValueArgument
-      somethingElse: SelectArgument<'owo' | 'other'>
-      randomNumber: NumberArgument
-      randomCountOfPeople: NumberArgument
-      wrapper: RichArgument
-    }
   }
 }
 

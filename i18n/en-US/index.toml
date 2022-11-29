@@ -1257,6 +1257,3 @@ user-id = "User ID: {id}"
 admin = "Modrinth Team"
 moderator = "Moderator"
 creator = "Creator"
-
-[test]
-test-string = "{something} {somethingElse, select, owo {OwO??} other {UwU!!}} {randomNumber, number} {randomCountOfPeople, plural, one {# person} other {# people}} <wrapper>ha</wrapper>"

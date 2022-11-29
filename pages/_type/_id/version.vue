@@ -835,13 +835,6 @@ export default {
       downloads: this.version.downloads,
     })
 
-    this.$t(
-      {
-        id: 'test.test-string',
-      },
-      {}
-    )
-
     return {
       title,
       meta: [
