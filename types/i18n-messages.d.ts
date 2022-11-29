@@ -275,8 +275,6 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'component.version-filter.field.versions.placeholder': never
 
-    'component.version-filter.field.versions.show-snapshots': never
-
     'component.version-filter.action.clear': never
 
     'dashboard.title': never
@@ -866,10 +864,6 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'project.version.edit.field.loaders.placeholder': never
 
-    'project.version.edit.field.game-versions.placeholder': never
-
-    'project.version.edit.field.game-versions.show-snapshots': never
-
     'project.version.edit.files.file.action.remove': never
 
     'project.version.edit.files.file.action.make-primary': never
@@ -971,8 +965,6 @@ declare module '~/modules/i18n/templates/i18n.types' {
 
     'footer.notice.legal-mojang': never
 
-    'game-version-selector.include-snapshots': never
-
     'generic.action.cancel': never
 
     'generic.action.continue': never
@@ -1011,6 +1003,8 @@ declare module '~/modules/i18n/templates/i18n.types' {
     'generic.placeholder.valid-url': never
 
     'generic.placeholder.choose-versions': never
+
+    'generic.field.include-snapshots': never
 
     'generic.filler.up-to-date': never
 

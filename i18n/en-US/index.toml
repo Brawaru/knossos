@@ -228,7 +228,6 @@ Project has a message from the moderators. View the project to see more."""
 [component.version-filter.field]
 loader.placeholder = "Filter loader..."
 versions.placeholder = "Filter versions..."
-versions.show-snapshots = "Include snapshots"
 
 [component.version-filter.action]
 clear = "Clear filters"
@@ -346,10 +345,6 @@ link.crowdin = "Crowdin"
 notice.legal-mojang = """\
 NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG."""
 
-[game-version-selector]
-include-snapshots = "Include snapshots" # TODO: dedupe!!
-# placeholder = "Choose versions..."
-
 [generic.action]
 cancel = "Cancel"
 continue = "Continue"
@@ -378,6 +373,9 @@ project-page-title = "{project} - {page}"
 select-one = "Select one"
 valid-url = "Enter a valid URL"
 choose-versions = "Choose versions..."
+
+[generic.field]
+include-snapshots = "Include snapshots"
 
 [generic.filler]
 up-to-date = "You're up-to-date!"
@@ -906,8 +904,6 @@ action.remove = "Remove"
 
 [project.version.edit.field]
 loaders.placeholder = "Choose loaders..."
-game-versions.placeholder = "Choose versions..."
-game-versions.show-snapshots = "Include snapshots"
 
 [project.version.edit.files]
 file.action.remove = "Remove"

@@ -45,10 +45,8 @@
         getValidVersions().some((v) => v.version_type !== 'release')
       "
       v-model="showSnapshots"
-      :label="$t('component.version-filter.field.versions.show-snapshots')"
-      :description="
-        $t('component.version-filter.field.versions.show-snapshots')
-      "
+      :label="$t('generic.field.include-snapshots')"
+      :description="$t('generic.field.include-snapshots')"
       :border="false"
     />
     <button

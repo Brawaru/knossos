@@ -338,22 +338,12 @@
                   :show-labels="false"
                   :limit="6"
                   :hide-selected="true"
-                  :placeholder="
-                    $t('project.version.edit.field.game-versions.placeholder')
-                  "
+                  :placeholder="$t('generic.placeholder.choose-versions')"
                 />
                 <Checkbox
                   v-model="showSnapshots"
-                  :label="
-                    $t(
-                      'project.version.edit.field.game-versions.show-snapshots'
-                    )
-                  "
-                  :description="
-                    $t(
-                      'project.version.edit.field.game-versions.show-snapshots'
-                    )
-                  "
+                  :label="$t('generic.field.include-snapshots')"
+                  :description="$t('generic.field.include-snapshots')"
                   style="margin-top: 0.5rem"
                   :border="false"
                 />
