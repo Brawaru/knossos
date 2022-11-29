@@ -143,11 +143,8 @@ languages you can [use `'<details>'` tag](https://developer.mozilla.org/en-US/\
 docs/Web/HTML/Element/details).""" # TODO: disable html parse
 
 [component.modal-creation.fields]
-project-type.title = "Project type<required>*</required>"
-name.title = "Name<required>*</required>"
+project-type.title = "Project type"
 name.placeholder = "Enter project name..."
-url.title = "URL<required>*</required>"
-summary.title = "Summary<required>*</required>"
 summary.description = "This appears in search and on the sidebar of your project's page."
 
 [component.modal-languages]

@@ -157,23 +157,9 @@ declare module '~/modules/i18n/templates/i18n.types' {
       >
     }
 
-    'component.modal-creation.fields.project-type.title': {
-      required: RichArgument
-    }
-
-    'component.modal-creation.fields.name.title': {
-      required: RichArgument
-    }
+    'component.modal-creation.fields.project-type.title': never
 
     'component.modal-creation.fields.name.placeholder': never
-
-    'component.modal-creation.fields.url.title': {
-      required: RichArgument
-    }
-
-    'component.modal-creation.fields.summary.title': {
-      required: RichArgument
-    }
 
     'component.modal-creation.fields.summary.description': never
 

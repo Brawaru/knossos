@@ -8,13 +8,8 @@
       </div>
       <label for="project-type">
         <span class="label__title">
-          <IntlFormatted
-            message-id="component.modal-creation.fields.project-type.title"
-          >
-            <template #required="{ children }">
-              <span class="required"><Fragment :of="children" /></span>
-            </template>
-          </IntlFormatted>
+          {{ $t('component.modal-creation.fields.project-type.title')
+          }}<span class="required">*</span>
         </span>
       </label>
       <Chips
@@ -25,13 +20,8 @@
       />
       <label for="name">
         <span class="label__title">
-          <IntlFormatted
-            message-id="component.modal-creation.fields.name.title"
-          >
-            <template #required="{ children }">
-              <span class="required"><Fragment :of="children" /></span>
-            </template>
-          </IntlFormatted>
+          {{ $t('project.edit.field.name.name')
+          }}<span class="required">*</span>
         </span>
       </label>
       <input
@@ -45,11 +35,8 @@
       />
       <label for="slug">
         <span class="label__title">
-          <IntlFormatted message-id="component.modal-creation.fields.url.title">
-            <template #required="{ children }">
-              <span class="required"><Fragment :of="children" /></span>
-            </template>
-          </IntlFormatted>
+          {{ $t('project.edit.field.slug.name')
+          }}<span class="required">*</span>
         </span>
       </label>
       <div class="text-input-wrapper">
@@ -67,13 +54,8 @@
       </div>
       <label for="additional-information">
         <span class="label__title">
-          <IntlFormatted
-            message-id="component.modal-creation.fields.summary.title"
-          >
-            <template #required="{ children }">
-              <span class="required"><Fragment :of="children" /></span>
-            </template>
-          </IntlFormatted>
+          {{ $t('project.edit.field.description.name')
+          }}<span class="required">*</span>
         </span>
         <span class="label__description">
           {{ $t('component.modal-creation.fields.summary.description') }}
