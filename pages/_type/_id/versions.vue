@@ -146,9 +146,9 @@ export default {
       versions: this.versions.length,
       project: this.project.title,
       downloads: this.$fmt.compactNumber(this.project.downloads),
-      lastUpdated: this.versions[0]
-        ? this.versions[0].date_published
-        : new Date(0), // I love when my project is updated on 1 January 1970
+      lastUpdated: new Date(
+        this.versions[0] ? this.versions[0].date_published : 0
+      ), // I love when my project is updated on 1 January 1970
     })
 
     return {
