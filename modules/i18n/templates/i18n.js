@@ -57,6 +57,7 @@ export class IntlController {
       }),
     })
 
+    /** @private */
     this._state = state
 
     // Messages computation
@@ -65,6 +66,7 @@ export class IntlController {
       () => state.localeMessages[state.defaultLocale]
     )
 
+    /** @private */
     this._defaultMessages = $defaultMessages
 
     const messages = computed(() => {
@@ -92,6 +94,7 @@ export class IntlController {
       )
     })
 
+    /** @private */
     this._intl = intl
 
     const formats = computed(
@@ -121,12 +124,14 @@ export class IntlController {
       }
     )
 
+    /** @private */
     this._formats = formats
 
     const intlLocale = computed(() => {
       return new Intl.Locale(intl.value.locale)
     })
 
+    /** @private */
     this._intlLocale = intlLocale
 
     /**
