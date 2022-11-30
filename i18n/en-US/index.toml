@@ -154,6 +154,14 @@ contribution-notice = """Modrinth is translated by volunteers. \
 filler.no-results = "No results"
 action.enable-automatic = "Automatic"
 field.search.placeholder = "Search language..."
+field.search.description = "Submit to focus the first search result."
+announcement.search-results = """\
+{matches, plural,\
+ =0 {No languages match}\
+ one {# language matches}\
+ other {# languages match}\
+} your search."""
+grid.legend = "Select a language"
 
 [component.modal-languages.auto-lockout]
 title = "Using your browser's language"
@@ -165,6 +173,9 @@ action = "Use a different language"
 [component.modal-languages.language]
 browser-preferred = "Browser language"
 currently-used = "Currently used"
+label = "{displayName} ({translatedName})"
+icon-labels.browser-preferred = "(browser language)"
+icon-labels.currently-used = "(currently used)"
 
 [component.modal-report]
 title = "Report {itemType, select, user {user} other {project}}"

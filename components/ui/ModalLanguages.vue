@@ -20,16 +20,18 @@
         <div class="languages-grid-container">
           <div v-if="automatic" class="automatic-overlay">
             <div class="automatic-overlay-icon">
-              <GlobeIcon />
+              <GlobeIcon aria-hidden="true" />
             </div>
-            <div class="automatic-overlay-title">
-              {{ $t('component.modal-languages.auto-lockout.title') }}
-            </div>
-            <div class="automatic-overlay-description">
-              <IntlFormatted
-                message-id="component.modal-languages.auto-lockout.description"
-                :values="{ language: currentLanguage.displayName }"
-              />
+            <div class="automatic-overlay-content" tabindex="0">
+              <h3 class="automatic-overlay-title">
+                {{ $t('component.modal-languages.auto-lockout.title') }}
+              </h3>
+              <p class="automatic-overlay-description">
+                <IntlFormatted
+                  message-id="component.modal-languages.auto-lockout.description"
+                  :values="{ language: currentLanguage.displayName }"
+                />
+              </p>
             </div>
             <div class="automatic-overlay-actions">
               <button
@@ -53,8 +55,31 @@
                 $t('component.modal-languages.field.search.placeholder')
               "
               :disabled="automatic"
+              aria-describedby="slm-s-desc"
+              @keypress="onSearchKeyPress"
             />
-            <div class="languages-grid" :class="{ empty }">
+            <div id="slm-s-desc" class="sr-only">
+              {{ $t('component.modal-languages.field.search.description') }}
+            </div>
+            <div id="slm-sr-results" class="sr-only" aria-live="polite">
+              {{
+                typedSearchQuery === ''
+                  ? ''
+                  : $t(
+                      'component.modal-languages.announcement.search-results',
+                      {
+                        matches: matchingLanguages.length,
+                      }
+                    )
+              }}
+            </div>
+            <div
+              ref="gridRef"
+              class="languages-grid"
+              :class="{ empty }"
+              :aria-label="$t('component.modal-languages.grid.legend')"
+              role="list"
+            >
               <div
                 v-for="language in matchingLanguages"
                 :key="language.code"
@@ -65,6 +90,7 @@
                 "
                 class="language"
                 :class="{ active: selectedLanguage === language.code }"
+                role="listitem"
               >
                 <input
                   :id="language.inputID"
@@ -78,7 +104,16 @@
                 />
                 <div class="language-info">
                   <label :for="language.inputID" class="language-label">
-                    <div class="display-name">
+                    <div
+                      class="display-name"
+                      :lang="language.code"
+                      :aria-label="
+                        $t('component.modal-languages.language.label', {
+                          displayName: language.displayName,
+                          translatedName: language.translatedName,
+                        })
+                      "
+                    >
                       {{ language.displayName }}
                     </div>
                     <span
@@ -90,7 +125,12 @@
                       "
                       class="browser-locale"
                     >
-                      <GlobeIcon />
+                      <GlobeIcon aria-hidden="true" />
+                      <span class="sr-only">{{
+                        $t(
+                          'component.modal-languages.language.icon-labels.browser-preferred'
+                        )
+                      }}</span>
                     </span>
                     <span
                       v-if="isCurrentlyUsed(language)"
@@ -99,7 +139,12 @@
                       "
                       class="current-locale"
                     >
-                      <Check />
+                      <Check aria-hidden="true" />
+                      <span class="sr-only">{{
+                        $t(
+                          'component.modal-languages.language.icon-labels.currently-used'
+                        )
+                      }}</span>
                     </span>
                   </label>
                   <div class="translated-name">
@@ -110,16 +155,24 @@
               <div
                 v-if="!empty && matchingLanguages.length < 4"
                 class="language spacer"
+                aria-hidden="true"
               />
               <div
                 v-if="!empty && matchingLanguages.length < 3"
                 class="language spacer"
+                aria-hidden="true"
               />
               <div
                 v-if="!empty && matchingLanguages.length < 2"
                 class="language spacer"
+                aria-hidden="true"
               />
-              <div v-if="empty" class="placeholder">
+              <div
+                v-if="empty"
+                class="placeholder"
+                tabindex="0"
+                role="listitem"
+              >
                 {{ $t('component.modal-languages.filler.no-results') }}
               </div>
             </div>
@@ -202,7 +255,9 @@ export default defineComponent({
       /** @type {null | InstanceType<import('./Modal.vue').default>} */ (null)
     )
 
-    return { modalRef }
+    const gridRef = ref(/** @type {null | HTMLFieldSetElement} */ (null))
+
+    return { modalRef, gridRef }
   },
   data() {
     return initialState.call(this)
@@ -360,9 +415,7 @@ export default defineComponent({
         )
       }
 
-      const result = this.fuse.search(this.searchQuery)
-      console.log(result)
-      return result.map((_) => _.item)
+      return this.fuse.search(this.searchQuery).map((_) => _.item)
     },
     /** @returns {boolean} Whether there are no search results. */
     empty() {
@@ -414,8 +467,22 @@ export default defineComponent({
     },
   },
   methods: {
-    applyChanges() {
-      return this.$i18n.changeLocale(this.selectedLanguage)
+    /** @param {KeyboardEvent} e Keyboard event */
+    onSearchKeyPress(e) {
+      const anyModifierPressed =
+        e.altKey || e.ctrlKey || e.metaKey || e.shiftKey
+
+      if (e.key === 'Enter' && !anyModifierPressed) {
+        const focusable =
+          /** @type {HTMLInputElement | HTMLDivElement | undefined} */ (
+            this.gridRef?.querySelector('input,div.placeholder')
+          )
+
+        focusable?.focus({ preventScroll: true })
+      }
+    },
+    async applyChanges() {
+      await this.$i18n.changeLocale(this.selectedLanguage)
     },
     /**
      * @param {Language} language Language to check.
@@ -557,6 +624,7 @@ export default defineComponent({
     white-space: pre-line;
     max-width: 400px;
     color: var(--color-overlay-description);
+    margin: 0;
   }
 }
 
