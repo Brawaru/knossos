@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { ref } from 'vue'
+import { nextTick, ref } from 'vue'
 import { match as localeMatch } from '@formatjs/intl-localematcher'
 
 export default {
@@ -31,6 +31,9 @@ export default {
     '$i18n.locale'() {
       this.openCloseLanguageSpoilers()
     },
+  },
+  updated() {
+    nextTick(() => this.openCloseLanguageSpoilers())
   },
   mounted() {
     this.openCloseLanguageSpoilers()
