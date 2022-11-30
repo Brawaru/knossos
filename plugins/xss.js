@@ -4,7 +4,7 @@ import xss from 'xss'
 const options = {
   whiteList: {
     ...xss.whiteList,
-    summary: [],
+    summary: ['lang'],
     h1: ['id'],
     h2: ['id'],
     h3: ['id'],
@@ -15,7 +15,7 @@ const options = {
     input: ['checked', 'disabled', 'type'],
     iframe: ['width', 'height', 'allowfullscreen', 'frameborder'],
     img: [...xss.whiteList.img, 'style'],
-    details: ['open', 'data-language'],
+    details: ['open', 'lang'],
   },
   css: {
     whiteList: {

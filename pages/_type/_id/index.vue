@@ -43,11 +43,11 @@ export default {
 
       /** @type {HTMLDetailsElement[]} */
       const spoilers = Array.from(
-        this.bodyHtmlRef.querySelectorAll('details[data-language]')
+        this.bodyHtmlRef.querySelectorAll('details[lang]')
       )
 
       const availableLocales = spoilers
-        .map((spoiler) => spoiler.dataset.language)
+        .map((spoiler) => spoiler.lang)
         .filter((locale) => locale != null && locale !== '')
 
       /** @type {string} */
@@ -68,7 +68,7 @@ export default {
       }
 
       for (const spoiler of spoilers) {
-        spoiler.open = spoiler.dataset.language === matchingLocale
+        spoiler.open = spoiler.lang === matchingLocale
       }
     },
   },
