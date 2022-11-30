@@ -319,7 +319,7 @@ function formatMoney(amount, overrides) {
       // Australlian Dollar, since with 'symbol' it displays as A$ in English
       // and AUD in other locales (mostly).
       currencyDisplay: 'narrowSymbol',
-      minimumFractionDigits: 0,
+      minimumFractionDigits: 2,
       maximumFractionDigits: 2,
       ...overrides,
     })
