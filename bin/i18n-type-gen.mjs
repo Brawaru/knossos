@@ -390,12 +390,6 @@ const dataTypes = {
   },
 }
 
-const __oldsrc = `
-<%= JSON.stringify(message.id) %>: <% if (message.args.size === 0) { print('never'); } else { %>
-<% message.args.forEach((name, type) => { %><%= JSON.stringify(name) %>: <%= type %><% /*endblock*/ }); %>
-<% /*endif*/ } }%>
-`
-
 const template = `// This file is generated automatically from <%= sourcePath %>
 // Use bin/i18n-type-gen.mjs script to re-generate it.
 
