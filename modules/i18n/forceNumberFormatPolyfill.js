@@ -20,45 +20,28 @@ function toLocaleString(locales, options) {
  * It tries the following sites: `global`, `globalThis`, `window`. If any of
  * those is missing then `null` value will be on its place.
  */
-const injectionSites = [
-  (() => {
-    try {
-      return global
-    } catch {
-      return null
-    }
-  })(),
-  (() => {
-    try {
-      return globalThis
-    } catch {
-      return null
-    }
-  })(),
-  (() => {
-    try {
-      return window
-    } catch {
-      return null
-    }
-  })(),
-]
+const injectionSites = /** @type {const} */ ([
+  typeof global === 'undefined' ? null : global,
+  typeof globalThis === 'undefined' ? null : globalThis,
+  typeof window === 'undefined' ? null : window,
+])
 
 for (const target of injectionSites) {
   if (target == null) continue
 
-  if (/** @type {any} */ ((target.Intl ?? {}).NumberFormat) !== NumberFormat) {
-    Object.defineProperty(
-      target.Intl ?? (target.Intl = /** @type {any} */ ({})),
-      'NumberFormat',
-      {
-        value: NumberFormat,
-      }
-    )
+  // @ts-expect-error - TS thinks this will always exist
+  if ((target.Intl?.NumberFormat ?? null) !== NumberFormat) {
+    if (target.Intl == null) target.Intl = /** @type {any} */ ({})
+
+    Object.defineProperty(target.Intl, 'NumberFormat', {
+      configurable: true,
+      value: NumberFormat,
+    })
   }
 
   if (target.Number.prototype.toLocaleString !== toLocaleString) {
     Object.defineProperty(target.Number.prototype, 'toLocaleString', {
+      configurable: true,
       value: toLocaleString,
     })
   }
