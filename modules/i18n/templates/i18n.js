@@ -117,6 +117,7 @@ export class IntlController {
           ),
           timeDifference: formatTimeDifference.bind(
             null,
+            $intl,
             $intl.formatRelativeTime
           ),
           customMessage: formatCustomMessage.bind(null, $intl),

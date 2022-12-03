@@ -82,10 +82,13 @@ function toTimestamp(value) {
  * @returns {string} Largest unit available to display the time.
  */
 
+/** @typedef {Pick<import('@formatjs/intl').ResolvedIntlConfig, 'onError'>} Config */
+
 /**
  * Given relative time in seconds returns the largest unit available to display
  * it.
  *
+ * @param {Config} config IntlShape config.
  * @param {import('@formatjs/intl').IntlFormatters['formatRelativeTime']} format
  *   Formatter function.
  * @param {TimeRange} range Range for which time difference is calculated.
@@ -93,7 +96,7 @@ function toTimestamp(value) {
  *   Options for relative time formatter.
  * @returns {string} Largest unit available to display the time.
  */
-export function formatTimeDifference(format, range, options) {
+export function formatTimeDifference(config, format, range, options) {
   /** @type {number} */
   let from
 
@@ -102,13 +105,15 @@ export function formatTimeDifference(format, range, options) {
 
   if (Array.isArray(range)) {
     if (range.length <= 0 || range.length > 2) {
-      throw new IntlError(
-        IntlErrorCode.FORMAT_ERROR,
-        'Illegal TimeRange value passed'
+      config.onError(
+        new IntlError(
+          IntlErrorCode.FORMAT_ERROR,
+          'Illegal TimeRange value passed'
+        )
       )
     }
 
-    from = toTimestamp(range[0])
+    from = toTimestamp(range[0] ?? 0)
 
     if (range.length > 1 && range[1] != null) {
       to = toTimestamp(range[1])
