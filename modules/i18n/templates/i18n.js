@@ -4,7 +4,7 @@
 
 import { createIntl, createIntlCache } from '@formatjs/intl'
 import { computed, reactive } from 'vue'
-import { CompactNumber, formatCompactNumber } from './compactNumber'
+import { formatCompactNumber } from './compactNumber'
 import { formatCustomMessage } from './customMessage'
 import { createIntlFormattedComponent } from './IntlFormatted'
 import { formatTimeDifference } from './timeDifferenceFormatter'
@@ -27,7 +27,7 @@ import { formatTimeDifference } from './timeDifferenceFormatter'
 /**
  * @private
  * @typedef {import('@formatjs/intl').IntlShape<
- *   import('vue').VNode | CompactNumber
+ *   import('vue').VNode | import('./compactNumber').CompactNumber
  * >} IntlShape
  */
 

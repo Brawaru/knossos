@@ -241,14 +241,6 @@ export function formatCompactNumber(...args) {
 }
 
 /**
- * @param {ConstructorParameters<typeof CompactNumber>} args
- * @returns {CompactNumberParts}
- */
-export function formatCompactNumberToParts(...args) {
-  return formatCompactNumber(...args).toParts()
-}
-
-/**
  * @private
  * @typedef {Omit<import('@formatjs/intl').FormatNumberOptions, 'notation'>} Options
  */
