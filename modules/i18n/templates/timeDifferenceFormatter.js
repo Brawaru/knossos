@@ -33,12 +33,13 @@ const intervals = [
  *
  * It must be either:
  *
- * - `string` that can be converted to [`Date`]({@link Date}) object.
+ * - `string` which can be used to construct [`Date`]({@link Date}) object.
  * - `number` that contains a timestamp, a number of seconds since 1 Jan 1970 UTC.
  * - [`Date`]({@link Date}) object on which [`getTime`]({@link Date#getTime}) will
  *   be executed.
  *
- * @typedef {Date | string | number} Timestamp
+ * @private
+ * @typedef {Date | string | number} TimeRangePart
  */
 
 /**
@@ -47,25 +48,27 @@ const intervals = [
  * wrapped in an array. If `to` is not provided it is assumed to be the current
  * date at the moment of executing any function accepting this type.
  *
- * @typedef {Timestamp | [from: Timestamp] | [from: Timestamp, to: Timestamp]} TimeRange
+ * @typedef {| TimeRangePart
+ *   | [from: TimeRangePart]
+ *   | [from: TimeRangePart, to: TimeRangePart]} TimeRange
  */
 
 /**
- * Converts provided {@link Timestamp} to an actual numeric timestamp.
+ * Converts provided {@link TimeRangePart} to an actual numeric timestamp.
  *
- * @param {Timestamp} convertable Value to convert.
+ * @param {TimeRangePart} value Value to convert.
  * @returns {number} Timestamp.
  */
-function toTimestamp(convertable) {
-  if (convertable instanceof Date) {
-    return convertable.getTime()
+function toTimestamp(value) {
+  if (value instanceof Date) {
+    return value.getTime()
   }
 
-  if (typeof convertable === 'string') {
-    return new Date(convertable).getTime()
+  if (typeof value === 'string') {
+    return new Date(value).getTime()
   }
 
-  return Number(convertable)
+  return Number(value)
 }
 
 /**
