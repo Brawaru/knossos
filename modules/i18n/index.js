@@ -8,8 +8,9 @@
 import './forceNumberFormatPolyfill'
 import { join } from 'path'
 import { readdir, stat } from 'fs/promises'
-import { customNamespace } from './consts'
 import merge from 'lodash/merge'
+
+export const customNamespace = 'knossos-i18n'
 
 /**
  * Describes a path that should be imported.
