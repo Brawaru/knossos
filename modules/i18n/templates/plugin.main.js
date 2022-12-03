@@ -397,13 +397,5 @@ export default async function (context) {
     settings.isAuto = isAuto
 
     settings.browserLocale = detectLocale(false).locale
-
-    if (context.isDev) {
-      console.log('[knossos-i18n] setup completed', {
-        detectedLocale,
-        detectionSource,
-        isAuto,
-      })
-    }
   }
 }
