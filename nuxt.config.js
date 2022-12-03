@@ -447,7 +447,7 @@ export default {
     defaultLocale: 'en-US',
     localesDir: path.resolve('./i18n'),
     srcDir: __dirname,
-    acceptedLocales: ['uk'],
+    acceptedLocales: [],
     logging: true,
   }),
 }
