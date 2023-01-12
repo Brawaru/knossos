@@ -96,3 +96,8 @@ sw.*
 # pnpm files
 pnpm-lock.yaml
 /.npmrc
+
+# Auto-generated messages types (annoying to rebase)
+types/i18n-messages.d.ts
+
+.vercel

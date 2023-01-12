@@ -1,6 +1,8 @@
 import { promises as fs } from 'fs'
 import { sortRoutes } from '@nuxt/utils'
 import axios from 'axios'
+import path from 'path'
+import i18nConfig from './generated/i18n-config.json'
 
 const STAGING_API_URL = 'https://staging-api.modrinth.com/v2/'
 const STAGING_ARIADNE_URL = 'https://staging-ariadne.modrinth.com/v1/'
@@ -197,6 +199,8 @@ export default {
     '~/plugins/vue-syntax.js',
     '~/plugins/shorthands.js',
     '~/plugins/markdown.js',
+    '~/plugins/typed-shorthands.js',
+    '~/plugins/vue-fragment.js',
   ],
   /*
    ** Auto import components
@@ -217,6 +221,7 @@ export default {
    */
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
+    '~/modules/i18n',
     '@nuxtjs/dayjs',
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
@@ -268,6 +273,37 @@ export default {
           },
         ],
       ],
+    },
+    /** @param {import('webpack').Configuration} config */
+    extend(config) {
+      const translationsLoader = path.resolve(
+        __dirname,
+        'loaders/translationsLoader.js'
+      )
+
+      const messageLoader = path.resolve(__dirname, 'loaders/messageLoader.js')
+
+      config.module.rules.push({
+        test: /\.toml$/,
+        include: path.resolve(__dirname, 'i18n'),
+        loader: translationsLoader,
+        type: 'javascript/auto',
+      })
+
+      config.module.rules.push({
+        test: /\.md$/,
+        include: path.resolve(__dirname, 'i18n'),
+        loader: messageLoader,
+      })
+
+      config.module.rules.push({
+        test: /\.html$/,
+        include: path.resolve(__dirname, 'i18n'),
+        loader: messageLoader,
+      })
+
+      config.resolve.alias['@formatjs/icu-messageformat-parser'] =
+        '@formatjs/icu-messageformat-parser/no-parser'
     },
   },
   loading: {
@@ -405,6 +441,7 @@ export default {
       },
     },
   },
+  i18n: Object.assign(i18nConfig, { baseURL: getDomain() }),
 }
 
 function getApiUrl() {

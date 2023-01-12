@@ -1,0 +1,45 @@
+# This file contains all the source strings.
+#
+# When adding the strings please follow the structure of the file, that is:
+#
+#  - All root (top) tables are generaly sorted alphabetically.
+#
+#  - Underlying tables and keys can be in any order that makes it easier to
+#     follow within the correspending file. If is not bound to the file, then
+#     it makes sense to also sort it alphabetically to find keys quicker.
+#
+#  - Don't worry *too much* about your translation keys length, but also don't
+#     put the whole sentences in them. Like variable names, try to provide as
+#     much context as possible through them while being brief.
+#
+#  - Crowdin is working on adding context comments, these are comments that go
+#     before the key, so if you are going to leave comments, then either break
+#     the line before the key, or leave them right after the key, like:
+#
+#     something = "hello" # This comment won't be on Crowdin.
+#
+#     # Contents of this comment will be shown on Crowdin.
+#     something-else = "hello world"
+#
+#  - Please avoid re-using translation keys except where you can be absolutely
+#     sure they will stay the same no matter the context. It's better to
+#     duplicate a string rather than leaving translators asking for a split.
+#
+#     Translators have tools to easily fill in translations for duplicates, but
+#     they may lack tools and technical proficiency to make a pull request that
+#     splits one string into two or more different strings.
+#
+# Don't forget to run `npm run i18n:types` to update typings and check for
+# possible errors.
+#
+# If you are actively working on the code, running `npm run i18n:watch` will
+# run the type generator in watch mode, which will update the typings whenever
+# any change is made here, as well as check for possible errors on the fly.
+#
+# If you have any questions regarding this file, feel free to ask them in our
+# Discord server. We have a thread dedicated to i18n stuff:
+#
+# https://discord.com/channels/734077874708938864/1021200723209355325
+#
+# Vielen Dank, dass Sie Modrinth für Menschen auf der ganzen Welt zugänglich
+# machen!
