@@ -2,11 +2,20 @@
   "button.cancel": {
     "message": "Cancel"
   },
+  "button.continue": {
+    "message": "Continue"
+  },
   "button.edit": {
     "message": "Edit"
   },
   "button.save": {
     "message": "Save"
+  },
+  "button.save-changes": {
+    "message": "Save changes"
+  },
+  "button.report": {
+    "message": "Report"
   },
   "frog": {
     "message": "You've been frogged! 🐸"
@@ -37,9 +46,6 @@
   },
   "profile.button.manage-projects": {
     "message": "Manage projects"
-  },
-  "profile.button.report": {
-    "message": "Report"
   },
   "profile.error.not-found": {
     "message": "User not found"
