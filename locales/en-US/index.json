@@ -2,11 +2,23 @@
   "button.cancel": {
     "message": "Cancel"
   },
+  "button.continue": {
+    "message": "Continue"
+  },
   "button.edit": {
     "message": "Edit"
   },
+  "button.report": {
+    "message": "Report"
+  },
   "button.save": {
     "message": "Save"
+  },
+  "button.save-changes": {
+    "message": "Save changes"
+  },
+  "button.sign-in": {
+    "message": "Sign in"
   },
   "frog": {
     "message": "You've been frogged! 🐸"
@@ -32,14 +44,17 @@
   "input.view.list": {
     "message": "List view"
   },
+  "label.created-ago": {
+    "message": "Created {ago}"
+  },
+  "label.followed-projects": {
+    "message": "Followed projects"
+  },
   "notification.error.title": {
     "message": "An error occurred"
   },
   "profile.button.manage-projects": {
     "message": "Manage projects"
-  },
-  "profile.button.report": {
-    "message": "Report"
   },
   "profile.error.not-found": {
     "message": "User not found"
