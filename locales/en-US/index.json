@@ -8,14 +8,17 @@
   "button.edit": {
     "message": "Edit"
   },
+  "button.report": {
+    "message": "Report"
+  },
   "button.save": {
     "message": "Save"
   },
   "button.save-changes": {
     "message": "Save changes"
   },
-  "button.report": {
-    "message": "Report"
+  "button.sign-in": {
+    "message": "Sign in"
   },
   "frog": {
     "message": "You've been frogged! 🐸"
