@@ -35,9 +35,6 @@
   "frog.title": {
     "message": "Frog"
   },
-  "label.followed-projects": {
-    "message": "Followed projects"
-  },
   "input.view.gallery": {
     "message": "Gallery view"
   },
@@ -46,6 +43,12 @@
   },
   "input.view.list": {
     "message": "List view"
+  },
+  "label.created-ago": {
+    "message": "Created {ago}"
+  },
+  "label.followed-projects": {
+    "message": "Followed projects"
   },
   "notification.error.title": {
     "message": "An error occurred"
