@@ -39,7 +39,7 @@
             "
           >
             {{
-              formatMessage(messages.sessionsCreatedAt, {
+              formatMessage(commonMessages.createdAgoLabel, {
                 ago: formatRelativeTime(session.created),
               })
             }}
